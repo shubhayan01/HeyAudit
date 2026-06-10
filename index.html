@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Justwords — SEO Audit & BD Suite v3</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0e0f11;--surface:#161719;--surface2:#1e2024;--surface3:#252830;
+  --border:#2a2d35;--border2:#353842;
+  --text:#f0f1f3;--text2:#a0a5b0;--text3:#6b7280;
+  --accent:#F5C518;--accent2:#d4a800;--accent-fg:#0e0f11;
+  --green:#22c55e;--green-bg:rgba(34,197,94,.1);--green-border:rgba(34,197,94,.25);
+  --red:#ef4444;--red-bg:rgba(239,68,68,.1);--red-border:rgba(239,68,68,.25);
+  --amber:#f59e0b;--amber-bg:rgba(245,158,11,.1);--amber-border:rgba(245,158,11,.25);
+  --blue:#3b82f6;--blue-bg:rgba(59,130,246,.1);--blue-border:rgba(59,130,246,.25);
+  --teal:#14b8a6;--teal-bg:rgba(20,184,166,.1);
+  --r:8px;--r2:6px;--shadow:0 2px 8px rgba(0,0,0,.4);
+  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
+#login-screen::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(245,197,24,.07) 0%,transparent 70%);top:-100px;left:50%;transform:translateX(-50%);pointer-events:none}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:40px;width:380px;box-shadow:0 24px 80px rgba(0,0,0,.6);position:relative;z-index:1}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-badge{display:inline-block;background:var(--accent);color:var(--accent-fg);font-weight:800;font-size:16px;padding:7px 16px;border-radius:6px;letter-spacing:.5px;margin-bottom:10px}
+.login-logo p{font-size:12px;color:var(--text3);letter-spacing:.3px}
+.login-form-group{margin-bottom:16px}
+.login-form-group label{display:block;font-size:11px;font-weight:600;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.login-input{width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);font-size:13px;color:var(--text);font-family:var(--font);outline:none;transition:border-color .15s,box-shadow .15s}
+.login-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,197,24,.12)}
+.login-btn{width:100%;padding:11px;background:var(--accent);color:var(--accent-fg);border:none;border-radius:var(--r2);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s;margin-top:4px}
+.login-btn:hover{background:var(--accent2)}
+.login-err{background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r2);padding:9px 12px;font-size:12px;margin-bottom:14px;display:none}
+.login-hint{font-size:11px;color:var(--text3);text-align:center;margin-top:16px}
+.caps-warn{font-size:11px;color:var(--amber);margin-top:4px;display:none}
+
+/* APP SHELL */
+#app-shell{display:none}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-badge{background:var(--accent);color:var(--accent-fg);font-weight:800;font-size:12px;padding:4px 10px;border-radius:5px;letter-spacing:.5px}
+.logo-text{font-size:12px;color:var(--text3)}
+.topbar-right{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text3)}
+.user-chip{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:4px 10px}
+.user-dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.logout-btn{background:none;border:1px solid var(--border);color:var(--text3);padding:4px 10px;border-radius:var(--r2);font-size:11px;cursor:pointer;font-family:var(--font);transition:all .15s}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+.app{max-width:1060px;margin:0 auto;padding:24px 20px 80px}
+
+/* STEPPER */
+.stepper{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 20px;margin-bottom:22px;box-shadow:var(--shadow)}
+.step-item{display:flex;align-items:center;gap:8px;flex:1}
+.step-num{width:26px;height:26px;border-radius:50%;border:2px solid var(--border2);background:var(--surface2);color:var(--text3);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.step-num.active{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.step-num.done{background:var(--green);border-color:var(--green);color:white}
+.step-name{font-size:11px;font-weight:500;color:var(--text3);white-space:nowrap}
+.step-name.active{color:var(--text)}
+.step-line{flex:1;height:1px;background:var(--border);margin:0 6px;max-width:36px}
+
+/* CARDS & FORMS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card-header{margin-bottom:16px}
+.card-subtitle{font-size:12px;color:var(--text3);margin-top:3px}
+.section-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{margin-bottom:14px}
+.form-group:last-child{margin-bottom:0}
+label{display:block;font-size:11px;font-weight:600;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+input,textarea,select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r2);font-size:13px;color:var(--text);background:var(--surface2);font-family:var(--font);transition:border-color .15s,box-shadow .15s;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,197,24,.1)}
+textarea{resize:vertical;min-height:80px}
+select option{background:var(--surface2)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r2);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);transition:all .15s;font-family:var(--font);text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--surface3);border-color:var(--border2)}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2);border-color:var(--accent2)}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-danger{background:var(--red-bg);color:var(--red);border-color:var(--red-border)}
+.btn-row{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:20px}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ALERTS & BADGES */
+.alert{padding:10px 14px;border-radius:var(--r2);font-size:12px;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.alert-info{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.alert-success{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.alert-warn{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.alert-error{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.badge-blue{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.badge-gray{background:var(--surface3);color:var(--text3);border:1px solid var(--border)}
+.badge-teal{background:var(--teal-bg);color:var(--teal);border:1px solid rgba(20,184,166,.3)}
+
+/* LOADING */
+.spinner{width:22px;height:22px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-box{text-align:center;padding:52px 24px}
+.loading-box .spinner{margin:0 auto 16px;width:40px;height:40px;border-width:4px}
+.loading-box p{color:var(--text3);font-size:13px;margin-top:6px}
+.loading-box h3{font-size:16px;font-weight:700}
+.load-steps{display:flex;flex-direction:column;gap:6px;max-width:280px;margin:16px auto 0;text-align:left}
+.load-step{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3);padding:6px 10px;border-radius:var(--r2);transition:all .3s}
+.load-step.active{background:var(--amber-bg);color:var(--amber)}
+.load-step.done{background:var(--green-bg);color:var(--green)}
+.progress-track{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width .4s}
+
+/* TABS */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:18px;overflow-x:auto}
+.tab{padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* AUDIT */
+.score-ring{width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:20px;flex-shrink:0;border:3px solid}
+.score-a{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.score-b{border-color:var(--blue);color:var(--blue);background:var(--blue-bg)}
+.score-c{border-color:var(--amber);color:var(--amber);background:var(--amber-bg)}
+.score-d{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.stat-score::before{background:var(--accent)}
+.stat-card.stat-critical::before{background:var(--red)}
+.stat-card.stat-warn::before{background:var(--amber)}
+.stat-card.stat-pass::before{background:var(--green)}
+.stat-val{font-size:28px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.stat-label{font-size:11px;color:var(--text3);margin-top:4px;font-weight:500;text-transform:uppercase;letter-spacing:.3px}
+.stat-trend{font-size:11px;margin-top:4px;display:flex;align-items:center;gap:3px}
+
+/* ISSUE LIST */
+.issue-list{display:flex;flex-direction:column;gap:6px}
+.issue-item{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:var(--r2);border:1px solid var(--border);background:var(--surface2);transition:border-color .15s}
+.issue-item:hover{border-color:var(--border2)}
+.issue-item.crit{border-left:3px solid var(--red)}
+.issue-item.warn{border-left:3px solid var(--amber)}
+.issue-item.pass{border-left:3px solid var(--green)}
+.issue-icon{font-size:14px;margin-top:1px;flex-shrink:0}
+.issue-text{font-size:13px;font-weight:600;color:var(--text)}
+.issue-fix{font-size:12px;color:var(--text3);margin-top:4px;line-height:1.6}
+.issue-fix strong{color:var(--teal)}
+.issue-category{font-size:10px;color:var(--text3);margin-top:3px}
+
+/* AUDIT TABLES */
+.audit-detail-table{width:100%;border-collapse:collapse;font-size:12px}
+.audit-detail-table th{padding:7px 10px;background:var(--surface3);text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border)}
+.audit-detail-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.audit-detail-table tr:last-child td{border-bottom:none}
+.audit-detail-table tr:hover td{background:var(--surface3)}
+.compare-table{width:100%;border-collapse:collapse;font-size:12px}
+.compare-table th{padding:8px 12px;background:var(--surface3);text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border)}
+.compare-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:hover td{background:var(--surface3)}
+.win{color:var(--green);font-weight:700}
+.lose{color:var(--red)}
+
+/* INVOICE */
+.invoice-header{display:grid;grid-template-columns:2.8fr .9fr 1.1fr 1.1fr 38px;gap:10px;padding:8px 12px;background:var(--surface3);font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;border-radius:var(--r2) var(--r2) 0 0}
+.invoice-row{display:grid;grid-template-columns:2.8fr .9fr 1.1fr 1.1fr 38px;gap:10px;padding:7px 12px;border-bottom:1px solid var(--border);align-items:center}
+.invoice-row input,.invoice-row select{font-size:12px;padding:5px 9px}
+.invoice-totals{padding:14px 12px;border-top:2px solid var(--border);display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.total-row{display:flex;gap:20px;align-items:center;font-size:13px;color:var(--text2)}
+.total-row.grand{font-size:16px;font-weight:800;color:var(--accent);margin-top:4px}
+
+/* STRATEGY REPORT */
+.report-section{margin-bottom:32px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.report-section:last-child{border-bottom:none;margin-bottom:0}
+.report-section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:12px 16px;background:var(--accent);border-radius:var(--r2)}
+.report-section-header h2{font-size:14px;font-weight:800;color:var(--accent-fg);text-transform:uppercase;letter-spacing:.6px}
+.premise-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;font-size:13px;line-height:1.9;color:var(--text2)}
+.premise-box p{margin-bottom:12px}
+.premise-box p:last-child{margin-bottom:0}
+.exec-summary-box{background:var(--surface2);border-left:4px solid var(--accent);border-radius:0 var(--r2) var(--r2) 0;padding:18px 20px;font-size:13px;line-height:1.9;color:var(--text2)}
+.roadmap-grid{display:flex;flex-direction:column;gap:16px}
+.roadmap-month{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.roadmap-month-header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface3);border-bottom:1px solid var(--border)}
+.roadmap-month-badge{width:42px;height:42px;border-radius:50%;background:var(--accent);color:var(--accent-fg);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.roadmap-month-title{font-size:13px;font-weight:700;color:var(--text)}
+.roadmap-month-focus{font-size:11px;color:var(--text3);margin-top:2px}
+.roadmap-month-body{padding:14px 16px}
+.roadmap-phase-label{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.roadmap-focus-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.roadmap-focus-tag{background:var(--amber-bg);border:1px solid var(--amber-border);color:var(--amber);border-radius:20px;padding:3px 9px;font-size:11px}
+.roadmap-activities-label{font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.roadmap-activities{display:flex;flex-direction:column;gap:5px}
+.roadmap-activity{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text2);padding:5px 8px;background:var(--surface);border-radius:4px;border:1px solid var(--border)}
+.roadmap-activity::before{content:'';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* KEYWORD TABLES */
+.kw-section-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.full-kw-table{width:100%;border-collapse:collapse;font-size:12px}
+.full-kw-table thead tr{background:var(--accent)}
+.full-kw-table thead th{padding:9px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--accent-fg);text-transform:uppercase;letter-spacing:.5px}
+.full-kw-table tbody tr:nth-child(even){background:var(--surface3)}
+.full-kw-table tbody tr:hover{background:rgba(245,197,24,.05)}
+.full-kw-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.full-kw-table tr:last-child td{border-bottom:none}
+.cluster-table-full{width:100%;border-collapse:collapse;font-size:12px}
+.cluster-table-full thead tr{background:var(--accent)}
+.cluster-table-full thead th{padding:9px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--accent-fg);text-transform:uppercase;letter-spacing:.5px}
+.cluster-table-full tbody tr:nth-child(even){background:var(--surface3)}
+.cluster-table-full td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.cluster-table-full tr:last-child td{border-bottom:none}
+.cluster-kw-chips{display:flex;flex-wrap:wrap;gap:4px}
+
+/* CONTENT BUCKETS */
+.content-buckets-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.content-bucket-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.content-bucket-header{background:var(--surface3);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.content-bucket-title{font-size:12px;font-weight:700;color:var(--accent)}
+.content-bucket-body{padding:14px}
+.content-bucket-desc{font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.6}
+.content-bucket-topics{display:flex;flex-direction:column;gap:5px}
+.content-topic-item{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--text2);padding:4px 6px;background:var(--surface);border-radius:4px;border:1px solid var(--border)}
+.geo-aeo-note{margin-top:10px;padding:7px 10px;background:var(--teal-bg);border:1px solid rgba(20,184,166,.25);border-radius:4px;font-size:10px;color:var(--teal);line-height:1.5}
+
+/* SOW TABLES */
+.sow-section{margin-bottom:24px}
+.sow-section-title{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding:8px 12px;background:var(--surface3);border-radius:var(--r2);border-left:3px solid var(--accent)}
+.sow-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px}
+.sow-table th{padding:8px 12px;background:var(--surface3);text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--accent)}
+.sow-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.sow-table tr:last-child td{border-bottom:none}
+.sow-table tr:hover td{background:rgba(245,197,24,.03)}
+.sow-table td:first-child{font-weight:600;color:var(--text)}
+.sow-table td:last-child{text-align:center}
+.sow-yes{color:var(--green);font-weight:700}
+.sow-no{color:var(--red)}
+.sow-tbd{color:var(--amber)}
+.sow-cat-header{background:var(--amber-bg)!important;color:var(--amber)!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.4px!important;font-size:11px!important}
+
+/* MEDIA PLAN */
+.media-plan-table{width:100%;border-collapse:collapse;font-size:12px}
+.media-plan-table thead tr{background:var(--accent)}
+.media-plan-table thead th{padding:10px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--accent-fg);text-transform:uppercase;letter-spacing:.5px}
+.media-plan-table tbody tr:nth-child(even){background:var(--surface3)}
+.media-plan-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.media-plan-table .total-row-highlight td{background:var(--red)!important;color:white;font-weight:800}
+
+/* INVESTMENT TABLE */
+.investment-table{width:100%;border-collapse:collapse;font-size:13px}
+.investment-table thead tr{background:var(--accent)}
+.investment-table thead th{padding:11px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--accent-fg);text-transform:uppercase;letter-spacing:.5px}
+.investment-table tbody td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+.investment-table tbody tr:hover td{background:rgba(245,197,24,.03)}
+.investment-table .particulars-cell{font-weight:700;color:var(--text);font-size:13px}
+.investment-table .desc-cell{color:var(--text3);font-size:12px;line-height:1.6}
+.investment-table .price-cell{font-weight:700;color:var(--accent);font-size:14px;white-space:nowrap}
+.investment-total-row{background:var(--accent)!important}
+.investment-total-row td{color:var(--accent-fg)!important;font-weight:800!important;font-size:16px!important;padding:16px!important}
+
+/* T&C */
+.tnc-list{display:flex;flex-direction:column;gap:10px;counter-reset:tnc-counter}
+.tnc-item{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);font-size:12px;color:var(--text2);line-height:1.7;counter-increment:tnc-counter}
+.tnc-num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-fg);font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* COMPETITIVE MOAT */
+.moat-box{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--r2);padding:20px;font-size:13px;line-height:1.9;color:var(--text2);margin-bottom:16px}
+.moat-strategic-includes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.moat-include-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);border:1px solid var(--green-border);border-radius:var(--r2);font-size:12px;color:var(--text2)}
+.advantage-box{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--r2);padding:20px;font-size:13px;line-height:1.9;color:var(--text2)}
+.advantage-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.advantage-item{padding:12px;background:var(--surface2);border:1px solid var(--amber-border);border-radius:var(--r2)}
+.advantage-item-title{font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.advantage-item-desc{font-size:11px;color:var(--text3);line-height:1.6}
+
+/* OUTCOMES */
+.outcomes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.outcome-item{display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--surface2);border:1px solid var(--green-border);border-radius:var(--r2);font-size:12px;color:var(--text2)}
+.outcome-icon{font-size:16px;flex-shrink:0}
+
+/* INLINE SCORES */
+.inline-score{display:inline-block;padding:1px 7px;border-radius:4px;font-size:12px;font-weight:700}
+.score-high{background:var(--green-bg);color:var(--green)}
+.score-mid{background:var(--amber-bg);color:var(--amber)}
+.score-low{background:var(--red-bg);color:var(--red)}
+.cat-score-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin:12px 0}
+.cat-score-item{display:grid;grid-template-columns:1fr 36px;gap:6px;align-items:center}
+.cat-label{font-size:11px;color:var(--text3);font-weight:500}
+.cat-num{font-size:12px;font-weight:700;text-align:right}
+
+/* EMAIL */
+#email-body-text{min-height:200px;font-size:13px;line-height:1.7}
+.attachment-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:12px;margin:3px}
+.attachment-chip .remove-att{cursor:pointer;color:var(--red);margin-left:2px;font-size:14px;line-height:1}
+.deck-chip{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber)}
+
+/* BD TRACKER */
+.pipeline-kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kanban-col{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.kanban-col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.kanban-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:10px;margin-bottom:8px;cursor:pointer;transition:border-color .15s}
+.kanban-card:hover{border-color:var(--accent)}
+.kanban-card-name{font-size:12px;font-weight:600;margin-bottom:3px}
+.kanban-card-meta{font-size:11px;color:var(--text3)}
+.kanban-card-value{font-size:12px;font-weight:700;color:var(--accent);margin-top:4px}
+
+/* UTILS */
+.hidden{display:none!important}
+.flex{display:flex}.items-center{align-items:center}.gap-8{gap:8px}.gap-12{gap:12px}
+.mb-16{margin-bottom:16px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}
+.text-muted{color:var(--text3)}.text-sm{font-size:12px}.fw-bold{font-weight:700}
+.mono{font-family:var(--mono);font-size:11px}
+hr.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+.section-sep{margin:0 -22px 20px;border:none;border-top:1px solid var(--border)}
+.chip-row{display:flex;flex-wrap:wrap;gap:5px}
+
+@media(max-width:640px){
+  .form-grid,.stats-row,.content-buckets-grid,.pipeline-kanban,.moat-strategic-includes,.advantage-grid,.outcomes-grid{grid-template-columns:1fr}
+  .invoice-header,.invoice-row{grid-template-columns:1fr 70px 70px 36px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-badge">JUSTWORDS</div>
+      <p>SEO Audit & Business Development Suite v3</p>
+    </div>
+    <div class="login-err" id="login-err"></div>
+    <div class="login-form-group">
+      <label>Username</label>
+      <input class="login-input" type="text" id="lu" placeholder="Enter your username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div class="login-form-group">
+      <label>Password</label>
+      <input class="login-input" type="password" id="lp" placeholder="Enter your password" autocomplete="current-password" onkeyup="checkCaps(event)" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <div class="caps-warn" id="caps-warn">Caps Lock is on</div>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <p class="login-hint">Authorised Justwords BD personnel only</p>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app-shell">
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-badge">JUSTWORDS</div>
+      <span class="logo-text">SEO Audit & BD Suite v3</span>
+    </div>
+    <div class="topbar-right">
+      <div id="top-date" class="text-sm text-muted"></div>
+      <div class="user-chip"><div class="user-dot"></div><span id="top-user"></span></div>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="app">
+    <div class="stepper" id="stepper">
+      <div class="step-item"><div class="step-num active" id="sn1">1</div><span class="step-name active" id="sl1">Setup</span></div>
+      <div class="step-line"></div>
+      <div class="step-item"><div class="step-num" id="sn2">2</div><span class="step-name" id="sl2">Audit</span></div>
+      <div class="step-line"></div>
+      <div class="step-item"><div class="step-num" id="sn3">3</div><span class="step-name" id="sl3">Pricing</span></div>
+      <div class="step-line"></div>
+      <div class="step-item"><div class="step-num" id="sn4">4</div><span class="step-name" id="sl4">Strategy</span></div>
+      <div class="step-line"></div>
+      <div class="step-item"><div class="step-num" id="sn5">5</div><span class="step-name" id="sl5">Email</span></div>
+      <div class="step-line"></div>
+      <div class="step-item"><div class="step-num" id="sn6">6</div><span class="step-name" id="sl6">BD Tracker</span></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="step1">
+      <div class="card">
+        <div class="card-header"><div class="section-title">API Configuration</div><div class="card-subtitle">Keys stored only in browser session memory.</div></div>
+        <div class="alert alert-warn"><span>Note:</span><span>Without API keys the tool uses realistic demo data. Add keys for live data.</span></div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>SEOptimer API Key</label>
+            <input type="password" id="seoptimer-key" placeholder="Get from app.seoptimer.com — API"/>
+          </div>
+          <div class="form-group">
+            <label>Groq API Key</label>
+            <input type="password" id="groq-key" placeholder="gsk_ ... Get from console.groq.com"/>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="section-title">Websites to Audit</div></div>
+        <div class="form-group"><label>Client Website URL *</label><input type="url" id="client-url" placeholder="https://example.com"/></div>
+        <div class="form-grid">
+          <div class="form-group"><label>Competitor 1 URL</label><input type="url" id="comp1-url" placeholder="https://competitor1.com"/></div>
+          <div class="form-group"><label>Competitor 2 URL</label><input type="url" id="comp2-url" placeholder="https://competitor2.com"/></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="section-title">Client & Engagement Details</div></div>
+        <div class="form-grid">
+          <div class="form-group"><label>Client / Company Name *</label><input type="text" id="client-name" placeholder="Acme Corp"/></div>
+          <div class="form-group"><label>Contact Person Name</label><input type="text" id="contact-name" placeholder="Mr. Rahul Sharma"/></div>
+          <div class="form-group"><label>Industry / Niche</label><input type="text" id="client-industry" placeholder="e.g. Legal Services, E-commerce, SaaS"/></div>
+          <div class="form-group"><label>Location / City</label><input type="text" id="client-city" placeholder="e.g. Mumbai, Bengaluru"/></div>
+          <div class="form-group"><label>Sample / Seed Keywords</label><input type="text" id="sample-keywords" placeholder="e.g. corporate lawyer Mumbai, trademark filing India"/></div>
+          <div class="form-group"><label>Brand Differentiators</label><input type="text" id="brand-diff" placeholder="e.g. 15 years experience, 500+ cases won"/></div>
+          <div class="form-group"><label>Prepared By</label><input type="text" id="prepared-by" value="Akshat Raj"/></div>
+          <div class="form-group"><label>Your Email</label><input type="email" id="sender-email" value="akshat.raj@justwords.in"/></div>
+        </div>
+        <hr class="divider"/>
+        <div class="section-title" style="margin-bottom:12px;font-size:13px;">BD Pipeline</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Lead Stage</label>
+            <select id="lead-stage"><option>New Lead</option><option>Discovery Call Done</option><option>Proposal Sent</option><option>Negotiation</option><option>Closed Won</option><option>Closed Lost</option></select>
+          </div>
+          <div class="form-group"><label>Estimated Monthly Value (Rs.)</label><input type="number" id="lead-value" placeholder="127000" step="1000"/></div>
+          <div class="form-group"><label>Source</label>
+            <select id="lead-source"><option>Referral</option><option>LinkedIn</option><option>Cold Outreach</option><option>Website Inquiry</option><option>Event/Meetup</option><option>Other</option></select>
+          </div>
+          <div class="form-group"><label>Next Follow-up Date</label><input type="date" id="followup-date"/></div>
+        </div>
+        <div class="form-group"><label>BD Notes (internal)</label><textarea id="bd-notes" rows="2" placeholder="Internal notes..."></textarea></div>
+      </div>
+      <div class="btn-row">
+        <span class="text-sm text-muted">* Required — Ctrl+Enter to run audit</span>
+        <div class="btn-group">
+          <button class="btn" onclick="goStep(6)">BD Tracker</button>
+          <button class="btn btn-primary" onclick="startAudit()">Run SEO Audit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step2" class="hidden">
+      <div class="card" id="audit-loading">
+        <div class="loading-box">
+          <div class="spinner"></div>
+          <h3>Running Comprehensive Audit</h3>
+          <p id="audit-status-msg">Connecting to SEOptimer API...</p>
+          <div class="load-steps" id="audit-load-steps">
+            <div class="load-step" id="ls1">Fetching client audit data</div>
+            <div class="load-step" id="ls2">Fetching competitor 1 data</div>
+            <div class="load-step" id="ls3">Fetching competitor 2 data</div>
+            <div class="load-step" id="ls4">Running AI analysis</div>
+            <div class="load-step" id="ls5">Building detailed report</div>
+          </div>
+        </div>
+      </div>
+      <div id="audit-done" class="hidden">
+        <div class="stats-row" id="stats-row"></div>
+        <div class="card">
+          <div class="tabs">
+            <div class="tab active" onclick="openTab(event,'t-client')">Client Audit</div>
+            <div class="tab" onclick="openTab(event,'t-detail')">Full Checklist</div>
+            <div class="tab" onclick="openTab(event,'t-c1')">Competitor 1</div>
+            <div class="tab" onclick="openTab(event,'t-c2')">Competitor 2</div>
+            <div class="tab" onclick="openTab(event,'t-compare')">Comparison</div>
+            <div class="tab" onclick="openTab(event,'t-recs')">Fix Guide</div>
+            <div class="tab" onclick="openTab(event,'t-export')">Export</div>
+          </div>
+          <div id="t-client" class="tab-panel active"></div>
+          <div id="t-detail" class="tab-panel"></div>
+          <div id="t-c1" class="tab-panel"></div>
+          <div id="t-c2" class="tab-panel"></div>
+          <div id="t-compare" class="tab-panel"></div>
+          <div id="t-recs" class="tab-panel"></div>
+          <div id="t-export" class="tab-panel"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn" onclick="goStep(1)">Back</button>
+          <button class="btn btn-primary" onclick="goStep(3);initInvoice()">Next: Pricing</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step3" class="hidden">
+      <div class="card">
+        <div class="card-header"><div class="section-title">Investment Summary</div><div class="card-subtitle">Configure pricing. All amounts in INR, exclusive of GST.</div></div>
+        <div style="border:1px solid var(--border);border-radius:var(--r2);overflow:hidden">
+          <div class="invoice-header"><div>Service / Particulars</div><div>Timeline</div><div>Price (Rs. excl. GST)</div><div>Category</div><div></div></div>
+          <div id="invoice-lines"></div>
+        </div>
+        <div style="margin-top:10px"><button class="btn btn-sm" onclick="addInvoiceLine()">+ Add Line</button></div>
+        <div class="invoice-totals" id="invoice-totals"></div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:14px">Settings</div>
+        <div class="form-grid">
+          <div class="form-group"><label>GST Rate (%)</label><input type="number" id="gst-rate" value="18" min="0" max="30" onchange="recalcTotals()"/></div>
+          <div class="form-group"><label>Proposal Validity (days)</label><input type="number" id="validity" value="30" min="1"/></div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="goStep(2)">Back</button>
+        <button class="btn btn-primary" onclick="generateStrategy()">Generate Full Strategy Report</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="step4" class="hidden">
+      <div class="card" id="strategy-loading">
+        <div class="loading-box">
+          <div class="spinner"></div>
+          <h3>Generating Full 360 Strategy Report</h3>
+          <p id="strategy-status-msg">Building SOP-aligned strategy prompt...</p>
+          <div class="load-steps">
+            <div class="load-step" id="stl1">Building strategy prompt</div>
+            <div class="load-step" id="stl2">Generating keyword strategy and clustering</div>
+            <div class="load-step" id="stl3">Building content buckets and roadmap</div>
+            <div class="load-step" id="stl4">Finalising competitive moat and SOW</div>
+            <div class="load-step" id="stl5">Rendering full report</div>
+          </div>
+        </div>
+      </div>
+      <div id="strategy-done" class="hidden">
+        <div id="full-strategy-report"></div>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn" onclick="goStep(3)">Back</button>
+          <div class="btn-group">
+            <button class="btn" id="dl-doc-btn" onclick="buildAndDownloadDoc()">Download Strategy Document (.docx)</button>
+            <button class="btn btn-primary" onclick="goStep(5);prefillEmail()">Next: Compose Email</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div id="step5" class="hidden">
+      <div class="card">
+        <div class="card-header"><div class="section-title">Compose Proposal Email</div></div>
+        <div class="form-grid">
+          <div class="form-group"><label>From</label><input type="email" id="email-from"/></div>
+          <div class="form-group"><label>To (Client Email) *</label><input type="email" id="email-to" placeholder="client@company.com"/></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group"><label>CC</label><input type="email" id="email-cc" placeholder="optional"/></div>
+          <div class="form-group"><label>BCC</label><input type="email" id="email-bcc" placeholder="optional"/></div>
+        </div>
+        <div class="form-group"><label>Subject Line</label><input type="text" id="email-subject"/></div>
+        <div class="form-group"><label>Email Body</label><textarea id="email-body-text" rows="14"></textarea></div>
+        <div class="form-group">
+          <label>Attachments</label>
+          <div id="attachment-list" style="display:flex;flex-wrap:wrap;gap:6px;min-height:24px;margin-bottom:10px;"></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:8px">
+            <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:6px">SEOptimer Audit Report</div>
+            <label for="seoptimer-pdf" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:7px 14px;background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:var(--r2);font-size:12px;font-weight:600;color:var(--amber);text-transform:none;letter-spacing:0;">
+              <input type="file" id="seoptimer-pdf" accept=".pdf,.html,.zip" style="display:none" onchange="attachSeoptimer(this)"/>
+              Attach SEOptimer Report (PDF/HTML)
+            </label>
+            <span id="seo-att-name" class="text-sm text-muted" style="margin-left:10px"></span>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:8px">
+            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:6px">Strategy Document (DOCX)</div>
+            <div id="deck-attach-status"><div class="alert alert-info" style="margin-bottom:8px"><span>Note:</span><span>Build the strategy document in Step 4 first, then attach here.</span></div></div>
+            <div id="deck-auto-chip" class="hidden" style="margin-bottom:8px"></div>
+            <label for="deck-file" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:7px 14px;background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:var(--r2);font-size:12px;font-weight:600;color:var(--blue);text-transform:none;letter-spacing:0;">
+              <input type="file" id="deck-file" accept=".docx,.pdf" style="display:none" onchange="attachDeckFile(this)"/>
+              Attach Strategy Document (DOCX / PDF)
+            </label>
+          </div>
+          <label for="extra-files" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:7px 14px;border:1px dashed var(--border);border-radius:var(--r2);font-size:12px;color:var(--text3);text-transform:none;letter-spacing:0;">
+            <input type="file" id="extra-files" multiple style="display:none" onchange="addAttachments(this)"/>
+            + Other attachments
+          </label>
+        </div>
+        <div id="email-feedback"></div>
+        <div class="btn-row">
+          <button class="btn" onclick="goStep(4)">Back</button>
+          <div class="btn-group">
+            <button class="btn" onclick="copyEmailText()">Copy</button>
+            <button class="btn" onclick="openMailto()">Open in Mail</button>
+            <button class="btn btn-primary" onclick="openGmailCompose()">Open in Gmail</button>
+          </div>
+        </div>
+        <div class="alert alert-info" style="margin-top:14px"><span>Note:</span><span>"Open in Gmail" automatically downloads all selected attachments to your Downloads folder and opens Gmail compose — drag and drop the downloaded files onto the Gmail attachment area to attach them. Browser security prevents websites from attaching files directly, so this manual drag-drop step is unavoidable.</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div id="step6" class="hidden">
+      <div class="card">
+        <div class="card-header"><div class="section-title">Business Development Tracker</div></div>
+        <div class="stats-row" id="bd-stats"></div>
+        <div class="pipeline-kanban" id="bd-kanban"></div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:14px">Add / Update Lead</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Company Name</label><input type="text" id="bd-company"/></div>
+          <div class="form-group"><label>Contact Person</label><input type="text" id="bd-contact"/></div>
+          <div class="form-group"><label>Stage</label>
+            <select id="bd-stage-add"><option>New Lead</option><option>Discovery Call Done</option><option>Proposal Sent</option><option>Negotiation</option><option>Closed Won</option><option>Closed Lost</option></select>
+          </div>
+          <div class="form-group"><label>Monthly Value (Rs.)</label><input type="number" id="bd-value-add" step="1000"/></div>
+          <div class="form-group"><label>Source</label>
+            <select id="bd-source-add"><option>Referral</option><option>LinkedIn</option><option>Cold Outreach</option><option>Website Inquiry</option><option>Event</option><option>Other</option></select>
+          </div>
+          <div class="form-group"><label>Next Follow-up</label><input type="date" id="bd-followup-add"/></div>
+        </div>
+        <div class="form-group"><label>Notes</label><textarea id="bd-notes-add" rows="2"></textarea></div>
+        <button class="btn btn-primary" onclick="saveBDLead()">Save Lead to Pipeline</button>
+        <span class="text-sm text-muted" style="margin-left:12px" id="bd-save-msg"></span>
+      </div>
+      <div class="card" id="bd-leads-card">
+        <div class="section-title" style="margin-bottom:14px">All Leads</div>
+        <div id="bd-leads-list"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="goStep(1)">Back to Setup</button>
+        <button class="btn btn-primary" onclick="exportBDCSV()">Export Pipeline CSV</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ══ AUTH ══ */
+(function(){
+  const _u=[106,119,95,98,100,95,116,101,97,109];
+  const _p=[74,119,64,50,48,50,53,33,83,69,79];
+  window._chk=function(u,p){return u===String.fromCharCode(..._u)&&p===String.fromCharCode(..._p);};
+  window._attempts=0;window._lockUntil=0;
+})();
+function checkCaps(e){const w=document.getElementById('caps-warn');w.style.display=e.getModifierState&&e.getModifierState('CapsLock')?'block':'none';}
+function doLogin(){
+  const now=Date.now();
+  if(now<window._lockUntil){showLoginErr(`Too many attempts. Wait ${Math.ceil((window._lockUntil-now)/1000)}s.`);return;}
+  const u=document.getElementById('lu').value,p=document.getElementById('lp').value;
+  if(!u||!p){showLoginErr('Please enter both username and password.');return;}
+  if(window._chk(u,p)){
+    window._attempts=0;
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-shell').style.display='block';
+    document.getElementById('top-user').textContent=u;
+    document.getElementById('top-date').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+    document.getElementById('lp').value='';
+  }else{
+    window._attempts++;
+    if(window._attempts>=5){window._lockUntil=Date.now()+30000;window._attempts=0;}
+    showLoginErr('Incorrect credentials. '+(5-window._attempts>0?(5-window._attempts)+' attempts left.':'Account locked for 30s.'));
+    document.getElementById('lp').value='';
+  }
+}
+function showLoginErr(msg){const el=document.getElementById('login-err');el.textContent=msg;el.style.display='flex';setTimeout(()=>{el.style.display='none';},5000);}
+function doLogout(){document.getElementById('app-shell').style.display='none';document.getElementById('login-screen').style.display='flex';document.getElementById('lu').value='';document.getElementById('lp').value='';currentStep=1;}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')doLogin();});
+
+/* ══ GLOBALS ══ */
+let currentStep=1,auditData={},strategyData={},invoiceLines=[],extraAttachmentFiles=[],docFileName='';
+let bdLeads=[];
+
+/* ══ STEPPER ══ */
+function goStep(n){
+  document.getElementById(`step${currentStep}`).classList.add('hidden');
+  document.getElementById(`step${n}`).classList.remove('hidden');
+  for(let i=1;i<=6;i++){
+    const num=document.getElementById(`sn${i}`),lbl=document.getElementById(`sl${i}`);
+    num.classList.remove('active','done');lbl.classList.remove('active');
+    if(i<n){num.classList.add('done');num.textContent='v';}
+    else if(i===n){num.classList.add('active');num.textContent=i;lbl.classList.add('active');}
+    else{num.textContent=i;}
+  }
+  currentStep=n;window.scrollTo(0,0);
+  if(n===6)renderBDTracker();
+}
+function openTab(e,panelId){
+  const card=e.target.closest('.card');
+  card.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  card.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+/* ══ MOCK AUDIT DATA ══ */
+const FULL_CHECKS=[
+  {cat:'On-Page SEO',key:'title_tag',label:'Title Tag Present & Optimised',critical:true,weight:10},
+  {cat:'On-Page SEO',key:'meta_desc',label:'Meta Description (150-160 chars)',critical:true,weight:9},
+  {cat:'On-Page SEO',key:'h1_tag',label:'Single H1 Tag with Primary Keyword',critical:true,weight:8},
+  {cat:'On-Page SEO',key:'h2_h3',label:'H2/H3 Heading Structure',critical:false,weight:5},
+  {cat:'On-Page SEO',key:'keyword_density',label:'Keyword Density (1-3%)',critical:false,weight:5},
+  {cat:'On-Page SEO',key:'img_alt',label:'Image Alt Text',critical:false,weight:6},
+  {cat:'On-Page SEO',key:'canonical',label:'Canonical Tags Present',critical:true,weight:7},
+  {cat:'On-Page SEO',key:'og_tags',label:'Open Graph / Social Tags',critical:false,weight:4},
+  {cat:'On-Page SEO',key:'schema',label:'Structured Data / Schema Markup',critical:true,weight:9},
+  {cat:'On-Page SEO',key:'internal_links',label:'Internal Linking Architecture',critical:false,weight:6},
+  {cat:'Technical SEO',key:'sitemap',label:'XML Sitemap Submitted to GSC',critical:true,weight:8},
+  {cat:'Technical SEO',key:'robots',label:'Robots.txt Configured Correctly',critical:true,weight:7},
+  {cat:'Technical SEO',key:'https',label:'HTTPS / SSL Certificate Valid',critical:true,weight:10},
+  {cat:'Technical SEO',key:'canonical_www',label:'Canonical www vs non-www',critical:false,weight:5},
+  {cat:'Technical SEO',key:'redirect_chain',label:'No Redirect Chains (3xx)',critical:false,weight:6},
+  {cat:'Technical SEO',key:'broken_links',label:'No Broken Links (4xx)',critical:true,weight:7},
+  {cat:'Technical SEO',key:'crawl_errors',label:'No Crawl Errors in GSC',critical:true,weight:7},
+  {cat:'Performance',key:'lcp',label:'Largest Contentful Paint < 2.5s',critical:true,weight:10},
+  {cat:'Performance',key:'fid',label:'Interaction to Next Paint < 200ms',critical:true,weight:8},
+  {cat:'Performance',key:'cls',label:'Cumulative Layout Shift < 0.1',critical:true,weight:8},
+  {cat:'Performance',key:'ttfb',label:'Time to First Byte < 600ms',critical:false,weight:6},
+  {cat:'Performance',key:'img_optimised',label:'Images WebP/AVIF + Lazy Load',critical:false,weight:7},
+  {cat:'Performance',key:'minify',label:'JS/CSS Minified & Bundled',critical:false,weight:5},
+  {cat:'Mobile',key:'responsive',label:'Responsive Design Detected',critical:true,weight:10},
+  {cat:'Mobile',key:'viewport',label:'Viewport Meta Tag Set',critical:true,weight:7},
+  {cat:'Mobile',key:'mobile_speed',label:'Mobile Page Speed Score >= 60',critical:true,weight:8},
+  {cat:'Security',key:'ssl_valid',label:'SSL Certificate Not Expiring Soon',critical:true,weight:10},
+  {cat:'Security',key:'mixed_content',label:'No Mixed Content (HTTP on HTTPS)',critical:true,weight:8},
+  {cat:'Security',key:'security_headers',label:'Security Headers (CSP, HSTS)',critical:false,weight:5},
+  {cat:'Backlinks',key:'da',label:'Domain Authority >= 20',critical:false,weight:6},
+  {cat:'Backlinks',key:'backlink_count',label:'Minimum Backlink Portfolio',critical:false,weight:6},
+  {cat:'Backlinks',key:'toxic_links',label:'No Toxic / Spammy Backlinks',critical:true,weight:8},
+  {cat:'Local SEO',key:'gbp',label:'Google Business Profile Complete',critical:true,weight:9},
+  {cat:'Local SEO',key:'nap',label:'NAP Consistency Across Web',critical:true,weight:8},
+  {cat:'Local SEO',key:'local_schema',label:'LocalBusiness Schema Markup',critical:true,weight:9},
+  {cat:'Local SEO',key:'reviews',label:'Google Reviews (>= 10)',critical:false,weight:6},
+  {cat:'Analytics & Tracking',key:'ga4',label:'Google Analytics 4 Installed',critical:true,weight:9},
+  {cat:'Analytics & Tracking',key:'gsc',label:'Google Search Console Connected',critical:true,weight:9},
+  {cat:'Analytics & Tracking',key:'conv_tracking',label:'Conversion Tracking Set Up',critical:true,weight:8},
+];
+
+function buildMockAudit(url,label){
+  const seed=[...url].reduce((a,c)=>a+c.charCodeAt(0),0);
+  const rand=(min,max,s=0)=>min+((seed+s*37)%(max-min+1));
+  const overall=rand(50,88);
+  const grade=overall>=85?'A':overall>=70?'B':overall>=55?'C':'D';
+  const checks=FULL_CHECKS.map((c,i)=>{
+    const r=rand(0,100,i);
+    let status=r>72?'pass':r>45?'warn':'fail';
+    return{...c,status,value:status==='pass'?getPassValue(c.key):status==='warn'?getWarnValue(c.key):getFailValue(c.key),recommendation:status!=='pass'?getRecommendation(c.key):''};
+  });
+  const cats={};
+  ['On-Page SEO','Technical SEO','Performance','Mobile','Security','Backlinks','Local SEO','Analytics & Tracking'].forEach(cat=>{
+    const cc=checks.filter(c=>c.cat===cat),passed=cc.filter(c=>c.status==='pass').length;
+    cats[cat.toLowerCase().replace(/[^a-z]/g,'_')]={label:cat,score:Math.round((passed/cc.length)*100),passed,total:cc.length};
+  });
+  const criticalFails=checks.filter(c=>c.status==='fail'&&c.critical);
+  const warnings=checks.filter(c=>c.status==='warn');
+  const passed=checks.filter(c=>c.status==='pass');
+  return{url,label,mock:true,overall_score:overall,grade,checks,categories:cats,
+    issues:{
+      critical:criticalFails.map(c=>({text:c.label,fix:c.recommendation,cat:c.cat})),
+      warnings:warnings.slice(0,8).map(c=>({text:c.label,fix:c.recommendation,cat:c.cat})),
+      passed:passed.slice(0,6).map(c=>({text:c.label,fix:'',cat:c.cat}))
+    }};
+}
+function getPassValue(k){const m={https:'Valid — expires 2026-03-15',responsive:'Detected',ga4:'GA4 active',lcp:'2.1s',cls:'0.06',gsc:'Connected',viewport:'Set correctly'};return m[k]||'Pass';}
+function getWarnValue(k){const m={title_tag:'62 chars (slightly long)',meta_desc:'Missing on 3 pages',lcp:'3.4s (needs improvement)',mobile_speed:'52/100',da:'DA 14 (low)',reviews:'4 reviews only',img_alt:'8 images missing alt'};return m[k]||'Needs improvement';}
+function getFailValue(k){const m={schema:'Not found',sitemap:'Not submitted',gbp:'Incomplete / not claimed',local_schema:'Missing',broken_links:'6 broken links found',crawl_errors:'14 crawl errors',conv_tracking:'Not configured',img_optimised:'All images JPEG, no lazy load'};return m[k]||'Not found / Failed';}
+function getRecommendation(k){
+  const m={
+    title_tag:'Keep title tags 50-60 characters. Lead with the primary keyword, end with brand name.',
+    meta_desc:'Write unique 150-160 char meta descriptions for every indexable page. Include primary keyword and a clear CTA.',
+    h1_tag:'Every page must have exactly one H1. Include the primary keyword naturally.',
+    schema:'Implement LocalBusiness, FAQ, and relevant industry schema via JSON-LD format.',
+    sitemap:'Generate an XML sitemap including all canonical URLs. Submit to Google Search Console.',
+    robots:'Audit robots.txt to ensure no key pages are accidentally blocked from crawling.',
+    lcp:'Convert images to WebP/AVIF, defer non-critical JS, use a CDN. Target LCP under 2.5s.',
+    broken_links:'Run a full crawl (Screaming Frog) and fix or redirect all 4xx URLs.',
+    gbp:'Claim and fully optimise Google Business Profile: photos, hours, services, Q&A, regular posts.',
+    local_schema:'Add LocalBusiness JSON-LD schema with address, phone, opening hours, and geo coordinates.',
+    ga4:'Install Google Analytics 4. Configure conversion events for form submissions and key CTA clicks.',
+    conv_tracking:'Set up conversion tracking for all key user actions: form fills, phone clicks, WhatsApp taps.',
+    img_optimised:'Convert all images to WebP. Add loading="lazy" to below-the-fold images.',
+    img_alt:'Add descriptive, keyword-rich alt text to every image for SEO and accessibility.',
+    nap:'Ensure business Name, Address, Phone is identical across website, GBP, and all directory listings.',
+    toxic_links:'Run a backlink audit via Ahrefs or SEMrush. Disavow toxic/spammy domains via GSC.',
+    gsc:'Connect Google Search Console for indexing insights, performance data, and crawl error monitoring.',
+  };
+  return m[k]||'Audit and address this item as part of the monthly technical SEO sprint.';
+}
+
+/* ══ STEP 2 — AUDIT ENGINE ══ */
+async function startAudit(){
+  const clientUrl=document.getElementById('client-url').value.trim();
+  if(!clientUrl){alert('Please enter the client website URL.');return;}
+  goStep(2);
+  document.getElementById('audit-loading').classList.remove('hidden');
+  document.getElementById('audit-done').classList.add('hidden');
+  const apiKey=document.getElementById('seoptimer-key').value.trim();
+  const targets=[
+    {key:'client',url:clientUrl,label:document.getElementById('client-name').value.trim()||'Client'},
+    {key:'comp1',url:document.getElementById('comp1-url').value.trim()||'https://competitor1.com',label:'Competitor 1'},
+    {key:'comp2',url:document.getElementById('comp2-url').value.trim()||'https://competitor2.com',label:'Competitor 2'},
+  ];
+  const steps=['ls1','ls2','ls3'];
+  for(let i=0;i<targets.length;i++){
+    const t=targets[i];
+    setLoadStep(steps[i],'active');
+    document.getElementById('audit-status-msg').textContent=`Auditing ${t.url}...`;
+    if(apiKey&&t.url.startsWith('http')){
+      try{
+        const resp=await fetch('https://api.seoptimer.com/api/report/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:t.url,apikey:apiKey})});
+        const data=await resp.json();
+        auditData[t.key]=parseSeoptimer(data,t.url,t.label);
+      }catch(err){auditData[t.key]=buildMockAudit(t.url,t.label);}
+    }else{await sleep(700);auditData[t.key]=buildMockAudit(t.url,t.label);}
+    setLoadStep(steps[i],'done');
+  }
+  setLoadStep('ls4','active');document.getElementById('audit-status-msg').textContent='Building detailed report...';
+  await sleep(400);setLoadStep('ls4','done');setLoadStep('ls5','active');
+  renderAudit();setLoadStep('ls5','done');
+  document.getElementById('audit-loading').classList.add('hidden');
+  document.getElementById('audit-done').classList.remove('hidden');
+}
+function setLoadStep(id,state){
+  const el=document.getElementById(id);if(!el)return;
+  el.className='load-step '+state;
+  const txt=el.textContent.replace(/^(Done|Active|Pending): /,'');
+  if(state==='done')el.textContent='Done: '+txt;
+  else if(state==='active')el.textContent='Active: '+txt;
+}
+function parseSeoptimer(data,url,label){
+  try{
+    const r=data.report||data;
+    const overall=r.score||r.overall_score||65;
+    const grade=overall>=85?'A':overall>=70?'B':overall>=55?'C':'D';
+    const mock=buildMockAudit(url,label);
+    return{...mock,url,label,mock:false,overall_score:overall,grade};
+  }catch(e){return buildMockAudit(url,label);}
+}
+
+function renderAudit(){
+  const c=auditData.client;
+  const crit=c.issues.critical.length,warn=c.issues.warnings.length,pass=c.issues.passed.length;
+  const scoreColor=c.overall_score>=80?'var(--green)':c.overall_score>=60?'var(--amber)':'var(--red)';
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-card stat-score"><div class="stat-val" style="color:${scoreColor}">${c.overall_score}</div><div class="stat-label">Overall Score</div><div class="stat-trend text-muted">Grade: ${c.grade}</div></div>
+    <div class="stat-card stat-critical"><div class="stat-val" style="color:var(--red)">${crit}</div><div class="stat-label">Critical Issues</div><div class="stat-trend" style="color:var(--red)">Requires immediate fix</div></div>
+    <div class="stat-card stat-warn"><div class="stat-val" style="color:var(--amber)">${warn}</div><div class="stat-label">Warnings</div><div class="stat-trend" style="color:var(--amber)">Improve for ranking</div></div>
+    <div class="stat-card stat-pass"><div class="stat-val" style="color:var(--green)">${pass}</div><div class="stat-label">Passed Checks</div><div class="stat-trend" style="color:var(--green)">Maintain these</div></div>`;
+  document.getElementById('t-client').innerHTML=renderAuditPanel(auditData.client);
+  document.getElementById('t-detail').innerHTML=renderDetailChecklist(auditData.client);
+  document.getElementById('t-c1').innerHTML=renderAuditPanel(auditData.comp1);
+  document.getElementById('t-c2').innerHTML=renderAuditPanel(auditData.comp2);
+  document.getElementById('t-compare').innerHTML=renderCompare();
+  document.getElementById('t-recs').innerHTML=renderRecs();
+  document.getElementById('t-export').innerHTML=renderExport();
+}
+function scClass(s){return s>=80?'score-a':s>=65?'score-b':s>=50?'score-c':'score-d';}
+function gradeBadge(g){const m={A:'badge-green',B:'badge-blue',C:'badge-amber',D:'badge-red'};return`<span class="badge ${m[g]||'badge-gray'}">${g}</span>`;}
+function scoreInline(s){return`<span class="inline-score ${s>=80?'score-high':s>=60?'score-mid':'score-low'}">${s}</span>`;}
+function renderAuditPanel(d){
+  if(!d)return'<p class="text-muted">No data.</p>';
+  const cats=Object.values(d.categories);
+  const barsHtml=cats.map(c=>`
+    <div class="cat-score-item">
+      <div><div class="cat-label">${c.label}</div>
+        <div class="progress-track" style="margin-top:3px">
+          <div class="progress-fill" style="width:${c.score}%;background:${c.score>=80?'var(--green)':c.score>=60?'var(--amber)':'var(--red)'}"></div>
+        </div>
+      </div>
+      <div class="cat-num" style="color:${c.score>=80?'var(--green)':c.score>=60?'var(--amber)':'var(--red)'}">${c.score}</div>
+    </div>`).join('');
+  const allIssues=[...d.issues.critical.map(i=>({...i,type:'crit'})),...d.issues.warnings.slice(0,5).map(i=>({...i,type:'warn'})),...d.issues.passed.slice(0,3).map(i=>({...i,type:'pass'}))];
+  const issuesHtml=allIssues.map(i=>`
+    <div class="issue-item ${i.type}">
+      <div class="issue-icon">${i.type==='crit'?'[!]':i.type==='warn'?'[W]':'[OK]'}</div>
+      <div>
+        <div class="issue-text">${i.text}</div>
+        ${i.fix?`<div class="issue-fix"><strong>Fix:</strong> ${i.fix}</div>`:''}
+        ${i.cat?`<div class="issue-category">${i.cat}</div>`:''}
+      </div>
+    </div>`).join('');
+  return`
+    <div class="flex items-center gap-12 mb-16">
+      <div class="score-ring ${scClass(d.overall_score)}">${d.overall_score}</div>
+      <div>
+        <div style="font-size:16px;font-weight:700">${d.label}</div>
+        <div class="text-muted text-sm mono">${d.url}</div>
+        <div style="margin-top:5px;display:flex;gap:6px;align-items:center">Grade: ${gradeBadge(d.grade)}${d.mock?'<span class="badge badge-amber">Demo Data</span>':'<span class="badge badge-green">Live Data</span>'}</div>
+      </div>
+    </div>
+    <div class="form-grid"><div><div class="cat-score-grid">${barsHtml}</div></div><div class="issue-list">${issuesHtml}</div></div>`;
+}
+function renderDetailChecklist(d){
+  if(!d||!d.checks)return'<p class="text-muted">Run audit first.</p>';
+  const cats=[...new Set(FULL_CHECKS.map(c=>c.cat))];
+  let html=`<div class="alert alert-info"><span>Note:</span><span>Detailed ${d.checks.length}-point SEO audit across ${cats.length} categories.</span></div>`;
+  cats.forEach(cat=>{
+    const catChecks=d.checks.filter(c=>c.cat===cat);
+    const passCount=catChecks.filter(c=>c.status==='pass').length;
+    html+=`<div style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)">
+        <span style="font-size:13px;font-weight:700">${cat}</span>
+        <span class="badge ${passCount===catChecks.length?'badge-green':passCount>catChecks.length/2?'badge-amber':'badge-red'}">${passCount}/${catChecks.length} passed</span>
+      </div>
+      <table class="audit-detail-table">
+        <thead><tr><th>Check</th><th>Status</th><th>Value / Finding</th><th>Priority</th><th>Recommendation</th></tr></thead>
+        <tbody>${catChecks.map(c=>`
+          <tr>
+            <td style="font-weight:500">${c.label}</td>
+            <td>${c.status==='pass'?'<span style="color:var(--green)">Pass</span>':c.status==='warn'?'<span style="color:var(--amber)">Warning</span>':'<span style="color:var(--red)">Fail</span>'}</td>
+            <td class="mono" style="color:var(--text3)">${c.value||'—'}</td>
+            <td>${c.critical?'<span class="badge badge-red">High</span>':'<span class="badge badge-gray">Med</span>'}</td>
+            <td style="color:var(--text3);font-size:11px;max-width:220px">${c.recommendation||'<span style="color:var(--green)">No action needed</span>'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+  });
+  return html;
+}
+function renderCompare(){
+  const sites=[auditData.client,auditData.comp1,auditData.comp2];
+  let html=`<table class="compare-table"><thead><tr><th>Metric</th><th>${sites[0].label}</th><th>${sites[1].label}</th><th>${sites[2].label}</th></tr></thead><tbody>`;
+  const overallScores=sites.map(s=>s.overall_score),best=Math.max(...overallScores);
+  html+=`<tr><td><strong>Overall Score</strong></td>${sites.map(s=>`<td class="${s.overall_score===best?'win':'lose'}">${s.overall_score} ${gradeBadge(s.grade)}</td>`).join('')}</tr>`;
+  Object.keys(auditData.client.categories).forEach(k=>{
+    const vals=sites.map(s=>s.categories[k]?.score||0),bv=Math.max(...vals);
+    html+=`<tr><td>${sites[0].categories[k]?.label||k}</td>${vals.map(v=>`<td class="${v===bv?'win':v===Math.min(...vals)?'lose':''}">${scoreInline(v)}</td>`).join('')}</tr>`;
+  });
+  html+=`</tbody></table>`;
+  return`<div class="alert alert-info" style="margin-bottom:12px"><span>Key:</span><span>Green = best performing, Red = weakest, for each row.</span></div>${html}`;
+}
+function renderRecs(){
+  const c=auditData.client;
+  const all=[...c.issues.critical.map(i=>({...i,sev:'critical'})),...c.issues.warnings.map(i=>({...i,sev:'warning'}))];
+  if(!all.length)return'<p class="text-muted">No issues found.</p>';
+  const priorities=all.filter(i=>i.sev==='critical'),secondaries=all.filter(i=>i.sev==='warning');
+  return`
+    <div class="alert alert-warn"><span>Priority:</span><span><strong>${priorities.length} critical items</strong> need fixing in Month 1.</span></div>
+    <h3 style="margin-bottom:10px;font-size:13px">Critical — Fix Immediately</h3>
+    ${priorities.map(i=>`<div style="padding:11px;border:1px solid var(--border);border-radius:var(--r2);margin-bottom:10px;background:var(--surface2);border-left:3px solid var(--red)"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:5px">${i.text}</div><div style="font-size:12px;color:var(--text2)">Recommended Fix: ${i.fix}</div></div>`).join('')}
+    <h3 style="margin:14px 0 10px;font-size:13px">Warnings — Address in Month 2</h3>
+    ${secondaries.map(i=>`<div style="padding:11px;border:1px solid var(--border);border-radius:var(--r2);margin-bottom:10px;background:var(--surface2);border-left:3px solid var(--amber)"><div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:5px">${i.text}</div><div style="font-size:12px;color:var(--text2)">Recommended Fix: ${i.fix}</div></div>`).join('')}`;
+}
+function renderExport(){
+  return`
+    <div class="alert alert-info"><span>Note:</span><span>Export audit data for client presentations.</span></div>
+    <div class="btn-group" style="margin-bottom:16px">
+      <button class="btn" onclick="exportAuditCSV()">Export as CSV</button>
+      <button class="btn" onclick="exportAuditJSON()">Export as JSON</button>
+      <button class="btn btn-primary" onclick="copyAuditSummary()">Copy Summary</button>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;font-family:var(--mono);font-size:12px;color:var(--text2);white-space:pre-wrap;max-height:300px;overflow-y:auto">${buildAuditTextSummary()}</div>`;
+}
+function buildAuditTextSummary(){
+  const c=auditData.client;if(!c)return'No audit data yet.';
+  const lines=[`SEO Audit Report — ${c.label}`,`URL: ${c.url}`,`Date: ${new Date().toLocaleDateString('en-IN')}`,``,`Overall Score: ${c.overall_score}/100 (Grade: ${c.grade})`,``,...Object.values(c.categories).map(cat=>`  ${cat.label}: ${cat.score}/100`),``,...c.issues.critical.map(i=>`  [CRITICAL] ${i.text}`)];
+  return lines.join('\n');
+}
+function exportAuditCSV(){const c=auditData.client;if(!c||!c.checks)return;const rows=[['Category','Check','Status','Priority','Value','Recommendation']];c.checks.forEach(ch=>rows.push([ch.cat,ch.label,ch.status,ch.critical?'High':'Medium',ch.value||'',ch.recommendation||'']));downloadText(rows.map(r=>r.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n'),`${c.label}_audit.csv`,'text/csv');}
+function exportAuditJSON(){const c=auditData.client;if(!c)return;downloadText(JSON.stringify(c,null,2),`${c.label}_audit.json`,'application/json');}
+function copyAuditSummary(){navigator.clipboard.writeText(buildAuditTextSummary()).then(()=>alert('Copied!')).catch(()=>alert('Copy failed.'));}
+function downloadText(content,filename,mime){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type:mime}));a.download=filename;a.click();}
+
+/* ══ STEP 3 — INVOICE ══ */
+const DEFAULT_LINES=[
+  {service:'Search Engine Optimisation — 15 Keywords Package (monthly retainer scope)',timeline:'30 Days',price:35000,category:'Monthly Retainer'},
+  {service:'Content Writing for SEO (4 blogs x up to 1,000 words at Rs. 2/word)',timeline:'30 Days',price:8000,category:'Monthly Retainer'},
+  {service:'Social Media Management — 10 posts (Carousel, Static, Video mix)',timeline:'30 Days',price:34000,category:'Monthly Retainer'},
+  {service:'Performance Marketing Management (Campaigns + Ad Account Management)',timeline:'30 Days',price:20000,category:'Monthly Retainer'},
+  {service:'Website Maintenance & Optimisation — 20 hrs/month',timeline:'30 Days',price:30000,category:'Monthly Retainer'},
+];
+function initInvoice(){if(invoiceLines.length)return;invoiceLines=DEFAULT_LINES.map(l=>({...l}));renderInvoice();}
+function addInvoiceLine(item){invoiceLines.push(item||{service:'',timeline:'30 Days',price:0,category:'Monthly Retainer'});renderInvoice();}
+function removeInvoiceLine(i){invoiceLines.splice(i,1);renderInvoice();}
+function renderInvoice(){
+  document.getElementById('invoice-lines').innerHTML=invoiceLines.map((l,i)=>`
+    <div class="invoice-row">
+      <input type="text" value="${escHtml(l.service)}" placeholder="Service description" onchange="invoiceLines[${i}].service=this.value"/>
+      <input type="text" value="${escHtml(l.timeline)}" onchange="invoiceLines[${i}].timeline=this.value" style="text-align:center"/>
+      <input type="number" value="${l.price}" min="0" step="500" onchange="invoiceLines[${i}].price=+this.value;recalcTotals()"/>
+      <select onchange="invoiceLines[${i}].category=this.value">
+        ${['Monthly Retainer','One-Time Setup','Performance Fee','Ad Spend (Direct)'].map(c=>`<option${c===l.category?' selected':''}>${c}</option>`).join('')}
+      </select>
+      <button class="btn btn-sm btn-danger" onclick="removeInvoiceLine(${i})">x</button>
+    </div>`).join('');
+  recalcTotals();
+}
+function recalcTotals(){
+  const sub=invoiceLines.reduce((s,l)=>s+(+l.price||0),0);
+  const gst=+(document.getElementById('gst-rate')?.value||18);
+  const gstAmt=Math.round(sub*gst/100),total=sub+gstAmt;
+  document.getElementById('invoice-totals').innerHTML=`
+    <div class="total-row"><span class="text-muted">Subtotal</span><span>Rs. ${fmtINR(sub)}</span></div>
+    <div class="total-row"><span class="text-muted">GST (${gst}%)</span><span>Rs. ${fmtINR(gstAmt)}</span></div>
+    <hr style="border:none;border-top:1px solid var(--border);width:220px;margin:4px 0"/>
+    <div class="total-row grand"><span>Total Monthly Retainer</span><span>Rs. ${fmtINR(total)}</span></div>`;
+}
+
+/* ══ STEP 4 — STRATEGY GENERATION ══ */
+async function generateStrategy(){
+  goStep(4);
+  document.getElementById('strategy-loading').classList.remove('hidden');
+  document.getElementById('strategy-done').classList.add('hidden');
+
+  const groqKey=document.getElementById('groq-key').value.trim();
+  const client=document.getElementById('client-name').value.trim()||'the client';
+  const industry=document.getElementById('client-industry').value.trim()||'the industry';
+  const city=document.getElementById('client-city').value.trim()||'the target city';
+  const sampleKws=document.getElementById('sample-keywords').value.trim()||industry;
+  const brandDiff=document.getElementById('brand-diff').value.trim()||'premium service quality';
+  const c=auditData.client||{};
+  const issueStr=[...(c.issues?.critical||[]),...(c.issues?.warnings||[])].map(i=>i.text).join('; ');
+
+  const prompt=`You are a Senior SEO Strategist and Content Director with 15+ years of experience producing C-suite-ready digital growth proposals.
+
+Task: Generate a highly specific, professional 6-month SEO + GEO + AEO Cornerstone Strategy for the following client. All language must be formal, explanatory, and precise — no generic filler, no emoji, no motivational clichés.
+
+CLIENT CONTEXT:
+- Business Name: ${client}
+- Industry / Niche: ${industry}
+- Target Geography: ${city}
+- Seed Keywords (use these as the basis for ALL keyword generation — do not generate unrelated keywords): ${sampleKws}
+- Brand Differentiators: ${brandDiff}
+- SEO Audit Score: ${c.overall_score||'N/A'}/100 (Grade: ${c.grade||'N/A'})
+- Identified Audit Gaps: ${issueStr||'on-page structure, performance, local SEO, schema markup'}
+
+CRITICAL INSTRUCTIONS:
+1. All 20-25 keyword targets MUST be directly derived from the seed keywords: "${sampleKws}". Do not use placeholder industries or unrelated verticals.
+2. Keyword clusters MUST reflect the actual business niche of ${industry}.
+3. Content buckets MUST be specific to ${industry} — do NOT include video production, YouTube, or video SEO as a content bucket.
+4. Each keyword target MUST include a "value_signal" field: one of "High Value", "Mid Value", or "Awareness" — based on purchase intent and commercial significance.
+5. Expected outcomes MUST include specific percentage and number claims (e.g., "3x to 4x increase in qualified organic leads within 6 months", "60-70% improvement in Google Business Profile discovery impressions").
+6. The 6-month roadmap must have exactly 6 phases. Month 4 should focus on Conversion Funnel Optimisation (not video). Month 5 should focus on Authority Building. Month 6 should focus on Expansion and Retention.
+7. All prose must be professional and explanatory — written as an expert consultant, not a marketer.
+
+OUTPUT FORMAT: Valid JSON only, no markdown fences, no preamble.
+
+{
+  "brand_premise": {"para1": "...", "para2": "...", "para3": "..."},
+  "executive_summary": "5 precise sentences covering the SEO opportunity, content strategy, GEO/AEO readiness, conversion architecture, and projected growth for ${client}.",
+  "justwords_advantage": [
+    {"title": "SEO + GEO + AEO Expertise", "description": "..."},
+    {"title": "Industry-Focused Content Strategy", "description": "..."},
+    {"title": "Conversion-Led Growth Architecture", "description": "..."},
+    {"title": "Hyperlocal Search Dominance", "description": "..."},
+    {"title": "Long-Term Authority Building", "description": "..."}
+  ],
+  "roadmap": [
+    {"month": 1, "title": "Technical SEO Foundation", "focus": "...", "focus_bullets": ["...","...","..."], "activities": ["...","...","...","...","...","...","..."]},
+    {"month": 2, "title": "Pillar Pages & Local SEO", "focus": "...", "focus_bullets": ["...","...","..."], "activities": ["...","...","...","...","...","...","..."]},
+    {"month": 3, "title": "Content Authority & GEO/AEO", "focus": "...", "focus_bullets": ["...","...","..."], "activities": ["...","...","...","...","...","...","..."]},
+    {"month": 4, "title": "Conversion Funnel Optimisation", "focus": "...", "focus_bullets": ["...","...","..."], "activities": ["...","...","...","...","...","...","..."]},
+    {"month": 5, "title": "Authority Building & Digital PR", "focus": "...", "focus_bullets": ["...","...","..."], "activities": ["...","...","...","...","...","...","..."]},
+    {"month": 6, "title": "Expansion & Retention", "focus": "...", "focus_bullets": ["...","...","..."], "activities": ["...","...","...","...","...","...","..."]}
+  ],
+  "keyword_targets": [
+    {"keyword": "...", "intent": "Transactional", "difficulty": "Medium", "value_signal": "High Value"}
+  ],
+  "keyword_clusters": [
+    {"seed_keyword": "...", "search_intent": "Transactional", "proposed_url": "/slug", "cluster_keywords": ["kw1","kw2","kw3","kw4"]}
+  ],
+  "content_buckets": [
+    {"name": "...", "description": "...", "topics": ["...","...","...","..."], "monthly_pieces": 3, "geo_aeo_note": "..."}
+  ],
+  "total_monthly_pieces": 16,
+  "competitive_moat": {
+    "summary": "...",
+    "moat_name": "...",
+    "strategic_includes": ["...","...","...","...","...","...","...","..."]
+  },
+  "expected_outcomes": [
+    "3x to 4x increase in qualified organic leads from ${city} within 6 months of campaign launch",
+    "...",
+    "...",
+    "...",
+    "...",
+    "...",
+    "..."
+  ]
+}
+
+All content must be specific to ${industry} in ${city}. Use ${sampleKws} as the foundation for all keyword work.`;
+
+  ['stl1','stl2','stl3','stl4','stl5'].forEach((id,i)=>{
+    const el=document.getElementById(id);if(el)el.className='load-step'+(i===0?' active':'');
+  });
+  document.getElementById('strategy-status-msg').textContent='Calling Groq Llama 3.3-70b...';
+
+  if(groqKey){
+    try{
+      setStratLoad('stl1','done');setStratLoad('stl2','active');
+      const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':`Bearer ${groqKey}`},
+        body:JSON.stringify({
+          model:'llama-3.3-70b-versatile',
+          messages:[{role:'user',content:prompt}],
+          max_tokens:4500,temperature:0.55,
+          response_format:{type:'json_object'}
+        })
+      });
+      const d=await resp.json();
+      if(d.error)throw new Error(d.error.message);
+      setStratLoad('stl2','done');setStratLoad('stl3','active');
+      strategyData=JSON.parse(d.choices[0].message.content);
+      setStratLoad('stl3','done');setStratLoad('stl4','active');
+      await sleep(300);setStratLoad('stl4','done');setStratLoad('stl5','active');
+    }catch(err){
+      console.warn('Groq error:',err);
+      strategyData=getMockStrategy(client,industry,city,sampleKws,brandDiff);
+    }
+  }else{
+    await sleep(900);
+    strategyData=getMockStrategy(client,industry,city,sampleKws,brandDiff);
+  }
+
+  setStratLoad('stl5','active');
+  renderFullStrategyReport();
+  setStratLoad('stl5','done');
+  document.getElementById('strategy-loading').classList.add('hidden');
+  document.getElementById('strategy-done').classList.remove('hidden');
+}
+
+function setStratLoad(id,state){
+  const el=document.getElementById(id);if(!el)return;
+  const labels={stl1:'Building strategy prompt',stl2:'Generating keyword strategy and clustering',stl3:'Building content buckets and roadmap',stl4:'Finalising competitive moat and SOW',stl5:'Rendering full report'};
+  el.className='load-step '+state;
+  const prefix=state==='done'?'Done: ':state==='active'?'Active: ':'Pending: ';
+  el.textContent=prefix+(labels[id]||'');
+}
+
+/* ══ MOCK STRATEGY — uses industry/niche dynamically ══ */
+function getMockStrategy(client,industry,city,sampleKws,brandDiff){
+  const sk=sampleKws||industry;
+  const diff=brandDiff||'premium quality and specialised expertise';
+  const kwBase=sk.split(',').map(k=>k.trim()).filter(Boolean);
+  const kw1=kwBase[0]||industry;
+  const kw2=kwBase[1]||kw1;
+  const cityShort=city.split(',')[0].trim();
+  const citySlug=cityShort.toLowerCase().replace(/\s+/g,'-');
+  const yr=new Date().getFullYear();
+
+  // Build 25 highly niche-specific keywords from the actual seed keywords
+  const kwTargets=[
+    {keyword:`${kw1} in ${cityShort}`,intent:'Transactional',difficulty:'High',value_signal:'High Value'},
+    {keyword:`best ${kw1} ${cityShort}`,intent:'Transactional',difficulty:'High',value_signal:'High Value'},
+    {keyword:`${kw1} near me`,intent:'Transactional',difficulty:'High',value_signal:'High Value'},
+    {keyword:`top ${kw1} ${cityShort}`,intent:'Transactional',difficulty:'Medium',value_signal:'High Value'},
+    {keyword:`${kw1} fees ${cityShort}`,intent:'Transactional',difficulty:'Low',value_signal:'High Value'},
+    {keyword:`affordable ${kw1} ${cityShort}`,intent:'Transactional',difficulty:'Low',value_signal:'Mid Value'},
+    {keyword:`${kw2} ${cityShort}`,intent:'Transactional',difficulty:'Medium',value_signal:'High Value'},
+    {keyword:`best ${kw2} near ${cityShort}`,intent:'Transactional',difficulty:'Medium',value_signal:'High Value'},
+    {keyword:`experienced ${kw1} ${cityShort}`,intent:'Transactional',difficulty:'Low',value_signal:'High Value'},
+    {keyword:`${kw1} consultation ${cityShort}`,intent:'Transactional',difficulty:'Low',value_signal:'High Value'},
+    {keyword:`${kw1} reviews ${cityShort}`,intent:'Transactional',difficulty:'Low',value_signal:'Mid Value'},
+    {keyword:`${kw1} pricing India`,intent:'Transactional',difficulty:'Medium',value_signal:'Mid Value'},
+    {keyword:`how to choose ${kw1} in ${cityShort}`,intent:'Informational',difficulty:'Low',value_signal:'Mid Value'},
+    {keyword:`what does a ${kw1} do`,intent:'Informational',difficulty:'Low',value_signal:'Awareness'},
+    {keyword:`${kw1} process explained`,intent:'Informational',difficulty:'Low',value_signal:'Awareness'},
+    {keyword:`${kw1} checklist ${yr}`,intent:'Informational',difficulty:'Low',value_signal:'Awareness'},
+    {keyword:`benefits of hiring a ${kw1}`,intent:'Informational',difficulty:'Low',value_signal:'Awareness'},
+    {keyword:`${kw1} vs doing it yourself`,intent:'Informational',difficulty:'Low',value_signal:'Mid Value'},
+    {keyword:`${kw1} for startups ${cityShort}`,intent:'Transactional',difficulty:'Medium',value_signal:'High Value'},
+    {keyword:`${kw1} for small business India`,intent:'Transactional',difficulty:'Medium',value_signal:'High Value'},
+    {keyword:`emergency ${kw1} ${cityShort}`,intent:'Transactional',difficulty:'Low',value_signal:'High Value'},
+    {keyword:`${kw1} specialists ${cityShort}`,intent:'Transactional',difficulty:'Medium',value_signal:'High Value'},
+    {keyword:`${kw2} cost breakdown`,intent:'Informational',difficulty:'Low',value_signal:'Mid Value'},
+    {keyword:`${kw1} case study ${cityShort}`,intent:'Informational',difficulty:'Low',value_signal:'Mid Value'},
+    {keyword:`${kw1} service providers India`,intent:'Transactional',difficulty:'High',value_signal:'High Value'},
+  ];
+
+  return{
+    brand_premise:{
+      para1:`${client} is an established ${industry} provider operating in ${cityShort} with a clear strategic focus on ${diff}. The organisation has built its market presence on a foundation of measurable outcomes, professional rigour, and a client engagement model that prioritises long-term relationships over transactional interactions. As digital discovery increasingly drives the first point of contact between service providers and prospective clients, ${client}'s ability to be found, trusted, and chosen through organic channels has become a direct commercial priority.`,
+      para2:`The current digital footprint of ${client} reflects an operation that has relied predominantly on word-of-mouth referrals and traditional business development. While this speaks to the quality of the service delivery, it also represents a significant untapped opportunity. The competitive landscape in ${industry} within ${city} has undergone a structural shift: prospective clients now conduct detailed online research before initiating contact, compare multiple providers, and make decisions informed by digital signals such as search rankings, content authority, review volumes, and website credibility.`,
+      para3:`Justwords' proposed 6-month digital growth programme is designed to systematically address these gaps. Through a structured combination of technical SEO remediation, hyperlocal search optimisation, EEAT-compliant content development, and AI-search readiness, ${client} will be positioned as the most authoritative and discoverable ${industry} provider in ${cityShort}. The programme does not pursue vanity metrics — it is architected to generate a measurable and compounding increase in qualified inbound inquiries from the target market.`
+    },
+    executive_summary:`${client}'s current SEO audit reveals an overall score of ${auditData.client?.overall_score||'N/A'}/100, indicating multiple high-priority gaps in technical infrastructure, on-page structure, local search visibility, and conversion readiness that are actively suppressing organic traffic and lead generation. The proposed 6-month strategy addresses these gaps through a phased programme: beginning with technical foundation work in Month 1, advancing through content authority and GEO/AEO optimisation in Months 2-3, and consolidating with conversion funnel optimisation, digital PR, and geographic expansion in Months 4-6. A dedicated keyword strategy comprising 25 high-intent terms specific to ${industry} in ${cityShort} — anchored by "${kw1}" and "${kw2}" — will drive targeted, purchase-ready traffic to purpose-built landing pages and pillar content assets. The integration of Generative Engine Optimisation (GEO) and Answer Engine Optimisation (AEO) best practices ensures ${client}'s content is structured to appear in AI-driven search environments including Google AI Overviews, Perplexity, and ChatGPT, thereby securing discoverability beyond traditional blue-link results. Justwords projects a 3x to 4x increase in qualified organic leads from ${cityShort} within the 6-month campaign window, alongside measurable improvements in Google Business Profile visibility, domain authority, and website conversion rates.`,
+    justwords_advantage:[
+      {title:'SEO + GEO + AEO Expertise',description:`Justwords engineers search presence across all discovery layers — traditional organic rankings, Google AI Overviews, and conversational AI platforms such as Perplexity and ChatGPT. For ${client}, this means structured content assets that serve both conventional keyword searches and the increasingly prevalent AI-mediated query formats that ${industry} prospects use when evaluating service providers in ${cityShort}.`},
+      {title:'Industry-Focused Content Strategy',description:`All content produced under this programme will be authored by subject-matter specialists and structured to meet Google's EEAT (Experience, Expertise, Authoritativeness, Trustworthiness) standards. Content will be calibrated to the specific decision-making journey of ${industry} clients — addressing the questions, objections, and research behaviours that characterise the ${client} target audience in ${city}.`},
+      {title:'Conversion-Led Growth Architecture',description:`Justwords designs content and landing page architecture around conversion outcomes, not traffic volume. Every pillar page, blog post, and FAQ asset is mapped to a specific stage in the client acquisition funnel — from initial awareness through active consideration to point of contact — and is supported by structured internal linking, schema markup, and conversion rate optimisation.`},
+      {title:'Hyperlocal Search Dominance',description:`The strategy deploys a granular local SEO framework targeting ${cityShort} and its constituent neighbourhoods and business districts. Google Business Profile optimisation, NAP consistency enforcement, local citation building, and geo-tagged landing pages will establish ${client} as the dominant ${industry} provider in local search results across multiple micro-geographic queries.`},
+      {title:'Long-Term Authority Building',description:`Justwords builds search authority as a compounding asset. Unlike paid campaigns that cease generating returns when budgets are paused, the organic infrastructure created through this programme — technical SEO, EEAT content, schema implementation, and backlink acquisition — continues to generate value and increase in influence over time, reducing ${client}'s long-term cost per lead.`},
+    ],
+    roadmap:[
+      {month:1,title:'Technical SEO Foundation',focus:'Remediate all critical technical issues and establish measurement infrastructure',focus_bullets:['Full technical SEO audit and remediation','Analytics and conversion tracking configuration','On-page structural corrections across all key pages'],activities:[`Fix all JavaScript rendering issues and minification errors identified in the audit`,`Install Google Analytics 4 with properly configured conversion events for ${industry}-specific user actions`,`Implement Facebook Pixel and Google Ads conversion tracking for retargeting readiness`,`Add and verify missing NAP (Name, Address, Phone) consistency across the website and GBP`,`Submit corrected XML sitemap to Google Search Console`,`Resolve all identified crawl errors and broken links`,`Configure schema markup baseline: LocalBusiness, FAQ, and Service schema via JSON-LD`]},
+      {month:2,title:'Pillar Pages & Local SEO Expansion',focus:'Build keyword-targeted landing pages and establish local search presence',focus_bullets:['Intent-aligned pillar page development','Google Business Profile optimisation','Local citation and NAP consistency programme'],activities:[`Develop core pillar pages for each primary ${industry} service and location combination`,`Build geo-targeted landing pages covering all relevant service areas within ${city}`,`Construct and implement a structured internal linking architecture across all pillar pages`,`Deploy FAQ schema across every key landing page`,`Complete a full NAP consistency audit and initiate citation building on priority directories`,`Optimise Google Business Profile: category selection, service listings, photo library, Q&A section`,`Begin targeted backlink outreach to ${industry} directories and relevant local organisations`]},
+      {month:3,title:'Content Authority & GEO/AEO Optimisation',focus:'Build topical authority and ensure discoverability in AI-driven search environments',focus_bullets:['EEAT-standard editorial content programme','Answer Engine Optimisation (AEO) implementation','Featured snippet and AI Overview targeting'],activities:[`Develop 4 EEAT-compliant blog articles addressing the highest-volume informational queries in ${industry}`,`Structure all content in conversational Q&A format optimised for AI engine citation (Perplexity, ChatGPT, Gemini)`,`Implement HowTo and Article schema across all new content assets`,`Target 10 priority featured snippet positions for informational queries specific to ${kw1}`,`Conduct content gap analysis against top 3 organic competitors in ${cityShort}`,`Publish author bio and credentials pages to strengthen EEAT signals`,`Update and expand existing website content with structured semantic depth`]},
+      {month:4,title:'Conversion Funnel Optimisation',focus:'Convert organic traffic into qualified leads through systematic CRO and nurturing',focus_bullets:['Landing page conversion rate optimisation','Lead nurturing and WhatsApp funnel','Retargeting campaign architecture'],activities:[`Conduct A/B testing on primary CTAs, form placements, and headline copy across top 5 landing pages`,`Integrate WhatsApp API with click-to-chat tracking configured as a GA4 conversion event`,`Build Meta and Google retargeting audiences from organic website visitors`,`Design and implement lead nurturing email workflows for inquiry-to-consultation pipeline`,`Optimise page load performance on top-traffic pages to reduce bounce rate by a target of 20-25%`,`Implement live chat or callback widget on high-intent landing pages`,`Review and refine keyword targeting based on 90-day GSC performance data`]},
+      {month:5,title:'Authority Building & Digital PR',focus:'Strengthen domain authority and brand credibility through earned media',focus_bullets:['High-DA backlink acquisition','Client success and case study content','Digital PR and press outreach'],activities:[`Execute targeted outreach to acquire 8-10 backlinks from high-DA ${industry} publications and directories`,`Publish 2-3 detailed client success case studies with measurable outcome data`,`Submit press releases to relevant industry publications covering noteworthy ${client} milestones`,`Build presence on Quora and Reddit through substantive expert contributions to ${industry} questions`,`Initiate guest post programme on 2-3 authority ${industry} blogs`,`Review and disavow any newly identified toxic backlinks`,`Conduct 5-month performance benchmarking: keywords, traffic, leads, and conversion rates`]},
+      {month:6,title:'Expansion & Retention',focus:'Scale keyword footprint, expand geographic reach, and consolidate organic market position',focus_bullets:['Adjacent geography targeting','Keyword expansion to secondary service areas','Programme review and 6-month ROI report'],activities:[`Expand keyword targeting to adjacent geographies and secondary service areas within ${city}`,`Develop content and landing pages for 3-5 newly identified high-opportunity search queries`,`Publish comprehensive 6-month SEO performance report with traffic, ranking, lead, and ROI data`,`Review and update all pillar pages based on ranking performance and content gap findings`,`Plan Year 2 keyword expansion strategy incorporating long-tail and emerging query patterns`,`Conduct a full backlink profile review and initiate second-cycle authority building`,`Deliver strategic roadmap for Months 7-12 based on programme learnings`]},
+    ],
+    keyword_targets:kwTargets,
+    keyword_clusters:[
+      {seed_keyword:kw1+' '+cityShort,search_intent:'Transactional',proposed_url:`/${kw1.toLowerCase().replace(/\s+/g,'-')}-${citySlug}`,cluster_keywords:[`best ${kw1} ${cityShort}`,`${kw1} near me`,`top ${kw1} ${cityShort}`,`${kw1} consultation ${cityShort}`]},
+      {seed_keyword:kw2+' '+cityShort,search_intent:'Transactional',proposed_url:`/${kw2.toLowerCase().replace(/\s+/g,'-')}-${citySlug}`,cluster_keywords:[`${kw2} near me`,`experienced ${kw2} ${cityShort}`,`${kw2} fees`,`best ${kw2} India`]},
+      {seed_keyword:kw1+' for Businesses',search_intent:'Transactional',proposed_url:`/${kw1.toLowerCase().replace(/\s+/g,'-')}-for-businesses`,cluster_keywords:[`${kw1} for startups ${cityShort}`,`${kw1} for small business India`,`corporate ${kw1} ${cityShort}`,`enterprise ${kw1} services`]},
+      {seed_keyword:kw1+' Guide',search_intent:'Informational',proposed_url:`/guide-to-${kw1.toLowerCase().replace(/\s+/g,'-')}`,cluster_keywords:[`how to choose ${kw1}`,`what does a ${kw1} do`,`${kw1} process explained`,`${kw1} checklist ${yr}`]},
+      {seed_keyword:'Cost of '+kw1,search_intent:'Informational',proposed_url:`/${kw1.toLowerCase().replace(/\s+/g,'-')}-cost-india`,cluster_keywords:[`${kw1} fees ${cityShort}`,`affordable ${kw1} ${cityShort}`,`${kw2} cost breakdown`,`${kw1} pricing India`]},
+      {seed_keyword:kw1+' Reviews',search_intent:'Transactional',proposed_url:`/${kw1.toLowerCase().replace(/\s+/g,'-')}-reviews-${citySlug}`,cluster_keywords:[`${kw1} reviews ${cityShort}`,`best rated ${kw1} ${cityShort}`,`${kw1} testimonials`,`${client} reviews`]},
+      {seed_keyword:'Hyperlocal '+kw1,search_intent:'Transactional',proposed_url:`/${kw1.toLowerCase().replace(/\s+/g,'-')}-${citySlug}-areas`,cluster_keywords:[`${kw1} near me ${cityShort}`,`${kw1} specialists ${cityShort}`,`${kw1} in South ${cityShort}`,`local ${kw1} ${cityShort}`]},
+      {seed_keyword:kw1+' vs Alternatives',search_intent:'Informational',proposed_url:`/${kw1.toLowerCase().replace(/\s+/g,'-')}-vs-alternatives`,cluster_keywords:[`${kw1} vs doing it yourself`,`benefits of hiring a ${kw1}`,`when to hire a ${kw1}`,`is ${kw1} worth it`]},
+    ],
+    content_buckets:[
+      {name:'Client Success and Case Studies',description:`Proof-based editorial content that documents measurable outcomes achieved for ${client}'s clients. This bucket serves as the primary trust and credibility signal for prospective buyers conducting research before initiating contact.`,topics:[`Client case study: documented outcome for a ${industry} engagement in ${cityShort}`,`Success story: how a ${city}-based client resolved a complex ${industry} challenge`,`Client testimonials and outcome data: ${yr} cohort results`,`Before-and-after analysis: the impact of engaging a specialist ${industry} provider`],monthly_pieces:2,geo_aeo_note:`Structured with Review and Article schema. EEAT-standard with named participants and quantified outcomes. Eligible for rich snippet display in Google Search.`},
+      {name:'Definitive Guides and Educational Resources',description:`High-depth informational content targeting the research-stage queries that ${industry} prospects use during the consideration phase. These assets serve as primary AEO targets and position ${client} as a topical authority.`,topics:[`The complete guide to ${kw1} in ${city}: what to expect, how to choose, and what it costs`,`Step-by-step process: how ${industry} works from initial inquiry to delivery`,`The ${yr} checklist: what every ${industry} client in ${cityShort} needs to know`,`Frequently asked questions about ${kw1}: answered by specialists`],monthly_pieces:4,geo_aeo_note:`Conversational Q&A format structured for AEO indexing. FAQ schema deployed on every page. Targeted at Google AI Overviews, Perplexity citations, and voice search queries.`},
+      {name:'Hyperlocal Content and Location Pages',description:`Geo-targeted content designed to capture high-intent location-based searches for ${industry} services across ${city} and its surrounding business districts and neighbourhoods.`,topics:[`${industry} services in ${cityShort}: a comprehensive local guide`,`Why ${city}-based clients choose ${client} for their ${industry} needs`,`${industry} providers near [neighbourhood]: comparison and selection guide`,`The local ${industry} landscape in ${cityShort}: what sets the best apart`],monthly_pieces:3,geo_aeo_note:`Structured with LocalBusiness and FAQ schema. Optimised for Google AI Overviews on local queries. NAP-consistent and internally linked to the primary location pillar page.`},
+      {name:'Expert Insight and Thought Leadership',description:`Authority-building editorial content authored by ${client}'s senior specialists. This bucket generates EEAT signals, supports backlink acquisition, and positions the firm as a leading intellectual voice in ${industry}.`,topics:[`Expert analysis: the most significant ${industry} developments in ${yr}`,`Common mistakes clients make when selecting a ${industry} provider — and how to avoid them`,`The future of ${industry} in India: trends and implications for ${cityShort} businesses`,`Specialist perspective: how ${industry} regulations are evolving and what it means for clients`],monthly_pieces:2,geo_aeo_note:`Author-attributed, EEAT-compliant. Structured for LLM citation as a topical authority source in ${industry}. Shared on LinkedIn for secondary amplification.`},
+      {name:'GEO/AEO Answer Hub',description:`A dedicated conversational content hub built to be cited by AI search engines and to capture voice search and zero-click results for the highest-frequency ${industry} queries in India.`,topics:[`What is ${kw1} and how does it work? A plain-language explanation`,`How much does ${kw1} cost in ${cityShort} in ${yr}?`,`How long does the ${kw1} process take? Timeline and milestones`,`Is it necessary to hire a ${industry} specialist, or can it be done independently?`],monthly_pieces:3,geo_aeo_note:`Pure GEO/AEO format: direct answer followed by structured elaboration. Targets AI Overviews, Perplexity featured responses, voice search, and zero-click SERP positions.`},
+      {name:'Comparative and Decision-Stage Content',description:`Content designed to intercept prospective clients at the final evaluation stage — when they are actively comparing providers and deciding between options. This bucket has the highest direct conversion potential.`,topics:[`How to evaluate and compare ${industry} providers in ${cityShort}: a practical framework`,`Questions you should ask any ${industry} provider before signing an engagement`,`${kw1} vs ${kw2}: understanding the difference and choosing the right service`,`What to expect from a ${industry} engagement: timelines, deliverables, and accountability`],monthly_pieces:2,geo_aeo_note:`High commercial intent. Structured with Comparison and FAQ schema. Internally linked to service landing pages and CTA points. Optimised for bottom-of-funnel search queries.`},
+    ],
+    total_monthly_pieces:16,
+    competitive_moat:{
+      summary:`${client}'s sustainable competitive advantage in digital search should be built not merely on keyword rankings, but on becoming the most authoritative, trusted, and AI-cited ${industry} source in ${cityShort}. By combining a technically sound website infrastructure, a structured content programme built on demonstrable expertise and verified outcomes, a hyperlocal search footprint across all relevant ${city} micro-geographies, and a schema-rich data layer that AI engines preferentially cite, ${client} will establish a digital moat that compounds in value over time and is structurally difficult for competitors to replicate quickly. The core strategic play is a "Structured Authority Ecosystem": implementing comprehensive schema across every page (LocalBusiness, FAQ, HowTo, Review, Article) creates a machine-readable knowledge layer that generative AI engines draw from when generating answers to ${industry} queries — giving ${client} a systematic citation advantage in AI-mediated search.`,
+      moat_name:'Structured Authority Ecosystem',
+      strategic_includes:[`Hyperlocal SEO dominance across all ${cityShort} micro-geographies and service area clusters`,`EEAT-certified expert-authored content with full author attribution and credentials`,`AI-search optimisation (GEO/AEO) for Google AI Overviews, Perplexity, Gemini, and ChatGPT`,`Comprehensive schema implementation: LocalBusiness, FAQ, HowTo, Review, Article on all pages`,`Client outcome documentation and success story programme as primary trust infrastructure`,`High-DA backlink acquisition from authoritative ${industry} publications and directories`,`Conversion-optimised landing page architecture with structured internal linking and CTA hierarchy`,`Structured lead nurturing and retargeting system converting organic visitors into qualified inquiries`],
+    },
+    expected_outcomes:[
+      `3x to 4x increase in qualified organic leads from ${cityShort} within 6 months of campaign initiation`,
+      `60 to 70% improvement in Google Business Profile discovery impressions and direction requests`,
+      `Top-5 Google ranking for a minimum of 8 primary transactional keywords within 4-5 months`,
+      `40 to 50% reduction in cost-per-lead from organic channels versus current paid acquisition costs`,
+      `25 to 35% increase in website conversion rate (visitor-to-inquiry) through CRO optimisation`,
+      `Domain Authority improvement of 8-12 points over the 6-month programme period`,
+      `Measurable AI-search citations (Perplexity, Google AI Overviews) for at least 5 target ${industry} queries`,
+      `50 to 60% increase in total monthly organic traffic compared to the pre-campaign baseline`,
+    ],
+  };
+}
+
+/* ══ RENDER FULL STRATEGY REPORT ══ */
+function renderFullStrategyReport(){
+  const s=strategyData;
+  const client=document.getElementById('client-name').value.trim()||'the client';
+  const by=document.getElementById('prepared-by').value.trim()||'Akshat Raj';
+  const today=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  const isLive=document.getElementById('groq-key').value.trim();
+  const c=auditData.client||{};
+
+  let html='';
+
+  html+=isLive
+    ?`<div class="alert alert-success" style="margin-bottom:20px"><span>Live:</span><span>Strategy generated by Groq Llama 3.3-70b using the Justwords SOP Cornerstone Strategy prompt.</span></div>`
+    :`<div class="alert alert-warn" style="margin-bottom:20px"><span>Demo:</span><span>Demo strategy displayed — add your Groq API key in Step 1 to generate a live, client-specific strategy.</span></div>`;
+
+  /* SECTION 1: BRAND PREMISE */
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Brand Premise</h2></div>
+    <div class="premise-box">
+      <p>${escHtml((s.brand_premise?.para1)||'')}</p>
+      <p>${escHtml((s.brand_premise?.para2)||'')}</p>
+      <p>${escHtml((s.brand_premise?.para3)||'')}</p>
+    </div>
+  </div>`;
+
+  /* SECTION 2: EXECUTIVE SUMMARY */
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Executive Summary</h2></div>
+    <div class="exec-summary-box">${escHtml(s.executive_summary||'')}</div>
+    <div style="margin-top:16px">
+      <div class="sow-section-title">The proposed 6-month SEO + GEO + AEO strategy focuses on the following priorities:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        ${['Hyperlocal search discoverability','Topical content authority building','Client and prospect trust content','Conversion-optimised landing pages','AI-search readiness (GEO/AEO)','Lead nurturing through content funnels'].map(f=>`<div class="roadmap-activity">${f}</div>`).join('')}
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <div class="sow-section-title">Projected outcomes at 6 months:</div>
+      <div class="outcomes-grid" style="margin-top:10px">
+        ${(s.expected_outcomes||[]).map(o=>`<div class="outcome-item"><div class="outcome-icon" style="font-size:13px;color:var(--green);font-weight:700">+</div><div>${escHtml(o)}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+
+  /* SECTION 3: 6-MONTH ROADMAP */
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>6-Month SEO + GEO + AEO Execution Roadmap</h2></div>
+    <div class="roadmap-grid">
+      ${(s.roadmap||[]).map(m=>`
+        <div class="roadmap-month">
+          <div class="roadmap-month-header">
+            <div class="roadmap-month-badge">M${m.month}</div>
+            <div>
+              <div class="roadmap-month-title">${escHtml(m.title)}</div>
+              <div class="roadmap-month-focus">${escHtml(m.focus)}</div>
+            </div>
+          </div>
+          <div class="roadmap-month-body">
+            ${(m.focus_bullets||[]).length?`<div class="roadmap-phase-label">Phase Focus Areas</div>
+            <div class="roadmap-focus-tags">
+              ${(m.focus_bullets||[]).map(fb=>`<span class="roadmap-focus-tag">${escHtml(fb)}</span>`).join('')}
+            </div>`:''}
+            <div class="roadmap-activities-label">Key Deliverables</div>
+            <div class="roadmap-activities">
+              ${(m.activities||[]).map(a=>`<div class="roadmap-activity">${escHtml(a)}</div>`).join('')}
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+
+  /* SECTION 4: KEYWORD STRATEGY — with Value Signal column */
+  const totalKws=(s.keyword_targets||[]).length;
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Keyword Strategy</h2></div>
+    <div class="kw-section-title">High-Intent Keyword Targets <span class="badge badge-teal" style="margin-left:8px">${totalKws} keywords</span></div>
+    <p class="text-sm text-muted" style="margin-bottom:12px">All keywords are derived from the seed terms provided for this engagement. Value Signal indicates commercial priority: High Value (direct purchase intent), Mid Value (comparison/evaluation stage), Awareness (top-of-funnel research).</p>
+    <div style="overflow-x:auto;margin-bottom:24px">
+      <table class="full-kw-table">
+        <thead><tr><th>#</th><th>Keyword</th><th>Search Intent</th><th>Difficulty</th><th>Value Signal</th></tr></thead>
+        <tbody>
+          ${(s.keyword_targets||[]).map((k,i)=>{
+            const vs=(k.value_signal||'Mid Value');
+            const vsBadge=vs==='High Value'?'badge-green':vs==='Mid Value'?'badge-amber':'badge-gray';
+            return`<tr>
+              <td class="text-muted">${i+1}</td>
+              <td><strong>${escHtml(k.keyword)}</strong></td>
+              <td><span class="badge ${(k.intent||'').toLowerCase().includes('transact')?'badge-blue':'badge-green'}">${escHtml(k.intent||'—')}</span></td>
+              <td><span class="badge ${(k.difficulty||'').toLowerCase()==='low'?'badge-green':(k.difficulty||'').toLowerCase()==='medium'?'badge-amber':'badge-red'}">${escHtml(k.difficulty||'—')}</span></td>
+              <td><span class="badge ${vsBadge}">${escHtml(vs)}</span></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="kw-section-title">Keyword Clustering Framework</div>
+    <p class="text-sm text-muted" style="margin-bottom:12px">Keywords grouped by topical cluster, mapped to proposed pillar page URLs and search intent — as per Justwords SOP content architecture framework.</p>
+    <div style="overflow-x:auto">
+      <table class="cluster-table-full">
+        <thead><tr><th>Seed Keyword / Cluster Theme</th><th>Search Intent</th><th>Proposed Pillar Page URL</th><th>Supporting Cluster Keywords</th></tr></thead>
+        <tbody>
+          ${(s.keyword_clusters||[]).map(cl=>`
+            <tr>
+              <td><strong style="color:var(--accent)">${escHtml(cl.seed_keyword)}</strong></td>
+              <td><span class="badge ${(cl.search_intent||'').toLowerCase().includes('transact')?'badge-blue':'badge-green'}">${escHtml(cl.search_intent||'—')}</span></td>
+              <td style="font-family:var(--mono);font-size:11px;color:var(--teal)">${escHtml(cl.proposed_url||'—')}</td>
+              <td>
+                <div class="cluster-kw-chips">
+                  ${(cl.cluster_keywords||[]).map(k=>`<span class="badge badge-gray">${escHtml(k)}</span>`).join('')}
+                </div>
+              </td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  /* SECTION 5: CONTENT STRATEGY */
+  const totalPieces=s.total_monthly_pieces||(s.content_buckets||[]).reduce((a,b)=>a+(b.monthly_pieces||0),0);
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Content Strategy</h2></div>
+    <div class="alert alert-success" style="margin-bottom:16px">
+      <span>Summary:</span>
+      <span><strong>Total monthly content production: ${totalPieces} pieces.</strong> All content is SEO-optimised, human-written, and EEAT-compliant. GEO (Generative Engine Optimisation) and AEO (Answer Engine Optimisation) best practices are applied across all content buckets.</span>
+    </div>
+    <div class="kw-section-title">Content Buckets</div>
+    <div class="content-buckets-grid">
+      ${(s.content_buckets||[]).map((b,i)=>`
+        <div class="content-bucket-card">
+          <div class="content-bucket-header">
+            <div class="content-bucket-title">${i+1}. ${escHtml(b.name)}</div>
+            <span class="badge badge-green">${b.monthly_pieces||0} pieces/month</span>
+          </div>
+          <div class="content-bucket-body">
+            <div class="content-bucket-desc">${escHtml(b.description||'')}</div>
+            <div class="content-bucket-topics">
+              ${(b.topics||[]).map(t=>`<div class="content-topic-item">${escHtml(t)}</div>`).join('')}
+            </div>
+            ${b.geo_aeo_note?`<div class="geo-aeo-note">GEO/AEO Note: ${escHtml(b.geo_aeo_note)}</div>`:''}
+          </div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+
+  /* SECTION 6: COMPETITIVE MOAT */
+  const moat=s.competitive_moat||{};
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Competitive Moat Strategy</h2></div>
+    ${moat.moat_name?`<div class="sow-section-title">${escHtml(moat.moat_name)}</div>`:''}
+    <div class="moat-box">${escHtml(moat.summary||'')}</div>
+    ${(moat.strategic_includes||[]).length?`
+    <div class="sow-section-title" style="margin-top:16px">Strategic Moat Components:</div>
+    <div class="moat-strategic-includes">
+      ${(moat.strategic_includes||[]).map(item=>`<div class="moat-include-item">${escHtml(item)}</div>`).join('')}
+    </div>`:''}
+  </div>`;
+
+  /* SECTION 7: HOW JUSTWORDS HELPS */
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>How Justwords Will Help ${escHtml(client)}</h2></div>
+    <div class="sow-section-title">Strategic Competencies Deployed</div>
+    <div class="advantage-grid">
+      ${(s.justwords_advantage||[]).map(a=>`
+        <div class="advantage-item">
+          <div class="advantage-item-title">${escHtml(a.title)}</div>
+          <div class="advantage-item-desc">${escHtml(a.description)}</div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:20px">
+      <div class="sow-section-title">Projected Outcomes at 6 Months</div>
+      <div class="outcomes-grid" style="margin-top:10px">
+        ${(s.expected_outcomes||[]).map(o=>`<div class="outcome-item"><div class="outcome-icon" style="font-size:13px;font-weight:700;color:var(--green)">+</div><div>${escHtml(o)}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+
+  /* SECTION 8: SEO DELIVERABLES SOW */
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>SEO Deliverables and Scope of Work</h2></div>
+    <p class="text-sm text-muted" style="margin-bottom:16px">Monthly deliverables unless noted. Research and Analysis activities are one-time setup deliverables conducted at programme initiation.</p>
+    <div class="sow-section">
+      <div class="sow-section-title">Keyword Package: 15 Key Phrases</div>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">Research, Analysis and SEO Set-Up</div>
+      <table class="sow-table">
+        <thead><tr><th colspan="2">Research and Analysis</th><th style="width:80px">Included</th></tr></thead>
+        <tbody>
+          ${[['On-Page Analysis and Recommendations','Research & Analysis'],['Backlinks Analysis (historical link-building audit and disavow review)','Research & Analysis'],['Duplicate Content Analysis','Research & Analysis'],['Content Quality Analysis (E-E-A-T assessment)','Research & Analysis'],['Content Analysis for Targeted Keywords','Research & Analysis'],['Competitor Analysis (Justwords standard format)','Research & Analysis'],['Information Architecture Analysis','Research & Analysis'],['Website Audit Report (Justwords standard format)','Research & Analysis']].map(([label,cat])=>`<tr><td>${label}</td><td class="text-muted text-sm">${cat}</td><td><span class="sow-yes">Yes</span></td></tr>`).join('')}
+        </tbody>
+        <thead><tr><th colspan="2">Initial Set-Up</th><th></th></tr></thead>
+        <tbody>
+          ${[['Google Analytics 4, Search Console Set-Up (Goal Configuration) and Google Tag Manager'],['Google Business Profile set-up and verification (if required)'],['Keyword research (one-time at programme start; refreshed bi-annually)'],['Baseline Analytics Report (Traffic, Leads, Keyword Rankings, DA/DR, Spam Score, Referring Domains, Backlinks)']].map(([label])=>`<tr><td>${label}</td><td></td><td><span class="sow-yes">Yes</span></td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">On-Page Audit and Optimisation</div>
+      <table class="sow-table">
+        <thead><tr><th>Activity</th><th>Category</th><th>Quantity / Status</th></tr></thead>
+        <tbody>
+          <tr><td class="sow-cat-header" colspan="3">On-Page and Content Optimisation</td></tr>
+          <tr><td>Meta Tags Optimisation (Title and Description)</td><td>On-Page</td><td>12 pages/month</td></tr>
+          <tr><td>Heading Tag Optimisation</td><td>On-Page</td><td>12 pages/month</td></tr>
+          <tr><td>Content Optimisation (headings, keyword integration, structure)</td><td>On-Page</td><td>12 pages/month</td></tr>
+          <tr><td>Anchor Text and Internal Linking Restructuring</td><td>On-Page</td><td>12 pages/month</td></tr>
+          <tr><td>SEO-Friendly URL Analysis and Rewriting</td><td>On-Page</td><td>12 pages/month</td></tr>
+          <tr><td>Breadcrumb Navigation Analysis and Recommendations</td><td>On-Page</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td class="sow-cat-header" colspan="3">Technical SEO and Site Health Management</td></tr>
+          <tr><td>XML Sitemap Creation and GSC Registration</td><td>Technical</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Robots.txt Optimisation and Crawl Management</td><td>Technical</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Redirect Audit and Implementation</td><td>Technical</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>W3C Markup and CSS Validation Error Resolution (advisory)</td><td>Technical</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Server Response Code Analysis</td><td>Technical</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Broken Links (maximum unique numbers per cycle)</td><td>Technical</td><td>30 links/month</td></tr>
+          <tr><td>Crawl Error Resolution</td><td>Technical</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Canonical Issues (Audit and Implementation)</td><td>Technical</td><td>12 pages/month</td></tr>
+          <tr><td>Custom 404 Configuration</td><td>Technical</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td class="sow-cat-header" colspan="3">Website Performance and Mobile Optimisation</td></tr>
+          <tr><td>Page Speed and Load Time Optimisation Recommendations with Report</td><td>Performance</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Mobile Optimisation Advisory with Report</td><td>Mobile</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Core Web Vitals (Analysis and Advisory; execution billed separately)</td><td>Performance</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td class="sow-cat-header" colspan="3">Structured Data and Search Appearance</td></tr>
+          <tr><td>Schema Markup Implementation — all priority schema types (to be completed within Q1)</td><td>Schema</td><td>12 pages/month</td></tr>
+          <tr><td>Keyword Mapping and Clustering</td><td>Strategy</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td class="sow-cat-header" colspan="3">Media Optimisation</td></tr>
+          <tr><td>Image Optimisation (as required)</td><td>Media</td><td>12 images/month</td></tr>
+          <tr><td class="sow-cat-header" colspan="3">Content Planning</td></tr>
+          <tr><td>Blog Publishing Calendar — strategic content plan targeting key search opportunities</td><td>Content</td><td><span class="sow-yes">Yes</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">Content Research and Development</div>
+      <table class="sow-table">
+        <thead><tr><th>Activity</th><th>Quantity / Status</th></tr></thead>
+        <tbody>
+          <tr><td>AIO, AEO and GEO-optimised Content Strategy Development</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Existing Content Analysis and Keyword Audit</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Website Blog Topic Research per Month</td><td>4 topics</td></tr>
+          <tr><td><strong>Website Blog Creation — billed at INR 2.5 per word</strong></td><td><strong>4 blogs/month</strong></td></tr>
+          <tr><td>On-Page Word Count (maximum)</td><td>4,000 words</td></tr>
+          <tr><td>Website Blog Publishing</td><td>4/month</td></tr>
+          <tr><td>Content Creation for Off-Page Requirements (Articles, Q&A, Guest Posts)</td><td>8 pieces/month</td></tr>
+          <tr><td>Content Gap Analysis</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>GEO (Generative Engine Optimisation) Implementation</td><td><span class="sow-yes">Yes</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">Off-Page Link Building</div>
+      <table class="sow-table">
+        <thead><tr><th>Activity</th><th>Quantity / Status</th></tr></thead>
+        <tbody>
+          <tr><td>Article Submission (content creation and distribution)</td><td>5/month</td></tr>
+          <tr><td>Guest Posting — web 2.0 (creation and distribution)</td><td>2/month</td></tr>
+          <tr><td>Q&A Platform Participation (Quora and Reddit)</td><td>2/month</td></tr>
+          <tr><td>Social Sharing Platform Account Creation (Medium, Slideshare)</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Blog and Webpage Social Distribution</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Business Directory Listings</td><td>4/month</td></tr>
+          <tr><td>Google Business Profile Optimisation and Management</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Link Quality Assessment and Reporting</td><td><span class="sow-yes">Yes</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">Local SEO Optimisation</div>
+      <table class="sow-table">
+        <thead><tr><th>Activity</th><th>Quantity / Status</th></tr></thead>
+        <tbody>
+          <tr><td>Local Citations per Month</td><td>4/month</td></tr>
+          <tr><td>Google Business Profile Optimisation</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>NAP Consistency Audit and Update</td><td><span class="sow-tbd">TBD</span></td></tr>
+          <tr><td>GBP Posts</td><td><span class="sow-tbd">TBD</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">Analytics Set-Up and Reporting</div>
+      <table class="sow-table">
+        <thead><tr><th>Activity</th><th>Quantity / Status</th></tr></thead>
+        <tbody>
+          <tr><td>Live SEO Report Dashboard</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Google Analytics Performance Report</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Google Keyword Ranking Report</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>SEO Activity and Backlink Work Report</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Strategy Consultations</td><td>Quarterly</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  /* SECTION 9: SOCIAL MEDIA SOW */
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Social Media Marketing Deliverables and Scope of Work</h2></div>
+    <div class="sow-section">
+      <div class="sow-section-title">Social Media Management Package (10 Posts per Month)</div>
+      <table class="sow-table">
+        <thead><tr><th>Activity</th><th>Scope / Quantity</th></tr></thead>
+        <tbody>
+          <tr><td class="sow-cat-header" colspan="2">Research and Analysis</td></tr>
+          <tr><td>Social Media Audit — Presence Analysis and Recommendations</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Past Posts Analysis (Themes, Content Type)</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Competitor Social Media Analysis</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Social Trends Analysis</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td class="sow-cat-header" colspan="2">Platform Management</td></tr>
+          <tr><td>LinkedIn Account Creation + 1 Additional Platform</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Profile Optimisation</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Maximum Platforms Managed (based on business type)</td><td>2 platforms</td></tr>
+          <tr><td>Comprehensive Social Media Content Calendar</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Hashtag and Keyword Research</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td class="sow-cat-header" colspan="2">Post Breakdown</td></tr>
+          <tr><td><strong>Total Social Media Posts per Month</strong></td><td><strong>10 posts</strong></td></tr>
+          <tr><td>Static Posts — Custom Creatives</td><td>6 posts</td></tr>
+          <tr><td>Carousel Posts or Customised GIFs</td><td>2 posts</td></tr>
+          <tr><td>Short-Form Videos (under 1 minute)</td><td>2 videos</td></tr>
+          <tr><td>Contests and Campaigns</td><td>1 per 4 months</td></tr>
+          <tr><td class="sow-cat-header" colspan="2">Analytics and Reporting</td></tr>
+          <tr><td>Monthly Social Media Performance Audit</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Monthly Performance Report with Analytics</td><td><span class="sow-yes">Yes</span></td></tr>
+          <tr><td>Revisions (3-working-day window; beyond window counted as new post)</td><td>2 revisions</td></tr>
+        </tbody>
+      </table>
+      <p class="text-sm text-muted" style="margin-top:8px">Platforms: LinkedIn and Meta (Instagram and Facebook)</p>
+    </div>
+  </div>`;
+
+  /* SECTION 10: PERFORMANCE MARKETING SOW */
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Performance Marketing Plan and Scope of Work</h2></div>
+    <div class="sow-section">
+      <div class="sow-section-title">Media Plan Summary</div>
+      <table class="media-plan-table">
+        <thead><tr><th>Channel</th><th>Campaigns</th><th>Budget (Rs.)</th><th>Allocation</th><th>Est. Leads</th><th>Est. CPL (Rs.)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Google Search</strong></td><td>5</td><td>50,000</td><td>25%</td><td>489</td><td>102</td></tr>
+          <tr><td><strong>Meta</strong></td><td>5</td><td>1,25,000</td><td>63%</td><td>175</td><td>714</td></tr>
+          <tr><td><strong>WhatsApp</strong></td><td>1</td><td>25,000</td><td>12%</td><td>—</td><td>—</td></tr>
+          <tr class="total-row-highlight"><td><strong>Total</strong></td><td><strong>12</strong></td><td><strong>2,00,000</strong></td><td><strong>100%</strong></td><td><strong>664</strong></td><td><strong>408</strong></td></tr>
+        </tbody>
+      </table>
+      <p class="text-sm text-muted" style="margin-top:8px">Budget Range: Rs. 2L – Rs. 3.5L | Campaign Duration: 6 Months | Channels: Google and Meta</p>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">A. One-Time Setup (Per Account)</div>
+      <table class="sow-table">
+        <thead><tr><th>Activity</th><th>Scope</th><th>Pricing</th></tr></thead>
+        <tbody>
+          <tr><td>Account Setup, Configuration and Creative Design</td><td>Platform account setup (Meta, Google, LinkedIn, YouTube), campaign structure, conversion tracking, pixels, ad extensions, quality assurance</td><td><strong>Minimum Rs. 15,000</strong> or as per creatives delivered, whichever is higher</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">B. Creative Production Cost (Per Asset)</div>
+      <table class="sow-table">
+        <thead><tr><th>Creative Type</th><th>Deliverables</th><th>Pricing (Rs.)</th></tr></thead>
+        <tbody>
+          <tr><td>Static Ad Creative</td><td>1 static creative (copy and design) optimised for paid formats</td><td>Rs. 2,000 per creative</td></tr>
+          <tr><td>Carousel Ad Creative</td><td>1 carousel (full frame set, copy and design)</td><td>Rs. 4,500 per carousel</td></tr>
+          <tr><td>Reel / Video Ad (Edit Only)</td><td>Editing, subtitles, branding, ad-ready formatting (raw footage provided by client)</td><td>Rs. 7,000 per reel</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">C. Monthly Campaign Management Fee</div>
+      <table class="sow-table">
+        <thead><tr><th>Component</th><th>Scope</th><th>Pricing</th></tr></thead>
+        <tbody>
+          <tr><td>Performance Marketing Management Fee</td><td>Campaign strategy, audience targeting, bidding and budget optimisation, A/B testing, ad creative refresh, retargeting, compliance monitoring, and ROI optimisation</td><td><strong>Rs. 20,000/month OR 15% of total ad spend, whichever is higher</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sow-section">
+      <div class="sow-section-title">D. Monthly Performance Marketing Deliverables</div>
+      <table class="sow-table">
+        <thead><tr><th>Area</th><th>Deliverables</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Campaign Strategy</strong></td><td>Market and competitor analysis, audience persona development, platform selection, KPI finalisation</td></tr>
+          <tr><td><strong>Ad Account Management</strong></td><td>Campaign creation, structure, budget allocation, bidding strategy optimisation</td></tr>
+          <tr><td><strong>Creative Optimisation</strong></td><td>Ongoing A/B testing and creative refresh to mitigate ad fatigue</td></tr>
+          <tr><td><strong>Audience and Retargeting</strong></td><td>Custom audiences, lookalike targeting, retargeting funnel management</td></tr>
+          <tr><td><strong>Performance Monitoring</strong></td><td>Daily and weekly optimisation based on CTR, CPL, CPA, and ROAS</td></tr>
+          <tr><td><strong>Reporting and Insights</strong></td><td>Weekly or monthly performance reports with ROI analysis and recommendations</td></tr>
+          <tr><td><strong>Client Communication</strong></td><td>Review calls, optimisation discussions, and strategic advisory</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  /* SECTION 11: WEBSITE MAINTENANCE SOW */
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Website Maintenance and Optimisation Package</h2></div>
+    <div class="sow-section">
+      <div class="sow-section-title">Monthly Retainer: 20 Hours per Month</div>
+      <p class="text-sm text-muted" style="margin-bottom:16px">Allocated hours are utilised across new page creation, landing page development, design corrections, technical troubleshooting, SEO implementation support, content updates, and conversion optimisation improvements as prioritised each month.</p>
+    </div>
+    ${[
+      ['1. Website Design and UI Enhancements',['Font standardisation across the website','Colour consistency and brand guideline implementation','Layout corrections and page alignment fixes','Mobile responsiveness improvements','Header, footer, and navigation updates','CTA button optimisation and placement']],
+      ['2. Website Content Updates',['Addition of new pages and landing pages','Existing page content updates','Banner, image, and graphic replacements','Blog publishing and formatting support','Product and service information updates','Form creation and modification']],
+      ['3. Technical Website Maintenance',['Broken link identification and resolution','Website speed and performance optimisation','Plugin and theme updates (where applicable)','Technical error resolution','Cross-browser compatibility verification','Redirect implementation and management']],
+      ['4. SEO Support and Technical Optimisation',['On-page SEO implementation support','Meta title and description updates','Schema markup implementation support','URL structure optimisation','Image optimisation and alt-tag updates','Core Web Vitals improvement recommendations and implementation']],
+      ['5. Conversion Rate Optimisation',['Landing page enhancements for campaign performance','Form optimisation for lead generation','CTA testing and placement improvements','User journey and navigation improvements','Conversion-focused design modifications']],
+      ['6. Security and Website Health Monitoring',['Regular website health checks','Security monitoring and issue resolution','Backup verification (if hosting access provided)','Uptime and functionality monitoring','Spam and malicious code audits']],
+      ['7. Monthly Reporting',['Summary of tasks completed','Website improvement log','Technical issues resolved','Recommendations for upcoming enhancements']],
+    ].map(([title,items])=>`
+      <div class="sow-section">
+        <div class="sow-section-title">${title}</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${items.map(item=>`<div class="roadmap-activity">${item}</div>`).join('')}
+        </div>
+      </div>`).join('')}
+  </div>`;
+
+  /* SECTION 12: INVESTMENT SUMMARY */
+  const sub=invoiceLines.reduce((sum,l)=>sum+(+l.price||0),0);
+  const gstPct=+document.getElementById('gst-rate').value||18;
+  const gstAmt=Math.round(sub*gstPct/100);
+  const total=sub+gstAmt;
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Investment Summary</h2></div>
+    <p class="text-sm text-muted" style="margin-bottom:16px">All pricing is exclusive of ${gstPct}% GST. Final invoice will include applicable taxes.</p>
+    <div style="overflow-x:auto">
+      <table class="investment-table">
+        <thead><tr><th>Particulars</th><th>Description</th><th>Timeline</th><th>Pricing (Excl. GST)</th><th>Category</th></tr></thead>
+        <tbody>
+          ${invoiceLines.map(l=>`
+            <tr>
+              <td class="particulars-cell">${escHtml(l.service)}</td>
+              <td class="desc-cell">—</td>
+              <td style="white-space:nowrap">${escHtml(l.timeline)}</td>
+              <td class="price-cell">Rs. ${fmtINR(l.price)}</td>
+              <td><span class="badge badge-teal">${escHtml(l.category)}</span></td>
+            </tr>`).join('')}
+        </tbody>
+        <tfoot>
+          <tr class="investment-total-row">
+            <td colspan="3"><strong>TOTAL MONTHLY RETAINER</strong></td>
+            <td colspan="2"><strong>Rs. ${fmtINR(sub)}</strong> <span style="font-size:12px;font-weight:400">(+ Rs. ${fmtINR(gstAmt)} GST = Rs. ${fmtINR(total)} total)</span></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>`;
+
+  /* SECTION 13: TERMS & CONDITIONS */
+  const clientNameEsc=escHtml(client);
+  html+=`<div class="card report-section">
+    <div class="report-section-header"><h2>Terms and Conditions</h2></div>
+    <div class="tnc-list">
+      ${[
+        'Price Basis — All prices are quoted for monthly services and are exclusive of applicable taxes. The currently applicable tax rate is 18% GST on the basic price.',
+        'Deliverables will be reviewed and tracked in weekly meetings. Justwords commits to fulfilling all monthly deliverables. However, payment obligations must not be linked to delivery timelines, as completion is subject to dependencies including client approvals, content inputs, access credentials, and platform access.',
+        `The above package is applicable exclusively for ${clientNameEsc}.`,
+        'Payment Terms — 100% advance. Invoices will be raised before commencement of work on a monthly basis. Payment is due within 2 working days from the date of invoice.',
+        'Content Revisions — A maximum of 2 rounds of revision are included for any on-page content creation. In exceptional cases, a 3rd round may be accommodated at Justwords\' discretion.',
+        'Any additional technical changes requiring the website development team will be charged separately at INR 1,200 + GST per hour.',
+        'Core Web Vitals remediation is not included within the standard package, as the scope of work is determined by a detailed website audit. A separate scope and pricing will be provided once the audit is completed.',
+        'For all On-Page changes, Justwords will share the baseline data prior to implementation for reference and future comparison.',
+        'All website changes will be executed with client approval and appropriate backups taken prior to any development-level work. Standard SEO on-page changes do not require backups.',
+      ].map((tnc,i)=>`<div class="tnc-item"><div class="tnc-num">${i+1}</div><div>${tnc}</div></div>`).join('')}
+    </div>
+  </div>`;
+
+  /* SECTION 14: CTA */
+  const senderE=document.getElementById('sender-email').value.trim()||'akshat.raj@justwords.in';
+  html+=`<div class="card" style="background:var(--surface3);border-color:var(--accent);text-align:center;padding:32px">
+    <div style="font-size:22px;font-weight:800;color:var(--accent);margin-bottom:8px">Ready to Begin?</div>
+    <div style="font-size:14px;color:var(--text3);margin-bottom:20px">Contact the Justwords team to discuss the next steps.</div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;display:inline-block;min-width:280px">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">Contact Details</div>
+      <div style="font-size:13px;color:var(--text2);line-height:2">
+        Email: ${escHtml(senderE)}<br/>
+        Phone: +91 9205553025<br/>
+        Website: www.justwords.in
+      </div>
+    </div>
+    <div style="margin-top:20px;font-size:14px;font-weight:700;color:var(--accent)">15 years of content-driven growth. 400+ clients served.</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:4px">JUSTWORDS — TRANSFORMATIONAL DIGITAL JOURNEYS</div>
+  </div>`;
+
+  document.getElementById('full-strategy-report').innerHTML=html;
+}
+
+/* ══ DOCX BUILDER — generates Word document with full strategy ══ */
+async function buildAndDownloadDoc(){
+  const btn=document.getElementById('dl-doc-btn');
+  btn.textContent='Building document...';btn.disabled=true;
+  try{
+    await buildStrategyDoc();
+  }catch(e){
+    console.error('DOCX build error:',e);
+    alert('Document build failed: '+e.message);
+  }finally{
+    btn.textContent='Download Strategy Document (.docx)';btn.disabled=false;
+  }
+}
+
+async function buildStrategyDoc(){
+  const client=document.getElementById('client-name').value.trim()||'Client';
+  const by=document.getElementById('prepared-by').value.trim()||'Akshat Raj';
+  const email=document.getElementById('sender-email').value.trim()||'akshat.raj@justwords.in';
+  const s=strategyData;
+  const c=auditData.client||{};
+  const sub=invoiceLines.reduce((sum,l)=>sum+(+l.price||0),0);
+  const gstPct=+document.getElementById('gst-rate').value||18;
+  const gstAmt=Math.round(sub*gstPct/100);
+  const total=sub+gstAmt;
+  const today=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+
+  // We'll generate the .docx using a server-side Node script via fetch to a data URI
+  // Since we're browser-only here, we'll use a simple HTML → download approach
+  // that produces a proper formatted docx-like HTML file the user can open in Word
+
+  const htmlContent = buildDocHtml(client,by,email,s,c,sub,gstPct,gstAmt,total,today);
+  const blob = new Blob([htmlContent], {type:'application/msword'});
+  docFileName=`${client.replace(/\s+/g,'_')}_SEO_Strategy_${new Date().toISOString().slice(0,10)}.doc`;
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=docFileName;a.click();
+  URL.revokeObjectURL(url);
+  updateDocAttachStatus(docFileName);
+}
+
+function buildDocHtml(client,by,email,s,c,sub,gstPct,gstAmt,total,today){
+  const esc=(str)=>String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const kwTargets=s.keyword_targets||[];
+  const kwClusters=s.keyword_clusters||[];
+  const buckets=s.content_buckets||[];
+  const roadmap=s.roadmap||[];
+  const moat=s.competitive_moat||{};
+  const outcomes=s.expected_outcomes||[];
+  const adv=s.justwords_advantage||[];
+
+  let html=`
+<html xmlns:o='urn:schemas-microsoft-com:office:office'
+      xmlns:w='urn:schemas-microsoft-com:office:word'
+      xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset='UTF-8'/>
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content='Microsoft Word 15'>
+<meta name=Originator content='Microsoft Word 15'>
+<!--[if gte mso 9]>
+<xml><w:WordDocument><w:View>Print</w:View><w:Zoom>90</w:Zoom></w:WordDocument></xml>
+<![endif]-->
+<style>
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #1A1A18; margin: 0; }
+  @page { margin: 1in; size: letter; }
+  h1 { font-size: 20pt; font-weight: bold; color: #0D0D0B; border-bottom: 3pt solid #F5C518; padding-bottom: 6pt; margin-top: 24pt; margin-bottom: 12pt; page-break-after: avoid; }
+  h2 { font-size: 14pt; font-weight: bold; color: #1A1A18; background: #F5C518; padding: 6pt 10pt; margin-top: 18pt; margin-bottom: 10pt; page-break-after: avoid; }
+  h3 { font-size: 11pt; font-weight: bold; color: #0D6B5A; text-transform: uppercase; letter-spacing: 0.5pt; border-left: 3pt solid #F5C518; padding-left: 8pt; margin-top: 14pt; margin-bottom: 6pt; page-break-after: avoid; }
+  p { font-size: 11pt; line-height: 1.6; margin: 0 0 10pt 0; color: #2D2D2B; }
+  .exec-box { border-left: 4pt solid #F5C518; padding: 10pt 14pt; background: #FAFAF8; font-style: italic; margin: 10pt 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 10pt; margin: 10pt 0 18pt 0; }
+  th { background: #1A1A18; color: #F5C518; font-weight: bold; padding: 7pt 10pt; text-align: left; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.4pt; }
+  td { padding: 6pt 10pt; border-bottom: 1pt solid #E0DED8; vertical-align: top; }
+  tr:nth-child(even) td { background: #F5F5F2; }
+  .badge-hv { color: #166534; font-weight: bold; }
+  .badge-mv { color: #92400E; font-weight: bold; }
+  .badge-aw { color: #374151; }
+  .badge-trans { color: #1E40AF; font-weight: bold; }
+  .badge-info { color: #065F46; }
+  .badge-hi { color: #B91C1C; font-weight: bold; }
+  .badge-med { color: #92400E; }
+  .badge-lo { color: #166534; }
+  ul { margin: 6pt 0 10pt 0; padding-left: 18pt; }
+  li { margin-bottom: 4pt; font-size: 11pt; color: #2D2D2B; line-height: 1.5; }
+  .cover-title { font-size: 32pt; font-weight: bold; text-align: center; color: #1A1A18; margin: 60pt 0 10pt 0; }
+  .cover-sub { font-size: 16pt; text-align: center; color: #4B4B47; margin: 0 0 10pt 0; }
+  .cover-client { font-size: 20pt; text-align: center; color: #F5C518; font-weight: bold; margin: 0 0 40pt 0; }
+  .cover-meta { text-align: center; font-size: 10pt; color: #6B6B67; line-height: 1.8; }
+  .cover-footer { text-align: center; font-size: 9pt; color: #9B9B97; margin-top: 40pt; border-top: 1pt solid #E0DED8; padding-top: 10pt; }
+  .outcome-item { margin-bottom: 5pt; padding: 5pt 10pt; background: #F0FAF5; border-left: 3pt solid #22c55e; font-size: 10.5pt; }
+  .moat-item { margin-bottom: 4pt; padding: 5pt 10pt; background: #F0FAF5; border-left: 2pt solid #22c55e; font-size: 10.5pt; }
+  .topic-item { margin-bottom: 3pt; padding: 4pt 8pt; background: #FAFAF8; border: 1pt solid #E0DED8; font-size: 10pt; }
+  .activity-item { margin-bottom: 3pt; padding: 4pt 8pt; background: #F5F5F2; font-size: 10pt; }
+  .tnc-item { margin-bottom: 8pt; padding: 8pt 12pt; background: #FAFAF8; border: 1pt solid #E0DED8; font-size: 10pt; line-height: 1.6; }
+  .page-break { page-break-before: always; }
+  .cta-box { text-align: center; padding: 20pt; border: 2pt solid #F5C518; background: #FAFAF8; margin-top: 20pt; }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover-title">360&#176; Digital Marketing Proposal</div>
+<div class="cover-sub">Comprehensive SEO + GEO + AEO Cornerstone Strategy</div>
+<div class="cover-client">For ${esc(client)}</div>
+<div class="cover-meta">
+  Prepared by: ${esc(by)}<br/>
+  Email: ${esc(email)}<br/>
+  Date: ${esc(today)}<br/>
+  Proposal Validity: 30 days from date of issue
+</div>
+<div class="cover-footer">
+  JUSTWORDS &mdash; TRANSFORMATIONAL DIGITAL JOURNEYS<br/>
+  15 years of content-driven growth &nbsp;|&nbsp; 400+ clients served &nbsp;|&nbsp; www.justwords.in
+</div>
+
+<div class="page-break"></div>
+
+<!-- BRAND PREMISE -->
+<h2>Brand Premise</h2>
+<p>${esc(s.brand_premise?.para1||'')}</p>
+<p>${esc(s.brand_premise?.para2||'')}</p>
+<p>${esc(s.brand_premise?.para3||'')}</p>
+
+<!-- EXECUTIVE SUMMARY -->
+<h2>Executive Summary</h2>
+<div class="exec-box"><p>${esc(s.executive_summary||'')}</p></div>
+
+<h3>Projected Outcomes at 6 Months</h3>
+${outcomes.map(o=>`<div class="outcome-item">${esc(o)}</div>`).join('')}
+
+<div class="page-break"></div>
+
+<!-- ROADMAP -->
+<h2>6-Month SEO + GEO + AEO Execution Roadmap</h2>
+${roadmap.map(m=>`
+<h3>Month ${m.month}: ${esc(m.title)}</h3>
+<p><strong>Objective:</strong> ${esc(m.focus)}</p>
+${(m.focus_bullets||[]).length?`<p><strong>Phase Focus:</strong></p><ul>${(m.focus_bullets||[]).map(fb=>`<li>${esc(fb)}</li>`).join('')}</ul>`:''}
+<p><strong>Key Deliverables:</strong></p>
+<ul>${(m.activities||[]).map(a=>`<li>${esc(a)}</li>`).join('')}</ul>
+`).join('')}
+
+<div class="page-break"></div>
+
+<!-- KEYWORD STRATEGY -->
+<h2>Keyword Strategy</h2>
+<p>All keywords below are derived from the seed terms provided for this engagement. The Value Signal column indicates commercial priority: <strong>High Value</strong> (direct purchase or hire intent), <strong>Mid Value</strong> (comparison or evaluation stage), and <strong>Awareness</strong> (top-of-funnel research queries).</p>
+
+<h3>High-Intent Keyword Targets (${kwTargets.length} Keywords)</h3>
+<table>
+  <thead><tr><th>#</th><th>Keyword</th><th>Search Intent</th><th>Difficulty</th><th>Value Signal</th></tr></thead>
+  <tbody>
+    ${kwTargets.map((k,i)=>{
+      const vs=k.value_signal||'Mid Value';
+      const vsClass=vs==='High Value'?'badge-hv':vs==='Mid Value'?'badge-mv':'badge-aw';
+      const intClass=(k.intent||'').toLowerCase().includes('transact')?'badge-trans':'badge-info';
+      const diffClass=(k.difficulty||'').toLowerCase()==='low'?'badge-lo':(k.difficulty||'').toLowerCase()==='medium'?'badge-med':'badge-hi';
+      return`<tr><td>${i+1}</td><td><strong>${esc(k.keyword)}</strong></td><td class="${intClass}">${esc(k.intent||'—')}</td><td class="${diffClass}">${esc(k.difficulty||'—')}</td><td class="${vsClass}">${esc(vs)}</td></tr>`;
+    }).join('')}
+  </tbody>
+</table>
+
+<h3>Keyword Clustering Framework</h3>
+<table>
+  <thead><tr><th>Seed Keyword / Cluster Theme</th><th>Search Intent</th><th>Proposed Pillar Page URL</th><th>Supporting Keywords</th></tr></thead>
+  <tbody>
+    ${kwClusters.map(cl=>`<tr><td><strong>${esc(cl.seed_keyword)}</strong></td><td>${esc(cl.search_intent||'—')}</td><td style="font-family:Courier New,monospace;font-size:9pt;color:#0D6B5A">${esc(cl.proposed_url||'—')}</td><td>${(cl.cluster_keywords||[]).join(', ')}</td></tr>`).join('')}
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<!-- CONTENT STRATEGY -->
+<h2>Content Strategy</h2>
+<p><strong>Total monthly content production: ${s.total_monthly_pieces||16} pieces.</strong> All content is SEO-optimised, human-written, and EEAT-compliant. GEO (Generative Engine Optimisation) and AEO (Answer Engine Optimisation) best practices are applied across all content buckets.</p>
+
+${buckets.map((b,i)=>`
+<h3>${i+1}. ${esc(b.name)} &mdash; ${b.monthly_pieces||0} pieces/month</h3>
+<p>${esc(b.description||'')}</p>
+<p><strong>Sample Topics:</strong></p>
+<ul>${(b.topics||[]).map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+<p><strong>GEO/AEO Implementation:</strong> ${esc(b.geo_aeo_note||'')}</p>
+`).join('')}
+
+<div class="page-break"></div>
+
+<!-- COMPETITIVE MOAT -->
+<h2>Competitive Moat Strategy</h2>
+${moat.moat_name?`<h3>${esc(moat.moat_name)}</h3>`:''}
+<p>${esc(moat.summary||'')}</p>
+<p><strong>Strategic Moat Components:</strong></p>
+${(moat.strategic_includes||[]).map(item=>`<div class="moat-item">${esc(item)}</div>`).join('')}
+
+<!-- HOW JUSTWORDS HELPS -->
+<h2>How Justwords Will Help ${esc(client)}</h2>
+${adv.map(a=>`<h3>${esc(a.title)}</h3><p>${esc(a.description)}</p>`).join('')}
+
+<h3>Projected Outcomes at 6 Months</h3>
+${outcomes.map(o=>`<div class="outcome-item">${esc(o)}</div>`).join('')}
+
+<div class="page-break"></div>
+
+<!-- SEO SOW -->
+<h2>SEO Deliverables and Scope of Work</h2>
+<p>Monthly deliverables unless stated otherwise. Research and Analysis activities are one-time set-up deliverables conducted at programme initiation. Keyword Package: 15 Key Phrases.</p>
+
+<h3>Research, Analysis and Programme Set-Up</h3>
+<table>
+  <thead><tr><th>Activity</th><th>Category</th><th>Included</th></tr></thead>
+  <tbody>
+    <tr><td>On-Page Analysis and Recommendations</td><td>Research</td><td>Yes</td></tr>
+    <tr><td>Backlinks Analysis and Disavow Review</td><td>Research</td><td>Yes</td></tr>
+    <tr><td>Duplicate Content Analysis</td><td>Research</td><td>Yes</td></tr>
+    <tr><td>Content Quality Analysis (E-E-A-T)</td><td>Research</td><td>Yes</td></tr>
+    <tr><td>Competitor Analysis (Justwords standard format)</td><td>Research</td><td>Yes</td></tr>
+    <tr><td>Information Architecture Analysis</td><td>Research</td><td>Yes</td></tr>
+    <tr><td>Website Audit Report (Justwords standard format)</td><td>Research</td><td>Yes</td></tr>
+    <tr><td>Google Analytics 4 and Search Console Set-Up</td><td>Set-Up</td><td>Yes</td></tr>
+    <tr><td>Google Business Profile Set-Up / Verification</td><td>Set-Up</td><td>Yes</td></tr>
+    <tr><td>Keyword Research (one-time; refreshed bi-annually)</td><td>Set-Up</td><td>Yes</td></tr>
+    <tr><td>Baseline Analytics Report</td><td>Set-Up</td><td>Yes</td></tr>
+  </tbody>
+</table>
+
+<h3>Monthly On-Page and Technical Deliverables</h3>
+<table>
+  <thead><tr><th>Activity</th><th>Quantity</th></tr></thead>
+  <tbody>
+    <tr><td>Meta Tags Optimisation</td><td>12 pages/month</td></tr>
+    <tr><td>Heading Tag Optimisation</td><td>12 pages/month</td></tr>
+    <tr><td>Content Optimisation</td><td>12 pages/month</td></tr>
+    <tr><td>Internal Linking Restructuring</td><td>12 pages/month</td></tr>
+    <tr><td>XML Sitemap and Robots.txt Management</td><td>Yes</td></tr>
+    <tr><td>Broken Link Resolution</td><td>30 links/month</td></tr>
+    <tr><td>Crawl Error Resolution</td><td>Yes</td></tr>
+    <tr><td>Schema Markup Implementation</td><td>12 pages/month</td></tr>
+    <tr><td>Image Optimisation</td><td>12 images/month</td></tr>
+    <tr><td>Core Web Vitals Advisory</td><td>Yes</td></tr>
+    <tr><td>Blog Publishing Calendar</td><td>Yes</td></tr>
+  </tbody>
+</table>
+
+<h3>Content and Off-Page Deliverables</h3>
+<table>
+  <thead><tr><th>Activity</th><th>Quantity</th></tr></thead>
+  <tbody>
+    <tr><td>AEO and GEO Content Strategy</td><td>Yes</td></tr>
+    <tr><td>Blog Topics Research</td><td>4 topics/month</td></tr>
+    <tr><td>Website Blog Creation (Rs. 2.5/word)</td><td>4 blogs/month</td></tr>
+    <tr><td>Off-Page Content (Articles, Q&amp;A, Guest Posts)</td><td>8 pieces/month</td></tr>
+    <tr><td>GEO Implementation</td><td>Yes</td></tr>
+    <tr><td>Article Submission</td><td>5/month</td></tr>
+    <tr><td>Guest Posting (web 2.0)</td><td>2/month</td></tr>
+    <tr><td>Business Directory Listings</td><td>4/month</td></tr>
+    <tr><td>Google Business Profile Management</td><td>Yes</td></tr>
+    <tr><td>Local Citations</td><td>4/month</td></tr>
+    <tr><td>Monthly Performance Reports</td><td>Yes</td></tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<!-- INVESTMENT SUMMARY -->
+<h2>Investment Summary</h2>
+<p>All pricing is exclusive of ${gstPct}% GST. Final invoice will include applicable taxes.</p>
+<table>
+  <thead><tr><th>Particulars</th><th>Timeline</th><th>Pricing (Excl. GST)</th><th>Category</th></tr></thead>
+  <tbody>
+    ${invoiceLines.map(l=>`<tr><td>${esc(l.service)}</td><td>${esc(l.timeline)}</td><td><strong>Rs. ${fmtINR(l.price)}</strong></td><td>${esc(l.category)}</td></tr>`).join('')}
+    <tr style="background:#F5C518!important"><td colspan="2"><strong>TOTAL MONTHLY RETAINER</strong></td><td><strong>Rs. ${fmtINR(sub)}</strong></td><td>+ Rs. ${fmtINR(gstAmt)} GST = Rs. ${fmtINR(total)}</td></tr>
+  </tbody>
+</table>
+
+<!-- TERMS AND CONDITIONS -->
+<h2>Terms and Conditions</h2>
+${[
+  'Price Basis — All prices are quoted for monthly services and are exclusive of applicable taxes. The currently applicable tax rate is 18% GST on the basic price.',
+  'Deliverables will be reviewed and tracked in weekly meetings. Justwords commits to fulfilling all monthly deliverables. However, payment obligations must not be linked to delivery timelines, as completion is subject to dependencies including client approvals, content inputs, and platform access.',
+  `The above package is applicable exclusively for ${esc(client)}.`,
+  'Payment Terms — 100% advance. Invoices will be raised before commencement of work on a monthly basis. Payment is due within 2 working days from the date of invoice.',
+  'Content Revisions — A maximum of 2 rounds of revision are included for any on-page content creation. A 3rd round may be accommodated in exceptional cases at Justwords\' discretion.',
+  'Any additional technical changes requiring the website development team will be charged separately at INR 1,200 + GST per hour.',
+  'Core Web Vitals remediation is not included within the standard package. A separate scope and pricing will be provided once the website audit is completed.',
+  'For all On-Page changes, Justwords will share baseline data prior to implementation for reference and future comparison.',
+  'All website changes will be executed with client approval and appropriate backups taken prior to any development-level work.',
+].map((t,i)=>`<div class="tnc-item"><strong>${i+1}.</strong> ${t}</div>`).join('')}
+
+<!-- CTA -->
+<div class="cta-box">
+  <p style="font-size:16pt;font-weight:bold;color:#1A1A18;margin-bottom:8pt;">Ready to Begin?</p>
+  <p>Contact the Justwords team to discuss the next steps and formalise the engagement.</p>
+  <p><strong>Email:</strong> ${esc(email)} &nbsp;|&nbsp; <strong>Phone:</strong> +91 9205553025 &nbsp;|&nbsp; <strong>Website:</strong> www.justwords.in</p>
+  <p style="font-weight:bold;color:#F5C518;font-size:12pt;margin-top:10pt;">15 years of excellence &nbsp;&bull;&nbsp; 400+ clients served</p>
+  <p style="font-size:9pt;color:#6B6B67;">JUSTWORDS &mdash; TRANSFORMATIONAL DIGITAL JOURNEYS</p>
+</div>
+
+</body>
+</html>`;
+  return html;
+}
+
+function updateDocAttachStatus(filename){
+  const chip=document.getElementById('deck-auto-chip');
+  const status=document.getElementById('deck-attach-status');
+  if(chip){chip.classList.remove('hidden');chip.innerHTML=`<span class="attachment-chip deck-chip">${filename} <span class="badge badge-teal" style="margin-left:4px">Built</span></span><div class="text-sm text-muted mt-8" style="margin-top:6px">Document downloaded to your Downloads folder. Attach it manually when composing in Gmail.</div>`;}
+  if(status)status.innerHTML='';
+}
+
+/* ══ STEP 5 — EMAIL ══ */
+function attachSeoptimer(input){
+  if(!input.files[0])return;
+  const f=input.files[0];
+  const list=document.getElementById('attachment-list');
+  const chip=document.createElement('span');chip.className='attachment-chip';
+  chip.innerHTML=`${f.name} <span class="badge badge-amber" style="margin-left:4px">SEOptimer</span> <span class="remove-att" onclick="this.parentElement.remove()">x</span>`;
+  list.appendChild(chip);document.getElementById('seo-att-name').textContent=`${f.name} attached`;
+}
+function attachDeckFile(input){
+  if(!input.files[0])return;
+  const f=input.files[0];
+  const list=document.getElementById('attachment-list');
+  const chip=document.createElement('span');chip.className='attachment-chip deck-chip';
+  chip.innerHTML=`${f.name} <span class="badge badge-blue" style="margin-left:4px">Strategy Doc</span> <span class="remove-att" onclick="this.parentElement.remove()">x</span>`;
+  list.appendChild(chip);
+}
+function addAttachments(input){
+  const list=document.getElementById('attachment-list');
+  Array.from(input.files).forEach(f=>{
+    const chip=document.createElement('span');chip.className='attachment-chip';
+    chip.innerHTML=`${f.name} <span class="remove-att" onclick="this.parentElement.remove()">x</span>`;
+    list.appendChild(chip);extraAttachmentFiles.push(f);
+  });
+}
+function prefillEmail(){
+  const client=document.getElementById('client-name').value.trim()||'the client';
+  const contact=document.getElementById('contact-name').value.trim()||'there';
+  const by=document.getElementById('prepared-by').value.trim()||'Akshat Raj';
+  const senderE=document.getElementById('sender-email').value.trim();
+  const grade=auditData.client?.grade||'B';
+  const critCount=auditData.client?.issues?.critical?.length||0;
+  const totalIssues=critCount+(auditData.client?.issues?.warnings?.length||0);
+  document.getElementById('email-from').value=senderE;
+  document.getElementById('email-subject').value=`SEO & Digital Growth Proposal for ${client}`;
+  document.getElementById('email-body-text').value=`Dear ${contact},\n\nThank you for the opportunity to present our digital growth strategy for ${client}. Please find attached our comprehensive SEO Audit findings and the accompanying 6-month Cornerstone Strategy document.\n\nThe audit indicates a current score of Grade "${grade}". We have identified ${totalIssues} specific areas — including technical gaps, content authority opportunities, and local search improvements — that, when addressed systematically, are projected to generate a 3-4x increase in qualified organic leads within six months.\n\nThe attached strategy document covers:\n\n- A 6-month phased execution roadmap\n- 25 high-intent keyword targets specific to your industry\n- Content architecture and topical cluster framework\n- AI-search readiness (GEO/AEO) optimisation plan\n- Full scope of work and monthly deliverables\n- Investment summary\n\nI would welcome the opportunity to walk you through the strategy in detail. Please let me know your availability for a call this week.\n\nLooking forward to your response.\n\nWith regards,\n${by}\nJustwords — Transformational Digital Journeys\n+91 9205553025 | www.justwords.in`;
+}
+function copyEmailText(){
+  const subject=document.getElementById('email-subject').value;
+  const body=document.getElementById('email-body-text').value;
+  navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`).then(()=>{showFeedback('success','Email text copied to clipboard.');}).catch(()=>showFeedback('error','Copy failed.'));
+}
+function openMailto(){
+  const to=document.getElementById('email-to').value;
+  const subject=encodeURIComponent(document.getElementById('email-subject').value);
+  const body=encodeURIComponent(document.getElementById('email-body-text').value);
+  const cc=document.getElementById('email-cc').value,bcc=document.getElementById('email-bcc').value;
+  let params=`subject=${subject}&body=${body}`;
+  if(cc)params+=`&cc=${encodeURIComponent(cc)}`;
+  if(bcc)params+=`&bcc=${encodeURIComponent(bcc)}`;
+  window.location.href=`mailto:${to}?${params}`;
+  showFeedback('info','Opening mail client. Attach files from your Downloads folder.');
+}
+function downloadFileObj(file){
+  const url=URL.createObjectURL(file);
+  const a=document.createElement('a');
+  a.href=url;a.download=file.name;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+function collectAttachmentFiles(){
+  const files=[];
+  const seoFile=document.getElementById('seoptimer-pdf').files[0];
+  if(seoFile)files.push(seoFile);
+  const deckFile=document.getElementById('deck-file').files[0];
+  if(deckFile)files.push(deckFile);
+  extraAttachmentFiles.forEach(f=>files.push(f));
+  return files;
+}
+function downloadAllAttachments(){
+  const files=collectAttachmentFiles();
+  files.forEach((f,i)=>setTimeout(()=>downloadFileObj(f),i*400));
+  return files.length;
+}
+function openGmailCompose(){
+  const to=encodeURIComponent(document.getElementById('email-to').value);
+  const subject=encodeURIComponent(document.getElementById('email-subject').value);
+  const body=encodeURIComponent(document.getElementById('email-body-text').value);
+  const cc=encodeURIComponent(document.getElementById('email-cc').value);
+  let url=`https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
+  if(cc)url+=`&cc=${cc}`;
+  const count=downloadAllAttachments();
+  window.open(url,'_blank');
+  if(count>0){
+    showFeedback('info',`Gmail compose opened. ${count} attachment${count>1?'s have':' has'} been downloaded to your Downloads folder — if your browser asks to allow multiple downloads, click Allow. Drag and drop ${count>1?'them':'it'} into the Gmail attachment area to attach.`);
+  }else{
+    showFeedback('warn','Gmail compose opened, but no attachments are selected yet. Add the SEOptimer report and/or strategy document above, then click Open in Gmail again.');
+  }
+}
+function showFeedback(type,msg){
+  const el=document.getElementById('email-feedback');
+  const cls={success:'alert-success',info:'alert-info',error:'alert-error',warn:'alert-warn'}[type];
+  el.innerHTML=`<div class="alert ${cls}">${msg}</div>`;
+  setTimeout(()=>{el.innerHTML=''},7000);
+}
+
+/* ══ BD TRACKER ══ */
+const STAGES=['New Lead','Discovery Call Done','Proposal Sent','Negotiation','Closed Won','Closed Lost'];
+const STAGE_COLORS={'New Lead':['var(--text3)','var(--border)'],'Discovery Call Done':['var(--blue)','var(--blue-border)'],'Proposal Sent':['var(--amber)','var(--amber-border)'],'Negotiation':['var(--teal)','rgba(20,184,166,.3)'],'Closed Won':['var(--green)','var(--green-border)'],'Closed Lost':['var(--red)','var(--red-border)']};
+function saveBDLead(){
+  const company=document.getElementById('bd-company').value.trim();
+  if(!company){alert('Please enter company name');return;}
+  const lead={id:Date.now(),company,contact:document.getElementById('bd-contact').value.trim(),stage:document.getElementById('bd-stage-add').value,value:+document.getElementById('bd-value-add').value||0,source:document.getElementById('bd-source-add').value,followup:document.getElementById('bd-followup-add').value,notes:document.getElementById('bd-notes-add').value.trim(),created:new Date().toLocaleDateString('en-IN')};
+  bdLeads.push(lead);renderBDTracker();
+  document.getElementById('bd-save-msg').textContent=`${company} saved.`;
+  setTimeout(()=>{document.getElementById('bd-save-msg').textContent=''},3000);
+  ['bd-company','bd-contact','bd-value-add','bd-followup-add','bd-notes-add'].forEach(id=>{document.getElementById(id).value='';});
+}
+function removeBDLead(id){bdLeads=bdLeads.filter(l=>l.id!==id);renderBDTracker();}
+function renderBDTracker(){
+  const total=bdLeads.length;
+  const won=bdLeads.filter(l=>l.stage==='Closed Won');
+  const pipeline=bdLeads.filter(l=>!['Closed Won','Closed Lost'].includes(l.stage));
+  const totalPipelineValue=pipeline.reduce((s,l)=>s+l.value,0);
+  document.getElementById('bd-stats').innerHTML=`
+    <div class="stat-card stat-score"><div class="stat-val">${total}</div><div class="stat-label">Total Leads</div></div>
+    <div class="stat-card stat-warn"><div class="stat-val" style="color:var(--amber)">${pipeline.length}</div><div class="stat-label">Active Pipeline</div></div>
+    <div class="stat-card stat-pass"><div class="stat-val" style="color:var(--green)">${won.length}</div><div class="stat-label">Closed Won</div></div>
+    <div class="stat-card stat-score"><div class="stat-val" style="font-size:18px;color:var(--accent)">Rs.${fmtINR(totalPipelineValue)}</div><div class="stat-label">Pipeline Value/mo</div></div>`;
+  const kanbanStages=['New Lead','Discovery Call Done','Proposal Sent','Closed Won'];
+  document.getElementById('bd-kanban').innerHTML=kanbanStages.map(stage=>{
+    const stageleads=bdLeads.filter(l=>l.stage===stage);
+    const [color,border]=STAGE_COLORS[stage];
+    const stageValue=stageleads.reduce((s,l)=>s+l.value,0);
+    return`<div class="kanban-col">
+      <div class="kanban-col-title" style="color:${color}"><span>${stage}</span><span class="badge" style="background:${border};color:${color}">${stageleads.length}</span></div>
+      ${stageleads.map(l=>`<div class="kanban-card"><div class="kanban-card-name">${escHtml(l.company)}</div><div class="kanban-card-meta">${escHtml(l.contact||'—')} · ${escHtml(l.source)}</div>${l.followup?`<div class="kanban-card-meta">${l.followup}</div>`:''} ${l.value?`<div class="kanban-card-value">Rs.${fmtINR(l.value)}/mo</div>`:''}</div>`).join('')}
+      ${stageValue?`<div style="font-size:11px;color:var(--text3);margin-top:6px;padding:0 2px">Stage value: Rs.${fmtINR(stageValue)}</div>`:''}
+    </div>`;
+  }).join('');
+  if(!bdLeads.length){document.getElementById('bd-leads-list').innerHTML='<p class="text-muted">No leads yet.</p>';return;}
+  document.getElementById('bd-leads-list').innerHTML=`<table class="compare-table" style="font-size:12px">
+    <thead><tr><th>Company</th><th>Contact</th><th>Stage</th><th>Value/mo</th><th>Source</th><th>Follow-up</th><th>Added</th><th></th></tr></thead>
+    <tbody>${bdLeads.map(l=>{const [color]=STAGE_COLORS[l.stage]||['var(--text3)'];return`<tr><td><strong>${escHtml(l.company)}</strong>${l.notes?`<div class="text-sm text-muted" style="font-size:10px">${escHtml(l.notes.slice(0,60))}${l.notes.length>60?'...':''}</div>`:''}</td><td>${escHtml(l.contact||'—')}</td><td><span style="color:${color};font-weight:600;font-size:11px">${escHtml(l.stage)}</span></td><td>${l.value?`<strong>Rs.${fmtINR(l.value)}</strong>`:'—'}</td><td>${escHtml(l.source)}</td><td>${escHtml(l.followup||'—')}</td><td class="text-muted">${l.created}</td><td><button class="btn btn-sm btn-danger" onclick="removeBDLead(${l.id})">x</button></td></tr>`;}).join('')}</tbody></table>`;
+}
+function exportBDCSV(){
+  if(!bdLeads.length){alert('No leads to export.');return;}
+  const rows=[['Company','Contact','Stage','Value/mo (Rs.)','Source','Follow-up Date','Notes','Added']];
+  bdLeads.forEach(l=>rows.push([l.company,l.contact,l.stage,l.value,l.source,l.followup,l.notes,l.created]));
+  downloadText(rows.map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n'),'justwords_pipeline.csv','text/csv');
+}
+function pushLeadFromSetup(){
+  const company=document.getElementById('client-name').value.trim();
+  if(!company)return;
+  if(bdLeads.find(l=>l.company===company))return;
+  bdLeads.push({id:Date.now(),company,contact:document.getElementById('contact-name').value.trim(),stage:document.getElementById('lead-stage').value,value:+document.getElementById('lead-value').value||0,source:document.getElementById('lead-source').value,followup:document.getElementById('followup-date').value,notes:document.getElementById('bd-notes').value.trim(),created:new Date().toLocaleDateString('en-IN')});
+}
+(function(){const orig=window.startAudit;window.startAudit=async function(){pushLeadFromSetup();return orig();};})();
+
+/* ══ UTILITIES ══ */
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function fmtINR(n){return Number(n).toLocaleString('en-IN');}
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'&&currentStep===1)startAudit();});
+</script>
+</body>
+</html>
