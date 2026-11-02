@@ -73,9 +73,6 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("url", help="Client URL or bare domain (e.g. https://example.com or example.com)")
     ap.add_argument("--out", default="reports", help="Output directory (default: reports)")
     ap.add_argument("--pagespeed-key", default=None, help="Optional Google PageSpeed API key")
-    ap.add_argument("--seoptimer-key", default=None,
-                    help="Optional SEOptimer API key (also read from SEOPTIMER_API_KEY). "
-                         "Enables reliable detailed data for the CAPTCHA/rate-limited checks.")
     ap.add_argument("--groq-key", default=None,
                     help="Groq API key for the AI analysis + proposal (also read from "
                          "GROQ_API_KEY or a .groq_key file in the project root).")
@@ -130,8 +127,6 @@ def main(argv: list[str] | None = None) -> int:
     config = {}
     if args.pagespeed_key:
         config["pagespeed_key"] = args.pagespeed_key
-    if args.seoptimer_key:
-        config["seoptimer_key"] = args.seoptimer_key
 
     discovery = _build_discovery(args)
 
@@ -161,7 +156,6 @@ def main(argv: list[str] | None = None) -> int:
         discovery=discovery,
         groq_key=groq_key,
         groq_model=args.groq_model,
-        seoptimer_key=args.seoptimer_key,
         tier=args.tier,
         make_pdf=not args.no_pdf,
         make_proposal=not args.no_pitch,

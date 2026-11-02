@@ -133,7 +133,7 @@ def _extent(r: CheckResult, metrics: dict, crawl_agg: dict | None = None) -> str
 
     bd-auto crawls the whole domain, so site-wide checks report their real
     page-count extent ("42 of 318 pages"). Homepage-only checks say "Homepage",
-    and SEOptimer-derived checks report the metric they measured.
+    and measured checks report the metric they captured.
     """
     a = crawl_agg or {}
     pages = a.get("pages_crawled")
@@ -312,11 +312,10 @@ def _site_analysis(crawl_agg: dict | None) -> list[dict]:
 def _quick_win_keywords(metrics: dict) -> list[dict]:
     """Real 'quick-win' keywords: terms the site ALREADY ranks for on page 2+.
 
-    Drawn straight from SEOptimer's measured ``top_keywords`` — a keyword sitting
-    in positions 4-30 is already ranking and one push away from the traffic that
-    converts, which makes it the honest, evidence-backed target list (no invented
-    volumes or difficulty scores). Returns [] when no ranking data is available,
-    so the template simply omits the section.
+    A keyword sitting in positions 4-30 is already ranking and one push away from
+    the traffic that converts, which makes it the honest, evidence-backed target
+    list (no invented volumes or difficulty scores). Returns [] when no measured
+    ranking data is available, so the template simply omits the section.
     """
     out: list[dict] = []
     for k in (metrics.get("top_keywords") or []):
@@ -359,12 +358,11 @@ def render_html(ctx: AuditContext, results: list[CheckResult], out_dir: Path,
     for r in results:
         summary[r.status.value] += 1
 
-    # SEOptimer scorecard (letter grades) + overall grade, if the API ran.
+    # Category letter grades + overall, derived from our own check results.
     try:
-        from .checks import seoptimer
-        rep = getattr(ctx, "seoptimer", None)
-        cards = seoptimer.scorecard(rep)
-        metrics = metrics if metrics is not None else seoptimer.metrics(rep)
+        from .checks import freedata
+        cards = freedata.scorecard(results)
+        metrics = metrics if metrics is not None else freedata.metrics(ctx, results)
     except Exception:
         cards, metrics = [], (metrics or {})
     overall = next((c for c in cards if c["key"] == "overall"), None)
@@ -420,7 +418,7 @@ def render_deck_html(ctx: AuditContext, out_dir: Path,
     """
     from . import competitors as comp_mod
     from . import packages as pk
-    from .checks import seoptimer
+    from .checks import freedata
 
     discovery = discovery or Discovery()
     pitch = pitch or {}
@@ -434,19 +432,16 @@ def render_deck_html(ctx: AuditContext, out_dir: Path,
     for r in results:
         summary[r.status.value] += 1
 
-    rep = getattr(ctx, "seoptimer", None)
-    scorecard = seoptimer.scorecard(rep)
+    scorecard = freedata.scorecard(results)
     overall_card = next((c for c in scorecard if c["key"] == "overall"), None)
     audit_grade = (ai or {}).get("grade") or (overall_card or {}).get("grade")
 
-    # Operator-supplied true organic traffic wins over SEOptimer's estimate.
-    # Mutate a copy so the caller's dict and any cache stay untouched.
+    # Operator-supplied real organic traffic is used verbatim when provided.
+    # Mutate a copy so the caller's dict stays untouched.
     client_metrics = dict(client_metrics)
     if discovery.organic_override is not None:
         client_metrics["organic_traffic"] = discovery.organic_override
-    # Domain Authority is intentionally not surfaced any more: SEOptimer's 0-100
-    # "domain strength" is a proprietary estimate (not Moz/Ahrefs DA), and the
-    # client asked for it removed. Drop it so no DA-style tile can render.
+    # No Domain Authority tile: it has no free source and is not surfaced.
     client_metrics.pop("domain_strength", None)
 
     crawl_agg = (getattr(getattr(ctx, "crawl", None), "agg", None) or {})

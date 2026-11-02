@@ -16,7 +16,6 @@ from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 
 from ..core import AuditContext, CheckResult, Status, check
-from . import seoptimer
 
 UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -268,20 +267,18 @@ def w3c(ctx: AuditContext) -> CheckResult:
     api = f"https://validator.w3.org/nu/?doc={ctx.url}&out=json"
     r = _get(ctx, api, timeout=40000)
     if not r or r.status >= 400:
-        result = CheckResult("w3c", "W3C Validation", "W3C HTML markup validation",
-                             Status.INFO, "W3C validator did not return a result — falling back to "
-                             "SEOptimer's detailed report.",
-                             source="validator.w3.org", evidence_url=f"https://validator.w3.org/nu/?doc={ctx.url}")
-        return seoptimer.enrich(ctx, result, "w3c")
+        return CheckResult("w3c", "W3C Validation", "W3C HTML markup validation",
+                           Status.INFO, "The W3C validator did not return a result, so markup "
+                           "could not be validated automatically this run.",
+                           source="validator.w3.org", evidence_url=f"https://validator.w3.org/nu/?doc={ctx.url}")
     try:
         data = r.json()
         msgs = data.get("messages", [])
     except Exception:
-        result = CheckResult("w3c", "W3C Validation", "W3C HTML markup validation",
-                             Status.INFO, "Could not parse validator response — falling back to "
-                             "SEOptimer's detailed report.",
-                             source="validator.w3.org", evidence_url=f"https://validator.w3.org/nu/?doc={ctx.url}")
-        return seoptimer.enrich(ctx, result, "w3c")
+        return CheckResult("w3c", "W3C Validation", "W3C HTML markup validation",
+                           Status.INFO, "The W3C validator response could not be parsed, so markup "
+                           "could not be validated automatically this run.",
+                           source="validator.w3.org", evidence_url=f"https://validator.w3.org/nu/?doc={ctx.url}")
     errors = sum(1 for m in msgs if m.get("type") == "error")
     warns = sum(1 for m in msgs if m.get("type") == "info" or m.get("subType") == "warning")
     status = Status.PASS if errors == 0 else (Status.WARN if errors <= 10 else Status.FAIL)
@@ -442,11 +439,10 @@ def pagespeed(ctx: AuditContext) -> CheckResult:
     r = _get(ctx, api, timeout=60000)
     eurl = f"https://pagespeed.web.dev/report?url={ctx.url}"
     if not r or r.status >= 400:
-        result = CheckResult("pagespeed", "PageSpeed Insights", "Google PageSpeed / Core Web Vitals",
-                             Status.INFO, "PageSpeed API unavailable/rate-limited — falling back to "
-                             "SEOptimer's performance report.",
-                             source="Google API", evidence_url=eurl)
-        return seoptimer.enrich(ctx, result, "pagespeed")
+        return CheckResult("pagespeed", "PageSpeed Insights", "Google PageSpeed / Core Web Vitals",
+                           Status.INFO, "Google PageSpeed was unavailable (the keyless API is "
+                           "rate-limited); see the on-page load-time check for measured timing.",
+                           source="Google API", evidence_url=eurl)
     try:
         data = r.json()
         lh = data["lighthouseResult"]
@@ -456,11 +452,10 @@ def pagespeed(ctx: AuditContext) -> CheckResult:
         def metric(k):
             return audits.get(k, {}).get("displayValue", "?")
     except Exception:
-        result = CheckResult("pagespeed", "PageSpeed Insights", "Google PageSpeed / Core Web Vitals",
-                             Status.INFO, "Could not parse PageSpeed response — falling back to "
-                             "SEOptimer's performance report.",
-                             source="Google API", evidence_url=eurl)
-        return seoptimer.enrich(ctx, result, "pagespeed")
+        return CheckResult("pagespeed", "PageSpeed Insights", "Google PageSpeed / Core Web Vitals",
+                           Status.INFO, "The PageSpeed response could not be parsed; see the on-page "
+                           "load-time check for measured timing.",
+                           source="Google API", evidence_url=eurl)
     status = Status.PASS if score >= 90 else (Status.WARN if score >= 50 else Status.FAIL)
     details = [("Performance score", f"{score}/100"),
                ("First Contentful Paint", metric("first-contentful-paint")),

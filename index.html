@@ -102,7 +102,7 @@
   <div class="brand">bd-auto</div>
   <h1>SEO Audit &amp; Growth Proposal</h1>
   <p class="lead">Drop in a client URL, choose the package and the services you're pitching, and we do the
-     rest: a whole-domain technical SEO audit, competitor analysis, opportunity model, and a Groq-written
+     rest: a whole-domain technical SEO audit, opportunity model, and a Groq-written
      strategy. Out comes one client-ready deck — the audit findings and the growth plan in a single PDF.</p>
 
   <div class="card">
@@ -160,7 +160,7 @@
           </div>
         </div>
       </div>
-      <p class="note" style="margin:10px 0 0">DA and organic default to SEOptimer's live estimate, which under-reports. Enter the real figures from Ahrefs/Semrush to override them everywhere in the deck.</p>
+      <p class="note" style="margin:10px 0 0">Optional. Off-page figures (DA, organic traffic) have no free source for a prospect's site, so they're left out of the deck unless you enter the real numbers from Ahrefs/Semrush here.</p>
     </div>
 
 
@@ -246,10 +246,6 @@
           <label for="psi">PageSpeed API key <span class="hint">(optional)</span></label>
           <input type="password" id="psi" placeholder="optional" autocomplete="off">
         </div>
-        <div>
-          <label for="seo">SEOptimer API key <span class="hint">(optional)</span></label>
-          <input type="password" id="seo" placeholder="detailed data for blocked checks" autocomplete="off">
-        </div>
       </div>
     </details>
 
@@ -277,7 +273,7 @@
 
 <script>
 const $ = id => document.getElementById(id);
-const urlEl=$("url"), groqEl=$("groq"), modelEl=$("model"), psiEl=$("psi"), seoEl=$("seo");
+const urlEl=$("url"), groqEl=$("groq"), modelEl=$("model"), psiEl=$("psi");
 
 // remember the keys/model locally so you don't paste them every time
 groqEl.value = localStorage.getItem("bd_groq") || "";
@@ -446,7 +442,7 @@ async function start(){
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
         url, groq_key:groqEl.value.trim(), groq_model:modelEl.value.trim(),
-        pagespeed_key:psiEl.value.trim(), seoptimer_key:seoEl.value.trim(),
+        pagespeed_key:psiEl.value.trim(),
         tier: $("tier").value,
         discovery: collectDiscovery()
       })

@@ -39,20 +39,19 @@ audit-only deck (no solution chapter).
 
 The app ships as a Docker web service (Playwright needs a real Chromium build
 plus system libraries that Render's native Python runtime can't install).
+**Plug-and-play — there are no environment variables to configure.**
 
 1. Push this repo to GitHub.
 2. In Render: **New + → Blueprint**, pick the repo. Render reads `render.yaml`
    and provisions a Docker web service (`heyaudit`).
-3. Set the environment variables (mark them **Secret**):
-   - `GROQ_API_KEY` — for the AI analysis + solution half of the deck
-   - `SEOPTIMER_API_KEY` — for the SEOptimer-backed metrics
-   - `GROQ_MODEL` *(optional)* — overrides the default model
-4. Deploy. The server binds `0.0.0.0:$PORT` automatically (Render injects
+3. Deploy. The server binds `0.0.0.0:$PORT` automatically (Render injects
    `$PORT`); the health check hits `/`.
 
 Notes:
-- Keys live only as Render env vars — the `.groq_key` / `.seoptimer_key` files
-  are git-ignored and never leave your machine.
+- The audit runs entirely on free, first-party data (no third-party API key).
+- The AI-written strategy half of the deck is optional: paste a Groq API key
+  into the web form at run time (it's stored only in your browser). Without one,
+  the deck renders as an audit-only document.
 - A whole-site crawl + Chromium is memory-hungry; the blueprint requests the
   `standard` plan. For lighter sites you can lower the plan and cap pages with
   the `max_pages` field in the audit form.

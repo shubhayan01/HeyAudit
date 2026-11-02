@@ -69,7 +69,7 @@ def _rel(path) -> str | None:
 
 def _run_job(job_id: str, url: str, groq_key: str | None,
              groq_model: str | None, pagespeed_key: str | None,
-             seoptimer_key: str | None, max_pages: int | None,
+             max_pages: int | None,
              tier: str | None, discovery: dict | None) -> None:
     job = JOBS[job_id]
     try:
@@ -80,8 +80,6 @@ def _run_job(job_id: str, url: str, groq_key: str | None,
         config: dict = {}
         if pagespeed_key:
             config["pagespeed_key"] = pagespeed_key
-        if seoptimer_key:
-            config["seoptimer_key"] = seoptimer_key
         if max_pages:
             config["max_pages"] = max_pages
 
@@ -101,7 +99,6 @@ def _run_job(job_id: str, url: str, groq_key: str | None,
             discovery=disc,
             groq_key=groq_key,
             groq_model=groq_model,
-            seoptimer_key=seoptimer_key,
             tier=tier,                      # None -> budget decides
             progress=progress,
         )
@@ -245,7 +242,6 @@ class Handler(BaseHTTPRequestHandler):
                   (payload.get("groq_key") or "").strip() or None,
                   (payload.get("groq_model") or "").strip() or None,
                   (payload.get("pagespeed_key") or "").strip() or None,
-                  (payload.get("seoptimer_key") or "").strip() or None,
                   max_pages, tier, discovery),
             daemon=True,
         ).start()

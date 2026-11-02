@@ -20,11 +20,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Callable, Optional
 
-from . import competitors as comp_mod
 from . import packages as pk
 from . import projections
 from .ai import generate_ai_report
-from .checks import seoptimer
+from .checks import freedata
 from .core import AuditContext, CheckResult
 from .discovery import Discovery
 from .pitch import generate_pitch
@@ -50,10 +49,9 @@ def analyse(
     discovery: Optional[Discovery] = None,
     groq_key: Optional[str] = None,
     groq_model: Optional[str] = None,
-    seoptimer_key: Optional[str] = None,
     progress: Optional[Callable[[str, str], None]] = None,
 ) -> dict:
-    """Analyse the audited site: metrics, AI headline, competitors, suggested tier.
+    """Analyse the audited site: metrics, AI headline, suggested tier.
 
     Returns a dict the caller keeps and later hands to :func:`build_deck`. Does
     NOT generate the deck — the package is chosen after this returns.
@@ -67,7 +65,7 @@ def analyse(
             except Exception:
                 pass
 
-    client_metrics = seoptimer.metrics(getattr(ctx, "seoptimer", None))
+    client_metrics = freedata.metrics(ctx, results)
     client_metrics["domain"] = ctx.domain
 
     ai = None
@@ -76,10 +74,10 @@ def analyse(
         ai = generate_ai_report(ctx.domain, ctx.url, results,
                                 api_key=groq_key, model=groq_model)
 
+    # Competitor comparison relied on a paid data source for the rival sites'
+    # authority/traffic/backlinks; those have no free source for a third party's
+    # site, so the comparison is left out rather than estimated.
     competitor_metrics: list[dict] = []
-    if discovery.competitors:
-        key = seoptimer.resolve_key({"seoptimer_key": seoptimer_key} if seoptimer_key else None)
-        competitor_metrics = comp_mod.analyse(discovery.competitors, key, progress=progress)
 
     # The budget's implied tier is the default the picker pre-selects; the
     # operator can still override it when building the deck.
@@ -175,7 +173,6 @@ def generate_deliverables(
     discovery: Optional[Discovery] = None,
     groq_key: Optional[str] = None,
     groq_model: Optional[str] = None,
-    seoptimer_key: Optional[str] = None,
     tier: Optional[str] = None,
     make_pdf: bool = True,
     make_proposal: bool = True,
@@ -189,8 +186,7 @@ def generate_deliverables(
     """
     discovery = discovery or Discovery()
     analysis = analyse(ctx, results, discovery=discovery, groq_key=groq_key,
-                       groq_model=groq_model, seoptimer_key=seoptimer_key,
-                       progress=progress)
+                       groq_model=groq_model, progress=progress)
     chosen = tier or analysis["suggested_tier"]
     out = build_deck(ctx, results, out_dir, tier=chosen, analysis=analysis,
                      discovery=discovery, groq_key=groq_key, groq_model=groq_model,

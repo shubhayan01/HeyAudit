@@ -1,85 +1,32 @@
 """Competitor intelligence for the proposal's Competitive Landscape section.
 
-The JW template compares the client against up to five named competitors on
-authority, traffic, keywords and referring domains. Those numbers have to be
-real — a prospect will check them — so each competitor domain gets its own
-SEOptimer report through the same API client the audit uses, and every figure in
-the comparison table is measured rather than estimated.
+The comparison table pits the client against named competitors on authority,
+traffic, keywords and referring domains. Those numbers have to be *real* — a
+prospect will check them — and there is no free source for a rival site's
+off-page metrics, so bd-auto no longer fetches them: the comparison is omitted
+rather than estimated. ``analyse`` therefore returns no competitor rows.
 
-Cost and time: one API credit per competitor, ~60-70s each. Reports are fetched
-concurrently (a few workers, not all at once) so four competitors add roughly
-90 seconds to a run rather than five minutes.
+The ``table`` and ``digest_for_prompt`` helpers are kept so the deck and the
+pitch prompt degrade cleanly (empty comparison, "no competitor data") and so a
+future paid data source can be wired back into ``analyse`` without touching the
+rest of the pipeline.
 """
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Callable, Optional
 
-from .checks import seoptimer
-
-# SEOptimer reports are slow but light on our side; a small pool keeps wall-clock
-# down without hammering their API.
-MAX_WORKERS = 3
 MAX_COMPETITORS = 5
 
 
-def _fetch_one(domain: str, key: str) -> dict:
-    """One competitor's metrics. Never raises — a failed competitor is dropped
-    from the comparison rather than taking the proposal down with it."""
-    try:
-        rep = seoptimer.fetch_report(f"https://{domain}/", key, domain=domain)
-    except Exception as exc:  # noqa: BLE001
-        return {"domain": domain, "loaded": False,
-                "error": f"{exc.__class__.__name__}: {exc}"}
-    m = seoptimer.metrics(rep)
-    m["domain"] = domain
-    m["loaded"] = bool(rep.get("loaded"))
-    if rep.get("error"):
-        m["error"] = rep["error"]
-    return m
-
-
-def analyse(domains: list[str], key: Optional[str],
+def analyse(domains: list[str], key: Optional[str] = None,
             progress: Optional[Callable[[str, str], None]] = None) -> list[dict]:
-    """Fetch metrics for each competitor domain, in parallel. Best-effort.
+    """No-op: competitor off-page metrics have no free data source.
 
-    Returns one metrics dict per domain (see ``seoptimer.metrics``), including
-    ones that failed — those carry ``loaded: False`` and are filtered out of the
-    comparison tables by ``projections.gaps``.
+    Returns [] so the Competitive Landscape section is omitted rather than shown
+    with estimated numbers a prospect could disprove.
     """
-    domains = [d for d in dict.fromkeys(domains) if d][:MAX_COMPETITORS]
-    if not domains:
-        return []
-    if not key:
-        return [{"domain": d, "loaded": False,
-                 "error": "no SEOptimer API key configured"} for d in domains]
-
-    def note(msg: str, cat: str = "competitors") -> None:
-        if progress:
-            try:
-                progress(msg, cat)
-            except Exception:
-                pass
-
-    note(f"Analysing {len(domains)} competitor{'s' if len(domains) > 1 else ''}"
-         f" (~90s)", "competitors")
-
-    out: dict[str, dict] = {}
-    with ThreadPoolExecutor(max_workers=min(MAX_WORKERS, len(domains))) as pool:
-        futures = {pool.submit(_fetch_one, d, key): d for d in domains}
-        for fut in as_completed(futures):
-            d = futures[fut]
-            try:
-                out[d] = fut.result()
-            except Exception as exc:  # noqa: BLE001
-                out[d] = {"domain": d, "loaded": False,
-                          "error": f"{exc.__class__.__name__}: {exc}"}
-            ok = out[d].get("loaded")
-            note(f"Competitor: {d}", "done" if ok else "unavailable")
-
-    # Preserve the order the user listed them in.
-    return [out[d] for d in domains if d in out]
+    return []
 
 
 def table(client: dict, competitors: list[dict], client_label: str = "Your site") -> dict:
@@ -141,7 +88,7 @@ def digest_for_prompt(client: dict, competitors: list[dict]) -> str:
                 f"backlinks {f('backlinks')}, "
                 f"overall grade {m.get('overall_grade') or 'n/a'}")
 
-    lines = ["MEASURED COMPETITOR METRICS (SEOptimer, live):",
+    lines = ["MEASURED COMPETITOR METRICS (live):",
              line(client, "CLIENT (the site we are pitching)")]
     lines += [line(c, c.get("domain", "?")) for c in live]
     failed = [c.get("domain") for c in competitors if not c.get("loaded")]

@@ -106,10 +106,6 @@ class AuditContext:
     home_load_ms: float = 0.0
     home_error: Optional[str] = None
 
-    # Lazily-populated SEOptimer detailed-report cache (see checks/seoptimer.py).
-    # Fetched once, on first fallback that needs it, then reused by every other.
-    seoptimer: object = None
-
     # Whole-domain crawl (auditor/crawler.py SiteCrawl). Populated by the runner
     # before the checks run; site-wide checks read its aggregates.
     crawl: object = None

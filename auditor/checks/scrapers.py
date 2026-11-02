@@ -1,63 +1,57 @@
-"""SEO checks powered by the SEOptimer API — no browser, no screenshots.
+"""Off-DOM SEO checks — powered entirely by free, first-party signals.
 
-bd-auto measures everything it can itself (see native.py). The topics below need
-third-party data (backlinks, organic presence, off-DOM performance, social, AI
-readiness, security), so each check delegates to the SEOptimer API report — which
-is fetched once and cached — via seoptimer.enrich(). Statuses are derived from
-SEOptimer's letter grades; no CAPTCHA screenshots are ever produced.
+bd-auto measures everything it can directly (see native.py). The topics below —
+page load, content depth, security posture, technology profile and AI-search
+readiness — used to be filled by a paid third-party API. They are now derived
+from the data the audit already gathers for free: navigation timing, the crawl
+aggregates, the rendered homepage DOM and the response headers (see
+``freedata.enrich``). No browser automation, no screenshots, no API key.
+
+Off-site authority metrics (backlinks, referring domains, organic traffic,
+keyword rankings) have no free source for a prospect's site, so bd-auto no
+longer reports them rather than showing estimates dressed up as measurements.
 """
 
 from __future__ import annotations
 
 from .. import screamingfrog
 from ..core import AuditContext, CheckResult, Status, check
-from . import seoptimer
+from . import freedata
 
 
-def _seo(ctx: AuditContext, cid: str, category: str, title: str, topic: str) -> CheckResult:
+def _free(ctx: AuditContext, cid: str, category: str, title: str, topic: str) -> CheckResult:
     result = CheckResult(cid, category, title, Status.INFO, "", source="")
-    return seoptimer.enrich(ctx, result, topic)
+    return freedata.enrich(ctx, result, topic)
 
 
-@check("backlinks", "Backlink Profile", "Backlinks & referring domains", "")
-def backlinks(ctx: AuditContext) -> CheckResult:
-    return _seo(ctx, "backlinks", "Backlink Profile", "Backlinks & referring domains", "backlinks")
-
-
-@check("indexed_google", "Organic Search", "Organic keyword presence & traffic", "")
-def organic_presence(ctx: AuditContext) -> CheckResult:
-    return _seo(ctx, "indexed_google", "Organic Search",
-                "Organic keyword presence & traffic", "indexed_google")
-
-
-@check("gtmetrix", "Page Load", "Load time, page weight & requests", "")
+@check("gtmetrix", "Page Load", "Load time & homepage weight", "")
 def page_load(ctx: AuditContext) -> CheckResult:
-    return _seo(ctx, "gtmetrix", "Page Load", "Load time, page weight & requests", "gtmetrix")
+    return _free(ctx, "gtmetrix", "Page Load", "Load time & homepage weight", "gtmetrix")
 
 
 @check("siteliner", "Content", "Content depth & on-page signals", "")
 def content_quality(ctx: AuditContext) -> CheckResult:
-    return _seo(ctx, "siteliner", "Content", "Content depth & on-page signals", "siteliner")
+    return _free(ctx, "siteliner", "Content", "Content depth & on-page signals", "siteliner")
 
 
 @check("geo", "AI Search Readiness", "Generative Engine Optimization (LLMs/AI)", "")
 def ai_readiness(ctx: AuditContext) -> CheckResult:
-    return _seo(ctx, "geo", "AI Search Readiness",
-                "Generative Engine Optimization (LLMs/AI)", "geo")
+    return _free(ctx, "geo", "AI Search Readiness",
+                 "Generative Engine Optimization (LLMs/AI)", "geo")
 
 
-@check("security", "Security", "Malware & connection safety", "")
+@check("security", "Security", "HTTPS & connection safety", "")
 def security(ctx: AuditContext) -> CheckResult:
-    return _seo(ctx, "security", "Security", "Malware & connection safety", "security")
+    return _free(ctx, "security", "Security", "HTTPS & connection safety", "security")
 
 
 @check("domain_category", "Technology Profile", "Detected technologies & hosting", "")
 def technology_profile(ctx: AuditContext) -> CheckResult:
-    result = _seo(ctx, "domain_category", "Technology Profile",
-                  "Detected technologies & hosting", "domain_category")
+    result = _free(ctx, "domain_category", "Technology Profile",
+                   "Detected technologies & hosting", "domain_category")
     # When Screaming Frog SEO Spider is installed + licensed, enrich the technical
     # profile with its deeper crawl data. Auto-detected and entirely optional: if
-    # it isn't present (or the run fails) the SEOptimer-derived result stands.
+    # it isn't present (or the run fails) the free result stands.
     if screamingfrog.available():
         sf = getattr(ctx, "_sf_tech", None)
         if sf is None:
