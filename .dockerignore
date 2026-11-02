@@ -1,0 +1,14 @@
+# Secrets — never bake keys into the image; pass them as env vars at runtime.
+.groq_key
+.seoptimer_key
+
+# Local-only cruft
+.venv/
+__pycache__/
+*.pyc
+reports/
+.git/
+.gitignore
+.claude/
+*.md
+audit.bat

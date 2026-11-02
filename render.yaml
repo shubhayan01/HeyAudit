@@ -1,0 +1,23 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Deploys the bd-auto web frontend as a Docker web service. Connect this repo
+# in the Render dashboard ("New +" -> "Blueprint") and it reads this file.
+services:
+  - type: web
+    name: heyaudit
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: standard            # Playwright + Chromium + a whole-site crawl need
+                              # real RAM; the free/starter tiers (512 MB) tend to
+                              # OOM. Drop to a smaller plan only for light use.
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      # Set these in the Render dashboard (mark them Secret). The app also reads
+      # them at runtime; without them the AI/SEOptimer-backed sections degrade.
+      - key: GROQ_API_KEY
+        sync: false
+      - key: SEOPTIMER_API_KEY
+        sync: false
+      # Optional: override the Groq model (default llama-3.3-70b-versatile).
+      - key: GROQ_MODEL
+        sync: false

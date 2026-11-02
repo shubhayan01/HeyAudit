@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bd-auto — Technical SEO Audit</title>
+<style>
+  :root{
+    --ink:#15181f; --muted:#6b7280; --line:#e5e7eb; --bg:#f4f6fa;
+    --brand:#2c6fb5; --brand-d:#205089; --ok:#1a8a3a; --bad:#c0392b; --warn:#b5840a;
+  }
+
+
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.55;font-size:15px}
+  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+  .brand{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:34px;margin:6px 0 4px}
+  .lead{color:var(--muted);margin:0 0 28px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;
+        box-shadow:0 1px 3px rgba(16,24,40,.04)}
+  label{display:block;font-size:13px;font-weight:600;margin:0 0 6px}
+  .hint{font-weight:400;color:var(--muted)}
+  input[type=text],input[type=password]{width:100%;padding:12px 14px;font-size:15px;
+    border:1px solid var(--line);border-radius:10px;background:#fff;outline:none;transition:border .15s}
+  input:focus{border-color:var(--brand)}
+  .row{margin-bottom:18px}
+  .adv{margin:4px 0 18px}
+  .adv summary{cursor:pointer;font-size:13px;color:var(--brand);font-weight:600;user-select:none}
+  .adv .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .adv .grid .full{grid-column:1/-1}
+  @media(max-width:560px){.adv .grid{grid-template-columns:1fr}}
+  .adv .note{font-size:12px;color:var(--muted);margin:10px 0 0}
+  textarea{width:100%;padding:11px 13px;font-size:14px;border:1px solid var(--line);
+    border-radius:10px;background:#fff;outline:none;font-family:inherit;resize:vertical;min-height:64px}
+  textarea:focus{border-color:var(--brand)}
+  select{width:100%;padding:12px 14px;font-size:15px;border:1px solid var(--line);
+    border-radius:10px;background:#fff;outline:none}
+  .secdiv{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin:20px 0 -4px;grid-column:1/-1;border-top:1px solid var(--line);padding-top:16px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.grid2{grid-template-columns:1fr}}
+  .inline{display:flex;gap:8px}
+  .inline input{flex:1}
+  .inline select{width:auto;flex:none}
+  .cats{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:8px}
+  .cats label{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;
+    background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;
+    margin:0;user-select:none;transition:border .15s,background .15s}
+  .cats label:hover{border-color:var(--brand)}
+  .cats input{accent-color:var(--brand);width:15px;height:15px;margin:0}
+  .cats label:has(input:checked){border-color:var(--brand);background:#eef4fb}
+  .cats .catbtns{width:100%;display:flex;gap:14px;margin:2px 0 2px}
+  .cats .catbtns a{font-size:12px;color:var(--brand);cursor:pointer;font-weight:600}
+  .deckopts{background:#fbfcfe;border:1px solid var(--line);border-radius:12px;padding:16px 16px 18px}
+  .deckopts .h{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+  button.go{width:100%;padding:14px;font-size:16px;font-weight:700;color:#fff;border:0;
+    border-radius:10px;background:var(--brand);cursor:pointer;transition:background .15s}
+  button.go:hover{background:var(--brand-d)}
+  button.go:disabled{background:#9bb6d4;cursor:not-allowed}
+
+  .panel{margin-top:22px;display:none}
+  .panel.show{display:block}
+  .statusbar{display:flex;align-items:center;gap:10px;font-weight:600;margin-bottom:12px}
+  .spinner{width:18px;height:18px;border:3px solid var(--line);border-top-color:var(--brand);
+    border-radius:50%;animation:spin .8s linear infinite;flex:none}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .log{background:#0f1320;color:#cdd6e4;border-radius:10px;padding:14px 16px;font-size:12.5px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;max-height:260px;overflow:auto}
+  .log div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .log .cat{color:#7f93b5}
+
+
+  .result{margin-top:18px}
+  .grade-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+  .grade{width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:30px;font-weight:800;color:#fff;background:var(--brand);flex:none}
+  .grade.A{background:#1a8a3a}.grade.B{background:#5a9e1e}.grade.C{background:#b5840a}
+  .grade.D{background:#cc6a1f}.grade.F{background:#c0392b}
+  .gtext .g1{font-size:13px;color:var(--muted)}
+  .gtext .g2{font-size:18px;font-weight:700}
+  .counts{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 0}
+  .pill{font-size:12px;font-weight:700;padding:4px 11px;border-radius:20px;background:var(--bg);border:1px solid var(--line)}
+  .pill.pass{color:var(--ok)}.pill.fail{color:var(--bad)}.pill.warn{color:var(--warn)}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .btn{display:inline-block;padding:11px 18px;border-radius:10px;font-weight:700;font-size:14px;
+    text-decoration:none;text-align:center}
+  .btn.primary{background:var(--brand);color:#fff}
+  .btn.ghost{background:#fff;color:var(--brand);border:1px solid var(--line)}
+  .errbox{background:#fdecea;border:1px solid #f5c6c0;color:var(--bad);border-radius:10px;padding:14px 16px;font-size:14px}
+  footer{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
+  .saved{font-size:12px;color:var(--ok);margin-left:8px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="brand">bd-auto</div>
+  <h1>SEO Audit &amp; Growth Proposal</h1>
+  <p class="lead">Drop in a client URL, choose the package and the services you're pitching, and we do the
+     rest: a whole-domain technical SEO audit, competitor analysis, opportunity model, and a Groq-written
+     strategy. Out comes one client-ready deck — the audit findings and the growth plan in a single PDF.</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="url">Website URL</label>
+      <input type="text" id="url" placeholder="https://client.com  or  client.com" autocomplete="off">
+    </div>
+
+    <div class="row">
+      <label for="groq">Groq API key <span class="hint">— powers the AI report. Stored only in this browser.</span><span class="saved" id="saved"></span></label>
+      <input type="password" id="groq" placeholder="gsk_..." autocomplete="off">
+    </div>
+
+
+    <div class="row deckopts">
+      <div class="h">Offers to feature in the deck</div>
+      <label style="margin:0">Services <span class="hint">— untick anything you're not pitching. All on by default.</span></label>
+      <div class="cats" id="cats">
+        <div class="catbtns"><a id="catAll">Select all</a><a id="catNone">Clear all</a></div>
+      </div>
+
+      <div style="margin-top:16px">
+        <label for="tier">Package to pitch <span class="hint">— sets the price tier the deck recommends. "Auto" picks it from the budget.</span></label>
+        <select id="tier">
+          <option value="">Auto — pick from the budget</option>
+          <option value="starter">Starter</option>
+          <option value="growth">Growth</option>
+          <option value="professional">Professional</option>
+          <option value="enterprise">Enterprise</option>
+        </select>
+        <p class="note" id="tierHint" style="margin:6px 0 0"></p>
+      </div>
+
+      <div class="grid2" style="margin-top:16px">
+        <div>
+          <label for="budget">Client's monthly budget <span class="hint">— drives ROI &amp; the Auto tier</span></label>
+          <div class="inline">
+            <input type="text" id="budget" placeholder="e.g. 60000 or 50K-95K" autocomplete="off">
+            <select id="currency">
+              <option value="INR">INR ₹</option><option value="USD">USD $</option>
+              <option value="GBP">GBP £</option><option value="EUR">EUR €</option>
+              <option value="AED">AED</option>
+            </select>
+          </div>
+          <p class="note" id="budgetHint" style="margin:6px 0 0"></p>
+        </div>
+        <div class="grid2" style="gap:14px">
+          <div>
+            <label for="da">True Domain Authority <span class="hint">(Ahrefs/Moz)</span></label>
+            <input type="text" id="da" placeholder="optional" autocomplete="off">
+          </div>
+          <div>
+            <label for="organic">Monthly organic traffic</label>
+            <input type="text" id="organic" placeholder="optional" autocomplete="off">
+          </div>
+        </div>
+      </div>
+      <p class="note" style="margin:10px 0 0">DA and organic default to SEOptimer's live estimate, which under-reports. Enter the real figures from Ahrefs/Semrush to override them everywhere in the deck.</p>
+    </div>
+
+
+
+    <details class="adv" id="discBlock">
+      <summary>Discovery call answers &amp; competitors <span class="hint">— optional, but they unlock the proposal's best sections</span></summary>
+      <div class="grid">
+        <div class="secdiv">Competitors</div>
+        <div class="full">
+          <label for="comps">Competitor domains <span class="hint">— up to 5, comma-separated. Each gets a real audit (~90s total).</span></label>
+          <input type="text" id="comps" placeholder="rival-a.com, rival-b.com, rival-c.com" autocomplete="off">
+          <p class="note">Without these there's no competitive landscape table and no opportunity model —
+            those sections are built from measured competitor data, so they're skipped rather than guessed.</p>
+        </div>
+ 
+
+
+        <div class="secdiv">Proposal cover</div>
+        <div>
+          <label for="clientName">Client company name</label>
+          <input type="text" id="clientName" placeholder="Acme Pvt Ltd" autocomplete="off">
+        </div>
+        <div>
+          <label for="preparedBy">Prepared by <span class="hint">(you)</span></label>
+          <input type="text" id="preparedBy" placeholder="Your name" autocomplete="off">
+        </div>
+        <div>
+          <label for="preparedTitle">Your title</label>
+          <input type="text" id="preparedTitle" placeholder="Head of SEO" autocomplete="off">
+        </div>
+
+        <div class="secdiv">What they told you <span class="hint">— budget &amp; currency are set above</span></div>
+        <div>
+          <label for="curLeads">Current inbound leads / month</label>
+          <input type="text" id="curLeads" placeholder="15" autocomplete="off">
+        </div>
+        <div>
+          <label for="closeRate">Close rate <span class="hint">(%)</span></label>
+          <input type="text" id="closeRate" placeholder="25" autocomplete="off">
+        </div>
+        <div>
+          <label for="dealValue">Average deal value</label>
+          <input type="text" id="dealValue" placeholder="150000" autocomplete="off">
+        </div>
+        <div>
+          <label for="targetLeads">Target leads / month</label>
+          <input type="text" id="targetLeads" placeholder="40" autocomplete="off">
+        </div>
+        <div>
+          <label for="geoFocus">Geographic focus</label>
+          <input type="text" id="geoFocus" placeholder="National" autocomplete="off">
+        </div>
+        <div class="full">
+          <label for="goal">Their goal <span class="hint">— in their own words, we echo it back</span></label>
+          <input type="text" id="goal" placeholder="Expand from local to national and double the sales team" autocomplete="off">
+        </div>
+        <div class="full">
+          <label for="services">Primary services <span class="hint">— one per line</span></label>
+          <textarea id="services" placeholder="Content marketing&#10;SEO retainers"></textarea>
+        </div>
+
+
+        <div class="full">
+          <label for="pains">Pain points they raised <span class="hint">— one per line</span></label>
+          <textarea id="pains" placeholder="Leads dried up after the last redesign&#10;No visibility outside our home city"></textarea>
+        </div>
+
+
+        <p class="note full">Leave anything blank and it drops out of the proposal cleanly — nothing here is invented to fill a gap.</p>
+      </div>
+    </details>
+
+
+
+    <details class="adv">
+      <summary>Advanced options</summary>
+      <div class="grid">
+        <div>
+          <label for="model">Groq model</label>
+          <input type="text" id="model" placeholder="llama-3.3-70b-versatile" autocomplete="off">
+        </div>
+        <div>
+          <label for="psi">PageSpeed API key <span class="hint">(optional)</span></label>
+          <input type="password" id="psi" placeholder="optional" autocomplete="off">
+        </div>
+        <div>
+          <label for="seo">SEOptimer API key <span class="hint">(optional)</span></label>
+          <input type="password" id="seo" placeholder="detailed data for blocked checks" autocomplete="off">
+        </div>
+      </div>
+    </details>
+
+
+
+    <button class="go" id="go">Run audit &amp; build proposal</button>
+  </div>
+
+  <div class="panel" id="panel">
+
+
+    <div class="statusbar" id="statusbar">
+      <span class="spinner" id="spinner"></span>
+      <span id="statustext">Starting…</span>
+    </div>
+
+
+    <div class="log" id="log"></div>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <footer>bd-auto runs locally on your machine. Reports are saved under <code>reports/</code>.</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const urlEl=$("url"), groqEl=$("groq"), modelEl=$("model"), psiEl=$("psi"), seoEl=$("seo");
+
+// remember the keys/model locally so you don't paste them every time
+groqEl.value = localStorage.getItem("bd_groq") || "";
+modelEl.value = localStorage.getItem("bd_model") || "";
+psiEl.value = localStorage.getItem("bd_psi") || "";
+seoEl.value = localStorage.getItem("bd_seo") || "";
+if (groqEl.value) $("saved").textContent = "saved";
+
+
+// Discovery form -> the JSON keys auditor/discovery.py expects.
+const DISC_FIELDS = {
+  competitors:"comps", client_name:"clientName", prepared_by:"preparedBy",
+  prepared_by_title:"preparedTitle", currency:"currency", budget:"budget",
+  current_leads:"curLeads", close_rate:"closeRate", avg_deal_value:"dealValue",
+  target_leads:"targetLeads", geo_focus:"geoFocus", goal:"goal",
+  services:"services", pain_points:"pains",
+  da_override:"da", organic_override:"organic"
+};
+
+
+
+// The real deck service areas (auditor/packages.py CATEGORIES). Ticking a box
+// keeps that area in the deck's deliverables + comparison matrix; unticked ones
+// are dropped. All on by default.
+const CATEGORIES = [
+  "Research & Analysis", "Setup", "On-Page Optimization", "Technical SEO",
+  "Website Performance", "Structured Data", "Visual & Media Optimization",
+  "Content Research & Development", "Off Page SEO", "Local SEO",
+  "Reporting", "Add-ons"
+];
+
+
+const catsBox = $("cats");
+CATEGORIES.forEach(name => {
+  const l = document.createElement("label");
+  l.innerHTML = `<input type="checkbox" value="${name.replace(/&/g,"&amp;")}" checked> ${name.replace(/&/g,"&amp;")}`;
+  catsBox.appendChild(l);
+});
+
+
+
+const catInputs = () => [...catsBox.querySelectorAll("input[type=checkbox]")];
+$("catAll").addEventListener("click", () => catInputs().forEach(c => c.checked = true));
+$("catNone").addEventListener("click", () => catInputs().forEach(c => c.checked = false));
+function selectedCategories(){
+  const all = catInputs();
+  const on = all.filter(c => c.checked).map(c => c.value);
+  // All ticked == no filter (send nothing, deck shows everything).
+  return on.length === all.length ? [] : on;
+}
+
+
+
+// Live hint: which package the entered budget lands on. Mirrors packages.py
+// tier_for_budget — the first tier whose ceiling the budget doesn't exceed.
+const TIER_MAX = {  // monthly ceilings, by currency (Enterprise is custom/above)
+  INR:{Starter:50000,Growth:95000,Professional:180000},
+  USD:{Starter:600,Growth:1150,Professional:2200}
+};
+function parseBudget(s){
+  if(!s) return null;
+  const parts = String(s).toLowerCase().replace(/,/g,"").split(/\s*(?:-|–|to)\s*/).filter(Boolean);
+  const nums = parts.map(p=>{
+    const m = p.match(/([\d.]+)\s*(k|l|lakh|lac|m|cr|crore)?/);
+    if(!m) return null;
+    const mult = {k:1e3,l:1e5,lakh:1e5,lac:1e5,m:1e6,cr:1e7,crore:1e7}[m[2]||""]||1;
+    return parseFloat(m[1])*mult;
+  }).filter(n=>n!=null);
+  return nums.length ? Math.max(...nums) : null;
+}
+function updateBudgetHint(){
+  const cur = ($("currency").value in TIER_MAX) ? $("currency").value : "INR";
+  const b = parseBudget($("budget").value);
+  const el = $("budgetHint");
+  // An explicit package pick overrides the budget, so the auto-fit hint is moot.
+  if($("tier").value){ el.textContent = "Overridden by the package you picked above."; el.style.color="var(--muted)"; return; }
+  if(b==null){ el.textContent=""; return; }
+  const maxes = TIER_MAX[cur];
+  let tier = "Enterprise";
+  for(const t of ["Starter","Growth","Professional"]) if(b<=maxes[t]){ tier=t; break; }
+  el.textContent = `→ fits the ${tier} package — the deck will recommend it.`;
+  el.style.color = "var(--ok)";
+}
+
+// Monthly price for each tier, by currency, for the tier picker's hint line.
+const TIER_PRICE = {
+  INR:{starter:"₹24K–50K/mo",growth:"₹50K–95K/mo",professional:"₹95K–180K/mo",enterprise:"Custom quote"},
+  USD:{starter:"$300–600/mo",growth:"$600–1,150/mo",professional:"$1,150–2,200/mo",enterprise:"Custom quote"}
+};
+function updateTierHint(){
+  const el = $("tierHint");
+  const t = $("tier").value;
+  if(!t){ el.textContent = ""; updateBudgetHint(); return; }
+  const cur = ($("currency").value in TIER_PRICE) ? $("currency").value : "INR";
+  el.textContent = `→ ${t[0].toUpperCase()+t.slice(1)} package · ${TIER_PRICE[cur][t]} — recommended in the deck regardless of budget.`;
+  el.style.color = "var(--ok)";
+  updateBudgetHint();
+}
+$("tier").addEventListener("change", updateTierHint);
+$("budget").addEventListener("input", updateBudgetHint);
+$("currency").addEventListener("change", ()=>{ updateTierHint(); });
+
+// Whoever runs this pitches all day; only the client-specific answers should
+// reset between runs. Their own name/title/currency persist.
+const STICKY = ["prepared_by","prepared_by_title","currency"];
+STICKY.forEach(k => { const v = localStorage.getItem("bd_"+k); if(v) $(DISC_FIELDS[k]).value = v; });
+updateTierHint();
+
+function collectDiscovery(){
+  const d = {};
+  for (const [key, id] of Object.entries(DISC_FIELDS)){
+    const v = ($(id).value || "").trim();
+    if (v) d[key] = v;
+  }
+  const cats = selectedCategories();
+  if (cats.length) d.include_categories = cats;  // empty == feature all
+  STICKY.forEach(k => localStorage.setItem("bd_"+k, ($(DISC_FIELDS[k]).value||"").trim()));
+  return d;
+}
+
+// Open the discovery block if it has anything in it, so it isn't forgotten.
+if (STICKY.some(k => ($(DISC_FIELDS[k]).value||"").trim())) $("discBlock").open = true;
+
+let seen = 0, poll = null;
+
+function setStatus(text, busy){
+  $("statustext").textContent = text;
+  $("spinner").style.display = busy ? "block" : "none";
+}
+
+function addLog(items){
+  const log = $("log");
+  for (let i = seen; i < items.length; i++){
+    const d = document.createElement("div");
+    d.innerHTML = "• " + escapeHtml(items[i].msg) + "  <span class='cat'>" + escapeHtml(items[i].cat||"") + "</span>";
+    log.appendChild(d);
+  }
+  seen = items.length;
+  log.scrollTop = log.scrollHeight;
+}
+
+
+function escapeHtml(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+
+async function start(){
+  const url = urlEl.value.trim();
+  if(!url){ urlEl.focus(); return; }
+
+
+
+  // persist keys locally
+  localStorage.setItem("bd_groq", groqEl.value.trim());
+  localStorage.setItem("bd_model", modelEl.value.trim());
+  localStorage.setItem("bd_psi", psiEl.value.trim());
+  localStorage.setItem("bd_seo", seoEl.value.trim());
+
+  $("go").disabled = true;
+  $("panel").classList.add("show");
+  $("log").innerHTML = ""; $("result").innerHTML = ""; seen = 0;
+  setStatus("Launching browser…", true);
+
+  let res;
+  try{
+    res = await fetch("/api/audit", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        url, groq_key:groqEl.value.trim(), groq_model:modelEl.value.trim(),
+        pagespeed_key:psiEl.value.trim(), seoptimer_key:seoEl.value.trim(),
+        tier: $("tier").value,
+        discovery: collectDiscovery()
+      })
+    }).then(r=>r.json());
+  }catch(e){ fail("Could not reach the server. Is server.py running?"); return; }
+
+  if(res.error){ fail(res.error); return; }
+  poll = setInterval(()=>checkStatus(res.job_id), 1200);
+}
+
+async function checkStatus(jobId){
+  let job;
+  try{ job = await fetch("/api/status/"+jobId).then(r=>r.json()); }
+  catch(e){ return; }
+  addLog(job.progress || []);
+
+  if(job.status === "running" || job.status === "queued"){
+    setStatus("Auditing " + (job.domain || job.url || "") + " — " + (job.progress.length) + " steps…", true);
+  } else if(job.status === "done"){
+    clearInterval(poll); setStatus("Audit complete.", false);
+    showResult(job);
+    $("go").disabled = false;
+  } else if(job.status === "error"){
+    clearInterval(poll); fail(job.error || "Audit failed.");
+  }
+}
+
+function showResult(job){
+  const c = job.counts || {};
+  const grade = job.ai_grade || "";
+  const gradeHtml = grade ? `<div class="grade ${grade}">${grade}</div>` : "";
+  const scoreHtml = (job.ai_score!=null)
+    ? `<div class="gtext"><div class="g1">AI health score</div><div class="g2">${job.ai_score} / 100</div></div>`
+    : `<div class="gtext"><div class="g1">Audit finished</div><div class="g2">${job.domain||""}</div></div>`;
+
+  const pills = [
+    c.pass?`<span class="pill pass">${c.pass} passed</span>`:"",
+    c.warn?`<span class="pill warn">${c.warn} warnings</span>`:"",
+    c.fail?`<span class="pill fail">${c.fail} failed</span>`:"",
+    c.info?`<span class="pill">${c.info} manual</span>`:"",
+    c.error?`<span class="pill">${c.error} errors</span>`:"",
+  ].join("");
+
+  const deckPdf = job.deck_pdf ? `<a class="btn primary" href="/reports/${job.deck_pdf}" target="_blank">Download deck (PDF)</a>` : "";
+  const deckHtml = job.deck_html ? `<a class="btn ghost" href="/reports/${job.deck_html}" target="_blank">View deck</a>` : "";
+
+  // Say plainly which competitors made it in — a silently dropped one would
+  // otherwise show up as a missing section in the finished proposal.
+  const comps = job.competitors || [];
+  const failed = comps.filter(c => !c.loaded).map(c => c.domain);
+  const okCount = comps.length - failed.length;
+  let compNote = "";
+  if (comps.length){
+    compNote = `<p class="note" style="margin-top:12px">${okCount} of ${comps.length} competitor${comps.length!==1?"s":""} analysed`
+      + (failed.length ? ` — no data for ${escapeHtml(failed.join(", "))}, so they're left out of the comparison.` : ".")
+      + `</p>`;
+  }
+  const opp = job.opportunity;
+  const oppNote = (opp && opp.visits)
+    ? `<p class="note" style="margin-top:6px">Opportunity modelled: +${opp.visits.toLocaleString()} visits/month, +${(opp.leads||0).toLocaleString()} leads/month.</p>`
+    : "";
+
+  $("result").innerHTML = `
+    <div class="grade-row">${gradeHtml}${scoreHtml}</div>
+    <div class="counts">${pills}</div>
+    <div class="actions" style="margin-top:14px">${deckHtml}${deckPdf}</div>
+    ${compNote}${oppNote}`;
+}
+
+function fail(msg){
+  setStatus("Failed.", false);
+  $("result").innerHTML = `<div class="errbox">${escapeHtml(msg)}</div>`;
+  $("go").disabled = false;
+}
+
+$("go").addEventListener("click", start);
+urlEl.addEventListener("keydown", e=>{ if(e.key==="Enter") start(); });
+</script>
+</body>
+</html>

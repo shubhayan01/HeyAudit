@@ -1,0 +1,20 @@
+# Secrets — supply these at runtime as env vars (GROQ_API_KEY / SEOPTIMER_API_KEY),
+# never commit them.
+.groq_key
+.seoptimer_key
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Generated audit output
+reports/
+
+# Local tooling / editor
+.claude/
+.vscode/
+.idea/
+.DS_Store

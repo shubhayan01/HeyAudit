@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SEO Audit &amp; Growth Plan — {{ client_name }}</title>
+<style>
+  :root{
+    --gold:#FFD400; --gold-deep:#E8B800; --gold-soft:#FFF7CC;
+    --ink:#111111; --ink2:#2b2b2b; --paper:#ffffff;
+    --muted:#6c6c6c; --line:#e7e7e7; --line2:#d9d9d9;
+    --good:#188a4e; --bad:#c0392b;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink2);margin:0;background:#4a4a4a;font-size:13px;line-height:1.6}
+
+  /* Each slide is one A4 page. */
+  .slide{position:relative;width:210mm;min-height:297mm;margin:0 auto;background:var(--paper);
+         padding:22mm 20mm;overflow:hidden;page-break-after:always;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+  .slide:last-child{page-break-after:auto}
+  @media screen{ .slide{margin:16px auto} }
+  /* A slide whose content can exceed one page: let it flow and paginate. */
+  .slide.flow{min-height:auto;overflow:visible}
+  .slide.flow .foot{position:static;left:auto;right:auto;bottom:auto;margin-top:22px}
+
+  h1,h2,h3{color:var(--ink);margin:0;line-height:1.2;font-weight:800;letter-spacing:-.01em}
+  p{margin:0 0 10px}
+  .kicker{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.16em;
+          text-transform:uppercase;color:var(--ink);background:var(--gold);
+          padding:5px 11px;border-radius:3px}
+  .slide-title{font-size:27px;margin:14px 0 4px}
+  .slide-sub{color:var(--muted);font-size:13.5px;margin-bottom:22px;max-width:62ch}
+  .rule{height:4px;width:56px;background:var(--gold);border-radius:2px;margin:14px 0 20px}
+
+  .foot{position:absolute;left:20mm;right:20mm;bottom:12mm;display:flex;justify-content:space-between;
+        align-items:center;font-size:10px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+  .foot b{color:var(--ink)}
+
+  /* ---------- Cover ---------- */
+  .cover{background:var(--ink);color:#fff;display:flex;flex-direction:column;justify-content:center}
+  .cover::before{content:"";position:absolute;top:0;left:0;right:0;height:14px;background:var(--gold)}
+  .cover::after{content:"";position:absolute;right:-90px;bottom:-90px;width:340px;height:340px;
+                border:36px solid var(--gold);border-radius:50%;opacity:.16}
+  .cover .brand{font-size:13px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+  .cover h1{color:#fff;font-size:46px;line-height:1.08;margin:20px 0 0;max-width:16ch}
+  .cover h1 .hl{color:var(--gold)}
+  .cover .for{margin-top:30px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#bdbdbd}
+  .cover .client{font-size:24px;font-weight:800;color:#fff;margin-top:4px}
+  .cover .client small{display:block;font-size:13px;font-weight:400;color:#9a9a9a;letter-spacing:0;text-transform:none;margin-top:3px}
+  .cover .meta{position:absolute;left:20mm;bottom:16mm;font-size:11px;color:#9a9a9a}
+  .cover .meta b{color:#fff}
+  .cover .tags{margin-top:26px;display:flex;gap:8px;flex-wrap:wrap}
+  .cover .tags span{border:1px solid #3a3a3a;color:#e8e8e8;font-size:11px;font-weight:700;
+                    padding:5px 12px;border-radius:20px}
+  .cover .tags span b{color:var(--gold)}
+
+  /* ---------- Generic building blocks ---------- */
+  .lead{font-size:15px;color:var(--ink2);line-height:1.75}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:#fff}
+  .card.dark{background:var(--ink);color:#eaeaea;border-color:var(--ink)}
+  .card.dark h3{color:#fff}
+  .card .h{font-weight:800;color:var(--ink);font-size:14px;margin-bottom:6px}
+  .card.dark .h{color:var(--gold)}
+  ul.clean{list-style:none;margin:0;padding:0}
+  ul.clean li{position:relative;padding:5px 0 5px 22px;border-bottom:1px solid var(--line)}
+  ul.clean li:last-child{border-bottom:none}
+  ul.clean li::before{content:"";position:absolute;left:0;top:12px;width:9px;height:9px;
+                      background:var(--gold);border-radius:2px}
+  .chk li::before{content:"✓";background:none;color:var(--gold-deep);font-weight:900;top:5px;left:2px;width:auto;height:auto}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  thead th{background:var(--ink);color:#fff;text-align:left;padding:9px 11px;font-size:11px;
+           letter-spacing:.04em;text-transform:uppercase;font-weight:700}
+  tbody td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#fbfbf6}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:800}
+  .pill.info{background:#eef2ff;color:#2f4bce} .pill.trans{background:var(--gold);color:var(--ink)}
+  .pill.comm{background:var(--gold-soft);color:#7a5c00;border:1px solid var(--gold-deep)}
+  .pill.nav{background:#eee;color:#444}
+  .pill.low{background:#e6f6ec;color:#177544} .pill.med{background:var(--gold-soft);color:#7a5c00}
+  .pill.high{background:#fde8e8;color:#c0392b}
+
+  /* ---------- TOC ---------- */
+  ol.toc{list-style:none;counter-reset:t;margin:0;padding:0;columns:2;column-gap:26px}
+  ol.toc li{counter-increment:t;padding:9px 0 9px 34px;position:relative;border-bottom:1px solid var(--line);
+            font-weight:600;color:var(--ink);break-inside:avoid}
+  ol.toc li::before{content:counter(t);position:absolute;left:0;top:8px;width:22px;height:22px;
+       background:var(--gold);color:var(--ink);font-size:11px;font-weight:900;border-radius:4px;
+       display:flex;align-items:center;justify-content:center}
+  ol.toc li small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+
+  /* ---------- Stat tiles ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:14px 15px;background:#fff}
+  .stat .n{font-size:25px;font-weight:900;color:var(--ink);line-height:1.1}
+  .stat .n.gold{color:var(--gold-deep)}
+  .stat .l{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);
+           margin-top:6px;font-weight:700}
+  .stat .h{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.4}
+
+  /* ---------- Comparison table ---------- */
+  table.compare tbody tr.me{background:var(--gold-soft)!important}
+  table.compare tbody tr.me td{font-weight:800;color:var(--ink);border-top:2px solid var(--gold-deep);
+                               border-bottom:2px solid var(--gold-deep)}
+  table.compare td.num{text-align:right;font-variant-numeric:tabular-nums}
+  table.compare th.num{text-align:right}
+  .gapbadge{font-size:10px;font-weight:800;color:var(--bad)}
+
+  /* Roadmap */
+  .months{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .mo{border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:8px;padding:12px 15px;
+      break-inside:avoid}
+  .mo .n{display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;
+         color:var(--ink);background:var(--gold);padding:2px 9px;border-radius:3px}
+  .mo h3{font-size:14.5px;margin:8px 0 2px}
+  .mo .focus{color:var(--muted);font-size:11.5px;margin-bottom:7px}
+  .mo ul{margin:0 0 6px;padding-left:16px;font-size:11.5px;color:var(--ink2)}
+  .mo li{margin:2px 0}
+  .mo .plab{font-size:9.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+            color:var(--gold-deep);margin-top:7px}
+
+  /* Pillars */
+  .pillar{border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:14px;
+          break-inside:avoid;border-top:5px solid var(--gold)}
+  .pillar .pn{font-size:10.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+  .pillar h3{font-size:18px;margin:5px 0 8px}
+  .pillar .why{margin-top:10px;border-left:3px solid var(--gold);padding:4px 0 4px 12px;
+               font-size:12px;color:var(--ink2);background:#fffdf2}
+
+  /* Options A/B/C */
+  .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
+  .opt{border:1px solid var(--line2);border-radius:12px;padding:18px 16px;background:#fff;position:relative}
+  .opt.rec{border:2px solid var(--ink);background:var(--ink);color:#eaeaea;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+  .opt.rec .ol,.opt.rec h3{color:#fff}
+  .opt.rec .price{color:var(--gold)}
+  .opt .flag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);
+             color:var(--ink);font-size:9px;font-weight:900;letter-spacing:.1em;padding:3px 12px;border-radius:20px;
+             white-space:nowrap}
+  .opt .ol{font-size:10.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .opt h3{font-size:17px;margin:5px 0 3px}
+  .opt .blurb{font-size:11px;color:var(--muted);min-height:32px}
+  .opt.rec .blurb{color:#b9b9b9}
+  .opt .price{font-size:15px;font-weight:900;color:var(--ink);margin:10px 0 2px;line-height:1.35}
+  .opt .kwr{font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .opt.rec .kwr{border-color:#3a3a3a;color:#c9c9c9}
+  .opt ul{margin:8px 0 0;padding-left:15px;font-size:11px}
+  .opt li{margin:3px 0}
+
+  /* Matrix */
+  table.matrix td:first-child{font-weight:600;color:var(--ink2)}
+  table.matrix thead th:not(:first-child){text-align:center}
+  table.matrix td:not(:first-child){text-align:center}
+  table.matrix .yes{color:var(--gold-deep);font-weight:900}
+  table.matrix .no{color:#c9c9c9}
+  table.matrix .cnt{font-weight:700;color:var(--ink)}
+  .catrow td{background:var(--gold-soft)!important;font-weight:800;color:var(--ink);
+             font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+  .col-on{background:#fffdf0}
+
+  /* Moat */
+  .moat{background:var(--ink);color:#f2f2f2;border-radius:12px;padding:26px 28px;position:relative;overflow:hidden}
+  .moat::after{content:"";position:absolute;right:-70px;top:-70px;width:220px;height:220px;border:30px solid var(--gold);border-radius:50%;opacity:.18}
+  .moat .tag{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+  .moat h2{color:#fff;font-size:24px;margin:10px 0 14px;max-width:22ch}
+  .moat p{color:#dcdcdc;font-size:14px}
+  .moat .why{margin-top:16px;border-left:4px solid var(--gold);padding:6px 0 6px 16px;color:#fff}
+
+  .cta{background:var(--gold);border-radius:12px;padding:22px 26px;color:var(--ink);text-align:center;margin-top:22px}
+  .cta h3{font-size:20px}
+  .cta p{margin:6px 0 0;font-weight:600}
+  .note{font-size:10.5px;color:var(--muted);font-style:italic;margin-top:10px}
+  .assump{font-size:10px;color:var(--muted);margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
+  .assump li{margin:3px 0}
+  .big{font-size:40px;font-weight:900;color:var(--ink);line-height:1}
+  .big small{font-size:13px;color:var(--muted);font-weight:600}
+
+  /* Steps */
+  .step{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);break-inside:avoid}
+  .step:last-child{border-bottom:none}
+  .step .sn{flex:none;width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--ink);
+            font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .step .sb b{color:var(--ink);font-size:13.5px}
+  .step .sb div{color:var(--muted);font-size:12px}
+
+  /* ---------- Audit: health scorecard ---------- */
+  .healthband{display:flex;gap:22px;align-items:center;background:var(--ink);border-radius:14px;
+              padding:22px 26px;color:#eaeaea}
+  .gcircle{width:104px;height:104px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+           font-size:46px;font-weight:900;color:#fff;background:#3a3a3a;flex:none;border:5px solid rgba(255,255,255,.15)}
+  .gcircle.gA,.gcircle.gB{background:var(--good)} .gcircle.gC{background:var(--gold-deep);color:var(--ink)}
+  .gcircle.gD,.gcircle.gF{background:var(--bad)}
+  .healthband .hb-t{color:#fff;font-size:18px;font-weight:800;margin:0 0 4px}
+  .healthband .hb-p{color:#c9c9c9;font-size:12.5px;margin:0}
+  .scorecard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+  .gcard{border:1px solid var(--line);border-radius:10px;padding:12px 10px;text-align:center;background:#fff}
+  .gcard .g{font-size:25px;font-weight:900;line-height:1}
+  .gcard .lab{font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+              margin-top:6px;font-weight:700}
+  .gA,.gB{color:var(--good)} .gC{color:var(--gold-deep)} .gD,.gF{color:var(--bad)}
+
+  /* Severity + status pills */
+  .pill.crit{background:#fce4e4;color:#a01d1d;border:1px solid #e6a6a6}
+  .sp{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:800;text-transform:uppercase;white-space:nowrap}
+  .sp.pass{background:#e6f6ec;color:#177544} .sp.warn{background:var(--gold-soft);color:#7a5c00}
+  .sp.fail{background:#fde8e8;color:#c0392b} .sp.info{background:#eef2ff;color:#2f4bce}
+
+  /* Keyword-position distribution bars */
+  .bars{margin-top:6px}
+  .bar{display:flex;align-items:center;gap:10px;margin:5px 0}
+  .bar .blab{width:112px;font-size:11px;color:var(--ink2);font-weight:700;flex:none}
+  .bar .btrack{flex:1;background:#f0f0e8;border-radius:4px;height:16px;overflow:hidden}
+  .bar .bfill{height:100%;background:var(--gold);border-radius:4px;min-width:2px}
+  .bar .bfill.win{background:var(--good)} .bar .bfill.mid{background:var(--gold-deep)}
+  .bar .bval{width:40px;text-align:right;font-size:11px;font-weight:800;color:var(--ink);flex:none}
+  .snap{font-size:10px;color:var(--muted);font-style:italic;margin-top:8px}
+
+  @media print{
+    body{background:#fff} .slide{margin:0;box-shadow:none;width:auto;min-height:auto}
+    table.matrix thead,table.compare thead{display:table-header-group}
+    table.matrix tr,table.compare tr,.mo,.card,.pillar,.opt,.stat{page-break-inside:avoid}
+    .healthband,.gcard,.bar{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+{% macro foot(n) %}
+<div class="foot"><span><b>Justwords</b> · SEO / GEO / AEO Growth Proposal</span>
+  <span>{{ client_name }}</span><span>{{ n }}</span></div>
+{% endmacro %}
+
+{% macro intent_pill(intent) %}
+  {%- set i = intent|lower -%}
+  {%- if 'trans' in i -%}<span class="pill trans">Transactional</span>
+  {%- elif 'comm' in i -%}<span class="pill comm">Commercial</span>
+  {%- elif 'nav' in i -%}<span class="pill nav">Navigational</span>
+  {%- else -%}<span class="pill info">Informational</span>{%- endif -%}
+{% endmacro %}
+
+{% macro cell(v) %}
+  {%- if v is sameas true -%}<span class="yes">✓</span>
+  {%- elif v is sameas false -%}<span class="no">—</span>
+  {%- else -%}<span class="cnt">{{ v }}</span>{%- endif -%}
+{% endmacro %}
+
+{# thousands-separate real numbers; pass strings through as-is; blank -> em dash #}
+{% macro num(v) %}{% if v is number %}{{ "{:,}".format(v) }}{% elif v is not none and v|string|trim != '' %}{{ v }}{% else %}—{% endif %}{% endmacro %}
+
+{# grade letter -> css class (gA..gF); '—'/blank -> empty #}
+{% macro gcls(grade) %}{% set L = (grade|string)[:1]|upper %}{% if L in 'ABCDF' %}g{{ L }}{% endif %}{% endmacro %}
+
+{% macro sev_pill(sev) %}
+  {%- set s = sev|lower -%}
+  {%- if 'crit' in s -%}<span class="pill crit">Critical</span>
+  {%- elif 'high' in s -%}<span class="pill high">High</span>
+  {%- elif 'low' in s -%}<span class="pill low">Low</span>
+  {%- elif 'info' in s -%}<span class="pill nav">Info</span>
+  {%- else -%}<span class="pill med">Medium</span>{%- endif -%}
+{% endmacro %}
+
+{% set has_discovery = not d.is_empty %}
+{% set page = namespace(n=1) %}
+
+<!-- ============ COVER ============ -->
+<section class="slide cover">
+  <div class="brand">Justwords</div>
+  <h1>SEO Audit &amp; <span class="hl">Growth Plan</span></h1>
+  <div class="tags">
+    <span><b>The Audit</b> — what we found</span>
+    <span><b>The Plan</b> — how we fix it</span>
+    <span><b>The Growth</b> — what it's worth</span>
+  </div>
+  <div class="for">Prepared exclusively for</div>
+  <div class="client">{{ client_name }}<small>{{ url }}</small></div>
+  <div class="meta">
+    {% if d.prepared_by %}Prepared by <b>{{ d.prepared_by }}</b>{% if d.prepared_by_title %}, {{ d.prepared_by_title }}{% endif %}<br>{% endif %}
+    Agency: <b>Justwords</b> &nbsp;·&nbsp; {{ generated }}
+    {% if audit_grade %} &nbsp;·&nbsp; Current audit grade <b>{{ audit_grade }}</b>{% endif %}<br>
+    Proposal valid until <b>{{ valid_until }}</b>
+  </div>
+</section>
+
+<!-- ============ EXECUTIVE SUMMARY ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">Executive Summary</span>
+  <h2 class="slide-title">What we found — and what we'll do about it</h2>
+  <div class="rule"></div>
+  {% if pitch and pitch.client_descriptor %}<p class="slide-sub">Prepared for {{ pitch.client_descriptor }}.</p>{% endif %}
+  {% if ai and ai.headline %}<p class="lead" style="font-weight:700;color:var(--ink)">{{ ai.headline }}</p>{% endif %}
+  <p class="lead">{{ (pitch.executive_summary if pitch else '') or (ai.executive_summary if ai else '')
+     or 'This deck sets out what our audit of ' ~ domain ~ ' found and the plan to turn those findings into organic growth.' }}</p>
+
+  {% if metrics.organic_traffic is not none or metrics.referring_domains is not none or (crawl and crawl.pages_crawled) %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:22px 0 10px">Where you stand today</div>
+  <div class="stats">
+    {% if metrics.organic_traffic is not none %}
+    <div class="stat"><div class="n">{{ num(metrics.organic_traffic) }}</div>
+      <div class="l">Monthly organic visits</div></div>
+    {% endif %}
+    {% if metrics.keywords_total is not none %}
+    <div class="stat"><div class="n">{{ metrics.keywords_total }}</div>
+      <div class="l">Ranking keywords</div></div>
+    {% endif %}
+    {% if metrics.referring_domains is not none %}
+    <div class="stat"><div class="n">{{ num(metrics.referring_domains) }}</div>
+      <div class="l">Referring domains</div></div>
+    {% endif %}
+    {% if has_discovery and d.current_leads is not none %}
+    <div class="stat"><div class="n">{{ d.current_leads }}</div>
+      <div class="l">Inbound leads / month</div></div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if pitch %}
+  <div class="grid2" style="margin-top:20px">
+    <div class="card">
+      <div class="h">What success looks like — 12 months</div>
+      <ul class="clean">
+        {% if pitch.success_vision.m3_6 %}<li><b>Months 3-6.</b> {{ pitch.success_vision.m3_6 }}</li>{% endif %}
+        {% if pitch.success_vision.m9_12 %}<li><b>Months 9-12.</b> {{ pitch.success_vision.m9_12 }}</li>{% endif %}
+        {% if pitch.success_vision.m12_plus %}<li><b>Month 12+.</b> {{ pitch.success_vision.m12_plus }}</li>{% endif %}
+      </ul>
+    </div>
+    <div class="card dark">
+      <div class="h">The outcome</div>
+      <p style="margin:0">Higher rankings on high-intent search, visibility inside AI answer engines
+      (ChatGPT, Perplexity, Google AI Overviews), and a compounding pipeline of qualified leads.</p>
+      {% if pitch.goal_restated %}
+      <div style="margin-top:12px;border-top:1px solid #333;padding-top:10px">
+        <div style="color:var(--gold);font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase">Your goal</div>
+        <p style="margin:4px 0 0">{{ pitch.goal_restated }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% if pitch.what_it_will_take %}
+  <div class="card" style="margin-top:16px;border-left:5px solid var(--gold)">
+    <div class="h">What it will take</div>
+    <p style="margin:0">{{ pitch.what_it_will_take }}</p>
+  </div>
+  {% endif %}
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ TABLE OF CONTENTS ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">Contents</span>
+  <h2 class="slide-title">What's in this proposal</h2>
+  <div class="rule"></div>
+  <ol class="toc">
+    {% if has_discovery %}<li>Discovery Call Findings<small>What you told us</small></li>{% endif %}
+    <li>Digital Health Scorecard<small>The audit at a glance</small></li>
+    <li>Critical Issues<small>What's broken and what it costs</small></li>
+    <li>On-Page &amp; Technical Health<small>Speed, mobile, Core Web Vitals</small></li>
+    <li>Organic Search Performance<small>Traffic, rankings, backlinks</small></li>
+    {% if comparison %}<li>Competitive Landscape<small>Who you're up against</small></li>{% endif %}
+    {% if pitch %}
+    {% if proj %}<li>The Opportunity<small>What the gap is costing you</small></li>{% endif %}
+    <li>Our Three-Pillar Strategy<small>How we win</small></li>
+    <li>Campaign Roadmap<small>Months 0-12</small></li>
+    <li>Keyword Strategy<small>Real rankings and new clusters</small></li>
+    <li>What We'll Deliver Each Month<small>Contracted deliverables</small></li>
+    <li>Investment &amp; Timeline<small>Options A, B and C</small></li>
+    <li>Why Justwords<small>How we work</small></li>
+    <li>Next Steps<small>How we start</small></li>
+    {% endif %}
+  </ol>
+  {{ foot(page.n) }}
+</section>
+
+{% if has_discovery %}
+<!-- ============ 1 · DISCOVERY CALL FINDINGS ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">01 · Discovery</span>
+  <h2 class="slide-title">What you told us</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Everything in this proposal is built around what you said on our call — not a
+    package we sell to everyone.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="h">Where you are today</div>
+      <ul class="clean">
+        {% if d.budget_line %}<li>Monthly marketing budget: <b>{{ d.budget_line }}</b></li>{% endif %}
+        {% if d.current_leads is not none %}<li>Current inbound leads: <b>{{ d.current_leads }}/month</b></li>{% endif %}
+        {% if d.close_rate is not none %}<li>Close rate: <b>{{ "%g"|format(d.close_rate) }}%</b></li>{% endif %}
+        {% if d.deals_per_month is not none %}<li>Deals closed: <b>{{ d.deals_per_month }}/month</b></li>{% endif %}
+        {% if d.avg_deal_value is not none %}<li>Average deal value: <b>{{ d.money(d.avg_deal_value) }}</b></li>{% endif %}
+        {% if d.geo_focus %}<li>Geographic focus: <b>{{ d.geo_focus }}</b></li>{% endif %}
+      </ul>
+    </div>
+    <div class="card">
+      <div class="h">Where you want to be</div>
+      <ul class="clean">
+        {% if d.target_leads is not none %}<li>Target lead flow: <b>{{ d.target_leads }}/month</b></li>{% endif %}
+        {% if d.goal %}<li>Your stated goal: {{ d.goal }}</li>{% endif %}
+        {% if d.dream_state %}<li>Dream state: {{ d.dream_state }}</li>{% endif %}
+        {% if d.services %}<li>Services to grow: {{ d.services|join(' · ') }}</li>{% endif %}
+      </ul>
+    </div>
+  </div>
+
+  {% if d.pain_points %}
+  <div class="card" style="margin-top:16px">
+    <div class="h">Pain points you raised</div>
+    <ul class="clean">{% for p in d.pain_points %}<li>{{ p }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+
+  {% if pitch.discovery_synthesis %}
+  <div class="card dark" style="margin-top:16px">
+    <div class="h">What this tells us</div>
+    <p style="margin:0">{{ pitch.discovery_synthesis }}</p>
+  </div>
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+{% endif %}
+
+<!-- ============ AUDIT · 1 · HEALTH SCORECARD ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">The Audit · Health Scorecard</span>
+  <h2 class="slide-title">Your digital health at a glance</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">We ran a full technical + SEO audit of {{ domain }} — the whole site, not a single
+    page — before writing a word of the plan. Here's the headline; the specifics follow.</p>
+
+  {%- set gL = (audit_grade|string)[:1]|upper -%}
+  {%- set grade_phrase = {'A':'Strong technical foundation','B':'Solid, with clear room to grow',
+        'C':'Underperforming — but fixable','D':'Significant issues to address',
+        'F':'Significant issues to address'}.get(gL, 'Overall SEO health') -%}
+  <div class="healthband">
+    <div class="gcircle {{ gcls(audit_grade) }}">{{ audit_grade or '—' }}</div>
+    <div>
+      <p class="hb-t">{{ grade_phrase }}</p>
+      <p class="hb-p">
+        {%- set fails = summary.fail or 0 %}{% set warns = summary.warn or 0 -%}
+        {{ fails }} issue{{ 's' if fails != 1 }} to fix and {{ warns }} to improve, across
+        {{ (summary.pass or 0) + fails + warns + (summary.info or 0) }} automated checks.
+        {% if ai and ai.score is not none %} Automated health score {{ ai.score }}/100.{% endif %}
+      </p>
+    </div>
+  </div>
+
+  {# The big circle already IS the overall grade — the scorecard shows the
+     category breakdown, so the redundant 'overall' cell is dropped to avoid a
+     grade sitting twice (and, when AI and SEOptimer disagree, contradicting itself). #}
+  {% set cat_cells = scorecard | rejectattr('key', 'equalto', 'overall') | list %}
+  {% if cat_cells %}
+  <div class="scorecard">
+    {% for c in cat_cells %}
+    <div class="gcard">
+      <div class="g {{ gcls(c.grade) }}">{{ c.letter }}</div>
+      <div class="lab">{{ c.label }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="stats" style="margin-top:16px">
+    <div class="stat"><div class="n" style="color:var(--good)">{{ summary.pass or 0 }}</div><div class="l">Passing</div></div>
+    <div class="stat"><div class="n" style="color:var(--gold-deep)">{{ summary.warn or 0 }}</div><div class="l">To improve</div></div>
+    <div class="stat"><div class="n" style="color:var(--bad)">{{ summary.fail or 0 }}</div><div class="l">To fix</div></div>
+    <div class="stat"><div class="n">{{ summary.info or 0 }}</div><div class="l">For review</div></div>
+  </div>
+
+  {# Shown here only for an audit-only deck; when a pitch exists the Executive
+     Summary slide already carries the narrative, so we don't repeat it. #}
+  {% if ai and ai.executive_summary and not pitch %}
+  <div class="card" style="margin-top:16px;border-left:5px solid var(--gold)">
+    <div class="h">What this means for you</div>
+    <p style="margin:0;white-space:pre-line">{{ ai.executive_summary }}</p>
+  </div>
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ AUDIT · 2 · CRITICAL ISSUES ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">The Audit · Critical Issues</span>
+  <h2 class="slide-title">What's holding your rankings back</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Every row below is something the audit measured — ranked worst-first, with what
+    it's costing you in plain English. This is the list the plan is built to clear.</p>
+
+  {% if issues %}
+  <table>
+    <thead><tr><th style="width:19%">Issue</th><th style="width:25%">What we found</th>
+      <th style="width:15%">Extent</th><th>Impact on rankings</th><th style="width:10%">Severity</th></tr></thead>
+    <tbody>
+      {% for i in issues %}
+      <tr>
+        <td><b>{{ i.issue }}</b></td>
+        <td>{{ i.summary }}</td>
+        <td style="color:var(--muted)">{{ i.extent }}</td>
+        <td style="color:var(--ink2)">{{ i.impact }}</td>
+        <td>{{ sev_pill(i.severity) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="card"><div class="h">No blocking issues flagged</div>
+    <p style="margin:0">The automated checks didn't surface critical failures — so the plan focuses on
+      growth and competitive gains rather than triage.</p></div>
+  {% endif %}
+
+  {% if ai and ai.quick_wins %}
+  <div class="card" style="margin-top:16px;border-left:5px solid var(--gold)">
+    <div class="h">Quick wins we can start with</div>
+    <ul class="clean chk">{% for w in ai.quick_wins %}<li>{{ w }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ AUDIT · 3 · ON-PAGE & TECHNICAL ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">The Audit · On-Page &amp; Technical</span>
+  <h2 class="slide-title">Speed, mobile and on-page foundations</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">The technical signals search engines weigh directly — and the on-page elements that
+    tell them what each page is about.</p>
+
+  <div class="stats">
+    {% if metrics.load_ms %}
+    <div class="stat"><div class="n">{{ "%.1f"|format(metrics.load_ms/1000) }}s</div>
+      <div class="l">Page load</div><div class="h">Target: under 2s</div></div>{% endif %}
+    {% if metrics.mobile_score is not none %}
+    <div class="stat"><div class="n {{ 'gA' if metrics.mobile_score>=80 else ('gC' if metrics.mobile_score>=50 else 'gF') }}">{{ metrics.mobile_score }}</div>
+      <div class="l">Mobile speed</div><div class="h">Google indexes mobile first</div></div>{% endif %}
+    {% if metrics.desktop_score is not none %}
+    <div class="stat"><div class="n {{ 'gA' if metrics.desktop_score>=80 else ('gC' if metrics.desktop_score>=50 else 'gF') }}">{{ metrics.desktop_score }}</div>
+      <div class="l">Desktop speed</div><div class="h">out of 100</div></div>{% endif %}
+    {% if metrics.page_bytes %}
+    <div class="stat"><div class="n">{{ "%.1f"|format(metrics.page_bytes/1048576) }}<small style="font-size:14px">MB</small></div>
+      <div class="l">Page weight</div><div class="h">homepage payload</div></div>{% endif %}
+  </div>
+
+  {% if metrics.lcp is not none or metrics.cls is not none or metrics.inp is not none %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 10px">Core Web Vitals — Google's page-experience signals</div>
+  <div class="grid3">
+    {% if metrics.lcp is not none %}
+    {% set lcp_s = (metrics.lcp/1000) if metrics.lcp > 100 else metrics.lcp %}
+    <div class="card"><div class="h">LCP — Largest Contentful Paint</div>
+      <div class="big" style="font-size:30px">{{ "%.1f"|format(lcp_s) }}s
+        <span class="sp {{ 'pass' if lcp_s<=2.5 else ('warn' if lcp_s<=4 else 'fail') }}">{{ 'Good' if lcp_s<=2.5 else ('Needs work' if lcp_s<=4 else 'Poor') }}</span></div>
+      <p style="margin:6px 0 0;color:var(--muted);font-size:11px">How fast the main content appears. Good ≤ 2.5s.</p></div>
+    {% endif %}
+    {% if metrics.cls is not none %}
+    <div class="card"><div class="h">CLS — Cumulative Layout Shift</div>
+      <div class="big" style="font-size:30px">{{ "%.2f"|format(metrics.cls) }}
+        <span class="sp {{ 'pass' if metrics.cls<=0.1 else ('warn' if metrics.cls<=0.25 else 'fail') }}">{{ 'Good' if metrics.cls<=0.1 else ('Needs work' if metrics.cls<=0.25 else 'Poor') }}</span></div>
+      <p style="margin:6px 0 0;color:var(--muted);font-size:11px">How much the layout jumps as it loads. Good ≤ 0.1.</p></div>
+    {% endif %}
+    {% if metrics.inp is not none %}
+    {% set inp_ms = metrics.inp if metrics.inp > 10 else metrics.inp*1000 %}
+    <div class="card"><div class="h">INP — Interaction to Next Paint</div>
+      <div class="big" style="font-size:30px">{{ inp_ms|round|int }}<small style="font-size:13px">ms</small>
+        <span class="sp {{ 'pass' if inp_ms<=200 else ('warn' if inp_ms<=500 else 'fail') }}">{{ 'Good' if inp_ms<=200 else ('Needs work' if inp_ms<=500 else 'Poor') }}</span></div>
+      <p style="margin:6px 0 0;color:var(--muted);font-size:11px">How quickly the page responds to a tap/click. Good ≤ 200ms.</p></div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if site_analysis %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 10px">
+    Whole-site issues{% if crawl and crawl.pages_crawled %} — across {{ num(crawl.pages_crawled) }} crawled pages{% endif %}</div>
+  <table>
+    <thead><tr><th style="width:30%">Issue</th><th style="width:26%">Extent</th>
+      <th>What it means</th><th style="width:11%">Status</th></tr></thead>
+    <tbody>
+      {% for row in site_analysis %}
+      <tr>
+        <td><b>{{ row.element }}</b></td>
+        <td style="color:var(--muted)">{{ row.current }}</td>
+        <td>{{ row.verdict }}</td>
+        <td><span class="sp {{ row.status }}">{{ row.status }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  {% if homepage %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 10px">Homepage on-page elements</div>
+  <table>
+    <thead><tr><th style="width:20%">Element</th><th style="width:30%">What's there now</th>
+      <th>Verdict</th><th style="width:11%">Status</th></tr></thead>
+    <tbody>
+      {% for row in homepage %}
+      <tr>
+        <td><b>{{ row.element }}</b></td>
+        <td style="color:var(--muted)">{{ row.current }}</td>
+        <td>{{ row.verdict }}</td>
+        <td><span class="sp {{ row.status }}">{{ row.status }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ AUDIT · 4 · ORGANIC SEARCH PERFORMANCE ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">The Audit · Organic Search</span>
+  <h2 class="slide-title">Where you rank and what it's worth</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Domain-wide organic visibility for {{ domain }} — the traffic you earn today, the
+    keywords behind it, and the backlink authority holding it up.</p>
+
+  <div class="stats">
+    {% if metrics.organic_traffic is not none %}
+    <div class="stat"><div class="n gold">{{ num(metrics.organic_traffic) }}</div>
+      <div class="l">Monthly organic visits</div><div class="h">current estimate</div></div>{% endif %}
+    {% if metrics.keywords_total is not none %}
+    <div class="stat"><div class="n">{{ num(metrics.keywords_total) }}</div>
+      <div class="l">Ranking keywords</div></div>{% endif %}
+    {% if metrics.referring_domains is not none %}
+    <div class="stat"><div class="n">{{ num(metrics.referring_domains) }}</div>
+      <div class="l">Referring domains</div></div>{% endif %}
+    {% if crawl and crawl.pages_crawled %}
+    <div class="stat"><div class="n">{{ num(crawl.pages_crawled) }}</div>
+      <div class="l">Pages crawled</div><div class="h">whole-domain audit</div></div>{% endif %}
+  </div>
+
+  {% if metrics.positions %}
+  {% set P = metrics.positions %}
+  {% set maxp = [P['1-3'], P['4-10'], P['11-20'], P['21-50'], P['51-100']]|max %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 8px">Where your keywords rank</div>
+  <div class="bars">
+    {% for label, key, cls in [('Positions 1-3','1-3','win'), ('Page 1 (4-10)','4-10','win'),
+                               ('Page 2 (11-20)','11-20','mid'), ('Positions 21-50','21-50',''),
+                               ('Positions 51-100','51-100','')] %}
+    <div class="bar">
+      <div class="blab">{{ label }}</div>
+      <div class="btrack"><div class="bfill {{ cls }}" style="width:{{ ((P[key]/maxp*100)|round|int) if maxp else 0 }}%"></div></div>
+      <div class="bval">{{ P[key] }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="snap">The keywords in positions 11-100 are the fastest wins: already ranking, one page away
+    from the traffic that actually converts.</p>
+  {% endif %}
+
+  {# The real ranking-keyword table lives on the Keyword Strategy slide when a
+     pitch is present; here it's shown only for an audit-only deck so the terms
+     appear exactly once. #}
+  {% if metrics.top_keywords and not pitch %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 8px">Keywords you rank for today</div>
+  <table>
+    <thead><tr><th style="width:46%">Keyword</th><th class="num" style="text-align:right">Position</th>
+      <th class="num" style="text-align:right">Volume / mo</th><th class="num" style="text-align:right">Est. traffic / mo</th></tr></thead>
+    <tbody>
+      {% for k in metrics.top_keywords %}
+      <tr>
+        <td><b>{{ k.keyword }}</b>{% if k.country %} <span style="color:var(--muted);font-weight:400">· {{ k.country }}</span>{% endif %}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ k.position if k.position is not none else '—' }}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ num(k.volume) }}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ num(k.traffic) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="snap">These are the domain's current top-earning search terms, measured from live ranking data.</p>
+  {% endif %}
+
+  {% if metrics.backlinks is not none or metrics.internal_links is not none %}
+  <div class="grid2" style="margin-top:14px">
+    {% if metrics.backlinks is not none or metrics.referring_domains is not none %}
+    <div class="card">
+      <div class="h">Backlink profile</div>
+      <ul class="clean">
+        {% if metrics.backlinks is not none %}<li>Total backlinks <b>{{ num(metrics.backlinks) }}</b></li>{% endif %}
+        {% if metrics.referring_domains is not none %}<li>Referring domains <b>{{ num(metrics.referring_domains) }}</b></li>{% endif %}
+        {% if metrics.dofollow_backlinks is not none %}<li>Dofollow links <b>{{ num(metrics.dofollow_backlinks) }}</b></li>{% endif %}
+        {% if metrics.edu_backlinks is not none or metrics.gov_backlinks is not none %}<li>.edu / .gov links <b>{{ num(metrics.edu_backlinks) }} / {{ num(metrics.gov_backlinks) }}</b></li>{% endif %}
+      </ul>
+    </div>
+    {% endif %}
+    {% if metrics.internal_links is not none or metrics.content_words is not none %}
+    <div class="card">
+      <div class="h">On-site signals</div>
+      <ul class="clean">
+        {% if metrics.internal_links is not none %}<li>Internal links (homepage) <b>{{ num(metrics.internal_links) }}</b></li>{% endif %}
+        {% if metrics.external_links is not none %}<li>External links (homepage) <b>{{ num(metrics.external_links) }}</b></li>{% endif %}
+        {% if metrics.content_words is not none %}<li>Homepage content depth <b>{{ num(metrics.content_words) }} words</b></li>{% endif %}
+        {% if metrics.ai_traffic is not none %}<li>Est. AI-search traffic <b>{{ num(metrics.ai_traffic) }}/mo</b></li>{% endif %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if metrics.organic_traffic is none and not metrics.top_keywords and not metrics.positions %}
+  <div class="card" style="margin-top:14px"><div class="h">Organic data</div>
+    <p style="margin:0;color:var(--muted)">Live keyword and traffic estimates weren't available for this
+      run. The Month-0 keyword research phase establishes the full ranking baseline.</p></div>
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+
+{% if comparison %}
+<!-- ============ 3 · COMPETITIVE LANDSCAPE ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">03 · Competitive Landscape</span>
+  <h2 class="slide-title">Who you're competing against</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">We ran the same audit against {{ comparison.count }}
+    competitor{{ 's' if comparison.count != 1 }}. Every number below is measured, not estimated —
+    check any of it.</p>
+
+  <table class="compare">
+    <thead><tr>
+      <th style="width:26%">Site</th><th class="num">Authority</th><th class="num">Organic traffic</th>
+      <th class="num">Ranking keywords</th><th class="num">Referring domains</th><th class="num">Backlinks</th>
+    </tr></thead>
+    <tbody>
+      {% for r in comparison.rows %}
+      <tr class="{{ 'me' if r.is_client }}">
+        <td>{{ r.name }}{% if r.is_client %} <span style="font-weight:400;color:var(--muted)">(you)</span>{% endif %}</td>
+        <td class="num">{{ r.authority if r.authority is not none else "—" }}</td>
+        <td class="num">{{ num(r.traffic) }}</td>
+        <td class="num">{{ r.keywords if r.keywords is not none else "—" }}</td>
+        <td class="num">{{ num(r.referring_domains) }}</td>
+        <td class="num">{{ num(r.backlinks) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="note">Authority is a 0-100 domain strength score. Traffic and ranking keywords are
+    third-party estimates over a sample of tracked keywords, measured identically for every site
+    here — so the comparison is fair even where the absolute numbers are directional.</p>
+
+  {% if pitch.competitor_insights %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:20px 0 10px">What they're doing right</div>
+  <div class="grid2">
+    {% for ins in pitch.competitor_insights %}
+    <div class="card">
+      <div class="h">{{ ins.domain }}</div>
+      {% if ins.doing_right %}<ul class="clean">{% for x in ins.doing_right %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+      {% if ins.takeaway %}<div style="margin-top:8px;border-left:3px solid var(--gold);padding-left:10px;font-size:11.5px">
+        <b>Our move:</b> {{ ins.takeaway }}</div>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ THE COMPETITIVE GAP ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">03 · The Gap</span>
+  <h2 class="slide-title">What it will take to close it</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">The distance between where you are and where the market leader is — stated
+    plainly, because it's what determines the size of the campaign.</p>
+
+  {% set g = proj.gaps if proj else none %}
+  {% if g %}
+  <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+    {% if g.traffic and g.traffic.gap %}
+    <div class="stat"><div class="n">{{ num(g.traffic.gap) }}</div>
+      <div class="l">Monthly visits behind</div>
+      <div class="h">vs {{ g.traffic.leader }}, the strongest site in your set.</div></div>
+    {% endif %}
+    {% if g.referring_domains and g.referring_domains.gap %}
+    <div class="stat"><div class="n">{{ num(g.referring_domains.gap) }}</div>
+      <div class="l">Referring domains behind</div>
+      <div class="h">{% if proj.authority and not proj.authority.parity_realistic %}Too wide to close on
+        count alone — we target relevant authority instead.{% elif proj.authority %}Closable within the
+        campaign at {{ proj.authority.delivered_range }} earned domains/month.{% endif %}</div></div>
+    {% endif %}
+    {% if g.authority and g.authority.gap %}
+    <div class="stat"><div class="n">{{ g.authority.gap }}</div>
+      <div class="l">Authority points behind</div>
+      <div class="h">Domain strength vs the leader.</div></div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div style="margin-top:18px">
+    {% if pitch.gap_narrative.content %}
+    <div class="card" style="margin-bottom:12px"><div class="h">The content gap</div>
+      <p style="margin:0">{{ pitch.gap_narrative.content }}</p></div>
+    {% endif %}
+    {% if pitch.gap_narrative.authority %}
+    <div class="card" style="margin-bottom:12px"><div class="h">The authority gap</div>
+      <p style="margin:0">{{ pitch.gap_narrative.authority }}</p></div>
+    {% endif %}
+    {% if g and g.speed and g.speed.mine_s and g.speed.best_s %}
+    <div class="card"><div class="h">The technical gap</div>
+      <p style="margin:0">Your homepage loads in <b>{{ g.speed.mine_s }}s</b>; the fastest competitor
+        in your set loads in <b>{{ g.speed.best_s }}s</b>{% if g.speed.avg_s %}, and the set averages
+        {{ g.speed.avg_s }}s{% endif %}. Speed is both a ranking factor and a conversion tax you're
+        paying on every visit.</p></div>
+    {% endif %}
+  </div>
+  {{ foot(page.n) }}
+</section>
+{% endif %}
+
+{# ===================== SOLUTION CHAPTER (needs the Groq narrative) ===================== #}
+{% if pitch %}
+
+{% if proj %}
+<!-- ============ 4 · THE OPPORTUNITY ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">04 · The Opportunity</span>
+  <h2 class="slide-title">What the gap is costing you</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">{{ pitch.opportunity_narrative }}</p>
+
+  <div class="card" style="border-left:5px solid var(--gold)">
+    <div class="h">Conservative model — capturing just {{ proj.capture_rate_pct }}% of the gap</div>
+    <div class="stats" style="margin-top:12px;grid-template-columns:repeat({{ 4 if proj.added_revenue_monthly is defined else 2 }},1fr)">
+      <div class="stat"><div class="n gold">+{{ num(proj.added_visits) }}</div>
+        <div class="l">Organic visits / month</div></div>
+      <div class="stat"><div class="n gold">+{{ num(proj.added_leads) }}</div>
+        <div class="l">Leads / month</div>
+        <div class="h">at {{ "%g"|format(proj.conversion_rate) }}% conversion</div></div>
+      {% if proj.added_revenue_monthly is defined %}
+      <div class="stat"><div class="n gold">{{ d.money(proj.added_revenue_monthly) }}</div>
+        <div class="l">Revenue / month</div>
+        <div class="h">at month-12 run rate</div></div>
+      <div class="stat"><div class="n gold">{{ d.money(proj.year1_revenue) }}</div>
+        <div class="l">Year-1 revenue</div>
+        <div class="h">ramped, not annualised</div></div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:20px 0 10px">The 12-month ramp</div>
+  <table>
+    <thead><tr><th>Milestone</th><th>Of month-12 run rate</th><th>Added visits / mo</th>
+      <th>Added leads / mo</th>{% if proj.added_revenue_monthly is defined %}<th>Added revenue / mo</th>{% endif %}</tr></thead>
+    <tbody>
+      {% for m, row in proj.milestones.items() %}
+      <tr><td><b>Month {{ m }}</b></td><td>{{ row.pct }}%</td><td>+{{ num(row.visits) }}</td>
+        <td>+{{ num(row.leads) }}</td>
+        {% if proj.added_revenue_monthly is defined %}<td>{{ d.money(row.revenue) }}</td>{% endif %}</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if proj.roi_pct is defined or proj.cost_per_lead is defined %}
+  <div class="grid3" style="margin-top:16px">
+    {% if proj.roi_pct is defined %}
+    <div class="card dark" style="text-align:center">
+      <div class="big" style="color:var(--gold)">{{ proj.roi_pct }}%</div>
+      <div style="color:#c9c9c9;font-size:11px;margin-top:6px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Year-1 ROI</div></div>
+    {% endif %}
+    {% if proj.breakeven_month %}
+    <div class="card" style="text-align:center">
+      <div class="big">Month {{ proj.breakeven_month }}</div>
+      <div style="color:var(--muted);font-size:11px;margin-top:6px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Break-even</div></div>
+    {% endif %}
+    {% if proj.cost_per_lead is defined %}
+    <div class="card" style="text-align:center">
+      <div class="big">{{ d.money(proj.cost_per_lead) }}</div>
+      <div style="color:var(--muted);font-size:11px;margin-top:6px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Year-1 cost per lead</div></div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="assump">
+    <b>How we calculated this — every assumption, stated:</b>
+    <ul style="margin:6px 0 0;padding-left:16px">
+      {% for a in proj.assumptions %}<li>{{ a }}</li>{% endfor %}
+    </ul>
+  </div>
+  {{ foot(page.n) }}
+</section>
+{% endif %}
+
+<!-- ============ 5 · THREE-PILLAR STRATEGY ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">05 · Strategy</span>
+  <h2 class="slide-title">How we win: three pillars</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">We don't do one-size-fits-all SEO. Based on your audit, your market and your
+    competition, this is the strategy built specifically to make you money.</p>
+
+  <div class="pillar">
+    <div class="pn">Pillar 1</div>
+    <h3>Content Creation &amp; Optimisation</h3>
+    <p>{{ pitch.pillars.content.approach }}</p>
+    {% if pitch.pillars.content.focus %}
+    <table style="margin-top:8px">
+      <thead><tr><th style="width:18%">Months</th><th>Focus</th></tr></thead>
+      <tbody>{% for f in pitch.pillars.content.focus %}
+        <tr><td><b>{{ f.months }}</b></td><td>{{ f.theme }}</td></tr>{% endfor %}</tbody>
+    </table>
+    {% endif %}
+    {% if pitch.pillars.content.why %}<div class="why"><b>Why this works — </b>{{ pitch.pillars.content.why }}</div>{% endif %}
+  </div>
+
+  <div class="pillar">
+    <div class="pn">Pillar 2</div>
+    <h3>Digital PR &amp; Link Building</h3>
+    <p>{{ pitch.pillars.digital_pr.approach }}</p>
+    {% if pitch.pillars.digital_pr.targets %}
+    <div style="margin-top:6px"><b style="font-size:12px;color:var(--ink)">Who we target:</b>
+      <ul class="clean" style="margin-top:4px">{% for t in pitch.pillars.digital_pr.targets %}<li>{{ t }}</li>{% endfor %}</ul></div>
+    {% endif %}
+    {% if proj and proj.authority %}
+    {% set a = proj.authority %}
+    <div style="margin-top:8px;font-size:12px">
+      {% if a.parity_realistic %}
+        The <b>{{ rec_label }}</b> tier delivers <b>{{ a.delivered_range }} new referring domains
+        per month</b>, which closes the {{ num(a.gap) }}-domain gap to the leader inside the campaign.
+      {% else %}
+        Straight arithmetic says matching the leader's {{ num(a.gap) }}-domain lead in twelve months
+        would take <b>~{{ num(a.needed_for_12mo_parity) }} new referring domains a month</b>. Nobody
+        credible sells that, and we won't pretend to: this tier delivers
+        <b>{{ a.delivered_range }} genuinely earned domains a month</b>. We're not buying parity on
+        link count — we're buying <b>relevant</b> authority on the keywords that make you money,
+        which is a far smaller and far more winnable target.
+      {% endif %}
+      Every link comes from a unique, real editorial domain — never a link farm.
+    </div>
+    {% endif %}
+    {% if pitch.pillars.digital_pr.why %}<div class="why"><b>Why this matters — </b>{{ pitch.pillars.digital_pr.why }}</div>{% endif %}
+  </div>
+
+  <div class="pillar">
+    <div class="pn">Pillar 3</div>
+    <h3>Technical &amp; On-Page SEO</h3>
+    <p>{{ pitch.pillars.technical.approach }}</p>
+    {% if pitch.pillars.technical.month0_fixes %}
+    <div style="margin-top:6px"><b style="font-size:12px;color:var(--ink)">Fixed in Month 0:</b>
+      <ul class="clean chk" style="margin-top:4px">{% for f in pitch.pillars.technical.month0_fixes %}<li>{{ f }}</li>{% endfor %}</ul></div>
+    {% endif %}
+    {% if pitch.pillars.technical.why %}<div class="why"><b>Why this gates everything — </b>{{ pitch.pillars.technical.why }}</div>{% endif %}
+  </div>
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ 6 · ROADMAP ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">06 · Roadmap</span>
+  <h2 class="slide-title">The campaign, month by month</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">A phased path from fixes to compounding growth. Each phase builds on the last —
+    technical foundations first, then content and authority that compound into rankings, AI citations
+    and leads.</p>
+  <div class="months">
+    {% for p in pitch.roadmap %}
+    <div class="mo">
+      <span class="n">{{ p.phase }}</span>
+      <h3>{{ p.title }}</h3>
+      {% if p.goal %}<div class="focus">{{ p.goal }}</div>{% endif %}
+      {% if p.technical %}<div class="plab">Technical</div>
+        <ul>{% for a in p.technical %}<li>{{ a }}</li>{% endfor %}</ul>{% endif %}
+      {% if p.content %}<div class="plab">Content</div>
+        <ul>{% for a in p.content %}<li>{{ a }}</li>{% endfor %}</ul>{% endif %}
+      {% if p.digital_pr %}<div class="plab">Digital PR</div>
+        <ul>{% for a in p.digital_pr %}<li>{{ a }}</li>{% endfor %}</ul>{% endif %}
+      {% if p.expected %}<div class="plab">What you get</div>
+        <ul>{% for a in p.expected %}<li>{{ a }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% if pitch.month13_plus %}
+  <div class="card dark" style="margin-top:14px">
+    <div class="h">Month 13+ — sustained growth</div>
+    <p style="margin:0">{{ pitch.month13_plus }}</p>
+  </div>
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ 7 · KEYWORD STRATEGY ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">07 · Keyword Strategy</span>
+  <h2 class="slide-title">The keywords we go after first</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Built on the terms {{ domain }} <em>already</em> ranks for — real positions measured
+    in the audit, not estimates. The fastest growth is pushing page-2 rankings onto page 1; from there we
+    expand into the adjacent topic clusters below.</p>
+
+  {% if quick_win_keywords %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:6px 0 8px">Quick wins — already ranking, one push from page 1</div>
+  <table>
+    <thead><tr><th style="width:42%">Keyword</th><th class="num" style="text-align:right">Current position</th>
+      <th class="num" style="text-align:right">Volume / mo</th><th class="num" style="text-align:right">Est. traffic / mo</th>
+      <th style="width:13%">Target</th></tr></thead>
+    <tbody>
+      {% for k in quick_win_keywords %}
+      <tr>
+        <td><b>{{ k.keyword }}</b>{% if k.country %} <span style="color:var(--muted);font-weight:400">· {{ k.country }}</span>{% endif %}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ k.position }}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ num(k.volume) }}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ num(k.traffic) }}</td>
+        <td><span class="pill trans">{{ k.target }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="snap">Every keyword above is a measured ranking from your live search data — the shortest,
+    lowest-risk path to more organic traffic.</p>
+  {% elif metrics.top_keywords %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:6px 0 8px">Keywords you rank for today</div>
+  <table>
+    <thead><tr><th style="width:52%">Keyword</th><th class="num" style="text-align:right">Position</th>
+      <th class="num" style="text-align:right">Volume / mo</th><th class="num" style="text-align:right">Est. traffic / mo</th></tr></thead>
+    <tbody>
+      {% for k in metrics.top_keywords %}
+      <tr>
+        <td><b>{{ k.keyword }}</b>{% if k.country %} <span style="color:var(--muted);font-weight:400">· {{ k.country }}</span>{% endif %}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ k.position if k.position is not none else '—' }}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ num(k.volume) }}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums">{{ num(k.traffic) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="snap">Measured from your live ranking data — the base we build the campaign on.</p>
+  {% endif %}
+
+  {% if pitch.keyword_clusters %}
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:20px 0 8px">New topic clusters to build — expanding beyond today's rankings</div>
+  <table>
+    <thead><tr><th style="width:19%">Seed Keyword</th><th style="width:15%">Search Intent</th>
+      <th style="width:24%">Proposed Pillar / URL</th><th>Cluster Keywords</th></tr></thead>
+    <tbody>
+      {% for c in pitch.keyword_clusters %}
+      <tr>
+        <td><b>{{ c.seed }}</b></td>
+        <td>{{ intent_pill(c.intent) }}</td>
+        <td><code style="font-size:11px;color:#7a5c00">{{ c.pillar_url }}</code></td>
+        <td>{{ c.cluster_keywords | join(' · ') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="note">Each cluster maps to a pillar page that builds topical authority with Google and earns
+    citations inside AI answer engines. Exact search volumes are confirmed in the one-time Keyword
+    Research phase in Month 0.</p>
+  {% endif %}
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ COMPETITIVE MOAT ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">The Competitive Moat</span>
+  <h2 class="slide-title">One play your competitors can't easily copy</h2>
+  <div class="rule"></div>
+  <div class="moat">
+    <div class="tag">Strategic Advantage</div>
+    <h2>{{ pitch.competitive_moat.title }}</h2>
+    <p>{{ pitch.competitive_moat.play }}</p>
+    {% if pitch.competitive_moat.advantage %}
+    <div class="why"><b style="color:var(--gold)">Why it's durable — </b>{{ pitch.competitive_moat.advantage }}</div>
+    {% endif %}
+  </div>
+  <div class="grid2" style="margin-top:22px">
+    <div class="card"><div class="h">Built for AI search (GEO + AEO)</div>
+      <p style="margin:0;color:var(--muted)">Structured data, answer-first formatting and entity clarity so your brand is
+      the source AI engines quote — not just a blue link.</p></div>
+    <div class="card"><div class="h">Compounds over time</div>
+      <p style="margin:0;color:var(--muted)">Authority and structured coverage accumulate, widening the gap on
+      competitors every month rather than resetting.</p></div>
+  </div>
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ CONTENT PLAN ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">Content Plan</span>
+  <h2 class="slide-title">What we publish — and why it ranks &amp; gets cited</h2>
+  <div class="rule"></div>
+  <div class="grid2">
+    {% for b in pitch.content_plan.buckets %}
+    <div class="card">
+      <div class="h">{{ b.name }}</div>
+      <p style="margin:0 0 8px;color:var(--muted)">{{ b.purpose }}</p>
+      {% if b.examples %}<ul class="clean">{% for e in b.examples %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <div class="card" style="margin-top:20px;border-left:5px solid var(--gold)">
+    <div class="h">Our content standard</div>
+    <p style="margin:0;color:var(--ink2)">{{ pitch.content_plan.standards or
+      "Every piece is SEO-optimised, human-written and held to Google's E-E-A-T standard, and engineered with GEO and AEO best practices so it ranks in search and gets cited by AI engines." }}</p>
+  </div>
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ 8 · MONTHLY DELIVERABLES ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">08 · Deliverables</span>
+  <h2 class="slide-title">What we'll deliver, every month</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Exactly what the <b>{{ rec_label }}</b> package contracts you to receive. Not
+    "we'll improve your SEO" — a countable list, delivered monthly, reported on monthly.</p>
+
+  <div class="grid2">
+    {% for group in deliverables %}
+    <div class="card" style="margin-bottom:14px">
+      <div class="h">{{ group.category }}</div>
+      <ul class="clean chk">
+        {% for i in group['items'] %}
+        <li>{{ i.name }}{% if i.value %} — <b>{{ i.value }}</b>{% endif %}{% if i.frequency %}
+          <span style="color:var(--muted)">({{ i.frequency }})</span>{% endif %}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="note">Counts are per month unless noted. Research &amp; Analysis is a one-time activity
+    completed during Month 0.</p>
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ 9 · INVESTMENT ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">09 · Investment</span>
+  <h2 class="slide-title">What this campaign costs</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Three options. We've marked the one your audit and competitive gap actually
+    justify — and we'll tell you honestly what happens if you go below it.</p>
+
+  <div class="opts">
+    {% for o in options %}
+    <div class="opt {{ 'rec' if o.recommended }}">
+      {% if o.recommended %}<div class="flag">RECOMMENDED</div>{% endif %}
+      <div class="ol">Option {{ o.label }}</div>
+      <h3>{{ o.positioning }}</h3>
+      <div class="blurb">{{ o.blurb }}</div>
+      <div class="price">{{ o.price }}</div>
+      <div class="kwr">Targets <b>{{ o.keyword_range }}</b> keywords{% if o.aeo_geo %} · AEO + GEO included{% else %} · no AEO/GEO{% endif %}</div>
+      <div class="kwr" style="border:none;padding-top:4px;margin-top:4px">{{ tier_labels[o.tier] }} tier
+        {%- if o.bounds %} · 12-month total {{ d.money(o.bounds[1] * 12) }} at the top of the range{% endif %}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card" style="margin-top:20px;border-left:5px solid var(--gold)">
+    <div class="h">Our honest recommendation: Option {{ (options | selectattr("recommended") | first).label }} — {{ rec_label }}</div>
+    {% if d.budget_figure %}<p style="margin:0 0 8px;color:var(--muted);font-size:11.5px">Matched to your stated budget of <b>{{ d.budget_line }}</b>.</p>{% endif %}
+    <p style="margin:0">{{ pitch.recommendation_rationale }}</p>
+  </div>
+
+  {% if pitch.why_not_lower %}
+  <div class="card dark" style="margin-top:14px">
+    <div class="h">If you go lower</div>
+    <p style="margin:0">{{ pitch.why_not_lower }}</p>
+  </div>
+  {% endif %}
+
+  <p class="note">{{ meta.billing }}. Currency: INR (primary) / USD. Quarterly review points at
+    months 3, 6 and 9. {% if proj and proj.roi_pct is defined %}The ROI shown earlier is calculated
+    against the top of this tier's range.{% endif %}</p>
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ FULL MATRIX ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide flow">
+  <span class="kicker">Appendix · What's Included</span>
+  <h2 class="slide-title">{{ meta.name }} — every tier, side by side</h2>
+  <div class="rule"></div>
+  <table class="matrix">
+    <thead><tr><th style="width:34%">Deliverable</th>
+      {% for t in tiers %}<th class="{{ 'col-on' if t == rec_tier }}">{{ tier_labels[t] }}</th>{% endfor %}</tr></thead>
+    <tbody>
+      <tr class="catrow"><td>Monthly investment</td>
+        {% for t in tiers %}<td class="{{ 'col-on' if t == rec_tier }}" style="text-transform:none;font-size:10px">{{ tier_prices[t] }}</td>{% endfor %}</tr>
+      {% for cat, rows in categories %}
+      <tr class="catrow"><td colspan="5">{{ cat }}</td></tr>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.name }}{% if row.frequency %} <span style="color:var(--muted);font-weight:400">· {{ row.frequency }}</span>{% endif %}</td>
+        {% for t in tiers %}<td class="{{ 'col-on' if t == rec_tier }}">{{ cell(row[t]) }}</td>{% endfor %}
+      </tr>
+      {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ 10 · WHY JUSTWORDS ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">10 · Why Justwords</span>
+  <h2 class="slide-title">We don't do cookie-cutter SEO</h2>
+  <div class="rule"></div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="h">Most agencies</div>
+      <ul class="clean">
+        <li>Sell a package before understanding your business</li>
+        <li>Pitch a minimum engagement and hope you sign</li>
+        <li>Deliver less than the market requires — results suffer</li>
+        <li>Clients churn before they ever see ROI</li>
+      </ul>
+    </div>
+    <div class="card dark">
+      <div class="h">Justwords</div>
+      <ul class="clean chk">
+        <li>We audit your business before we pitch it — you're holding the proof</li>
+        <li>We show you what success actually costs, and why</li>
+        <li>We put the measured competitive gap on the table, not a sales story</li>
+        <li>We deliver a countable list every month, and report against it</li>
+      </ul>
+    </div>
+  </div>
+
+  {% if pitch.justwords_advantage %}
+  <div class="card" style="margin-top:16px">
+    <div class="h">What this means for {{ client_name }}</div>
+    <ul class="clean chk">
+      {% for a in pitch.justwords_advantage %}<li>{{ a }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="grid3" style="margin-top:16px">
+    <div class="card" style="text-align:center"><div class="h" style="margin:0">Be Innovative</div>
+      <div style="font-size:11px;color:var(--muted)">Custom strategies, not templates</div></div>
+    <div class="card" style="text-align:center"><div class="h" style="margin:0">Be Positive</div>
+      <div style="font-size:11px;color:var(--muted)">Your success is our success</div></div>
+    <div class="card" style="text-align:center"><div class="h" style="margin:0">Be a Winner</div>
+      <div style="font-size:11px;color:var(--muted)">We only take campaigns we can win</div></div>
+  </div>
+  {{ foot(page.n) }}
+</section>
+
+<!-- ============ 11 · NEXT STEPS ============ -->
+{% set page.n = page.n + 1 %}
+<section class="slide">
+  <span class="kicker">11 · Next Steps</span>
+  <h2 class="slide-title">If you're ready to move forward</h2>
+  <div class="rule"></div>
+
+  <div class="card">
+    <div class="step"><div class="sn">1</div><div class="sb"><b>You accept this proposal</b>
+      <div>Reply with your preferred option (A, B or C). We send the contract and onboarding pack.</div></div></div>
+    <div class="step"><div class="sn">2</div><div class="sb"><b>Kickoff week — Week 1 of Month 0</b>
+      <div>90-minute kickoff call, access setup (Analytics, Search Console, CMS), your account manager assigned.</div></div></div>
+    <div class="step"><div class="sn">3</div><div class="sb"><b>Strategy development — Weeks 2-3</b>
+      <div>Full keyword research, 12-month content calendar, backlink acquisition strategy, topic clusters and silos.</div></div></div>
+    <div class="step"><div class="sn">4</div><div class="sb"><b>Foundation building — Week 4</b>
+      <div>Critical technical fixes cleared, homepage optimised, schema implemented, full-site crawl completed, roadmap presented.</div></div></div>
+    <div class="step"><div class="sn">5</div><div class="sb"><b>Campaign execution — Month 1</b>
+      <div>First content published, first pages optimised, first outreach begins, first monthly report delivered.</div></div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:18px">
+    <div class="card">
+      <div class="h">Timeline from acceptance</div>
+      <ul class="clean">
+        <li><b>Today.</b> Accept the proposal</li>
+        <li><b>Within 3 days.</b> Contract signed, payment processed</li>
+        <li><b>Day 4.</b> Kickoff call scheduled</li>
+        <li><b>Day 7.</b> Campaign begins</li>
+        <li><b>Day 30.</b> Month 0 complete, Month 1 underway</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="h">Questions before you decide?</div>
+      <p style="margin:0;color:var(--muted)">Happy to walk through any part of this: how we chose these
+        deliverables, why we recommend the option we did, how we track ROI, and what success looks like
+        at 3, 6, 9 and 12 months.</p>
+      {% if d.prepared_by %}<p style="margin:10px 0 0"><b>{{ d.prepared_by }}</b>{% if d.prepared_by_title %},
+        {{ d.prepared_by_title }}{% endif %}<br><span style="color:var(--muted)">Justwords</span></p>{% endif %}
+    </div>
+  </div>
+
+  <div class="cta">
+    <h3>This proposal is valid until {{ valid_until }}</h3>
+    <p>Every month you wait, the gap compounds in your competitors' favour.</p>
+  </div>
+  {{ foot(page.n) }}
+</section>
+
+{% endif %}{# ===================== end solution chapter ===================== #}
+
+<!-- ============ CLOSE ============ -->
+<section class="slide cover" style="justify-content:center">
+  <div class="brand">Justwords</div>
+  <h1>Let's turn your audit into <span class="hl">organic market share.</span></h1>
+  <div class="tags" style="margin-top:30px">
+    {% if pitch %}<span><b>{{ rec_label }}</b> · {{ rec_price }}</span>{% endif %}
+    <span><b>12</b>-Month Roadmap</span>
+    {% if proj and proj.added_leads %}<span><b>+{{ num(proj.added_leads) }}</b> leads / month potential</span>{% endif %}
+  </div>
+  <div class="meta"><b>Next step:</b> a 30-minute strategy call to confirm keywords, pillars and kickoff.<br>
+    Prepared by Justwords · {{ generated }} · Valid until {{ valid_until }}</div>
+</section>
+
+</body>
+</html>
