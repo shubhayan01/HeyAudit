@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SEO Audit &amp; Growth Plan — BrightPath Dental</title>
+<style>
+  :root{
+    --gold:#FFD400; --gold-deep:#E8B800; --gold-soft:#FFF7CC;
+    --ink:#111111; --ink2:#2b2b2b; --paper:#ffffff;
+    --muted:#6c6c6c; --line:#e7e7e7; --line2:#d9d9d9;
+    --good:#188a4e; --bad:#c0392b;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink2);margin:0;background:#4a4a4a;font-size:13px;line-height:1.6}
+
+  /* Each slide is one A4 page. */
+  .slide{position:relative;width:210mm;min-height:297mm;margin:0 auto;background:var(--paper);
+         padding:22mm 20mm;overflow:hidden;page-break-after:always;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+  .slide:last-child{page-break-after:auto}
+  @media screen{ .slide{margin:16px auto} }
+  /* A slide whose content can exceed one page: let it flow and paginate. */
+  .slide.flow{min-height:auto;overflow:visible}
+  .slide.flow .foot{position:static;left:auto;right:auto;bottom:auto;margin-top:22px}
+
+  h1,h2,h3{color:var(--ink);margin:0;line-height:1.2;font-weight:800;letter-spacing:-.01em}
+  p{margin:0 0 10px}
+  .kicker{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.16em;
+          text-transform:uppercase;color:var(--ink);background:var(--gold);
+          padding:5px 11px;border-radius:3px}
+  .slide-title{font-size:27px;margin:14px 0 4px}
+  .slide-sub{color:var(--muted);font-size:13.5px;margin-bottom:22px;max-width:62ch}
+  .rule{height:4px;width:56px;background:var(--gold);border-radius:2px;margin:14px 0 20px}
+
+  .foot{position:absolute;left:20mm;right:20mm;bottom:12mm;display:flex;justify-content:space-between;
+        align-items:center;font-size:10px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+  .foot b{color:var(--ink)}
+
+  /* ---------- Cover ---------- */
+  .cover{background:var(--ink);color:#fff;display:flex;flex-direction:column;justify-content:center}
+  .cover::before{content:"";position:absolute;top:0;left:0;right:0;height:14px;background:var(--gold)}
+  .cover::after{content:"";position:absolute;right:-90px;bottom:-90px;width:340px;height:340px;
+                border:36px solid var(--gold);border-radius:50%;opacity:.16}
+  .cover .brand{font-size:13px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+  .cover h1{color:#fff;font-size:46px;line-height:1.08;margin:20px 0 0;max-width:16ch}
+  .cover h1 .hl{color:var(--gold)}
+  .cover .for{margin-top:30px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#bdbdbd}
+  .cover .client{font-size:24px;font-weight:800;color:#fff;margin-top:4px}
+  .cover .client small{display:block;font-size:13px;font-weight:400;color:#9a9a9a;letter-spacing:0;text-transform:none;margin-top:3px}
+  .cover .meta{position:absolute;left:20mm;bottom:16mm;font-size:11px;color:#9a9a9a}
+  .cover .meta b{color:#fff}
+  .cover .tags{margin-top:26px;display:flex;gap:8px;flex-wrap:wrap}
+  .cover .tags span{border:1px solid #3a3a3a;color:#e8e8e8;font-size:11px;font-weight:700;
+                    padding:5px 12px;border-radius:20px}
+  .cover .tags span b{color:var(--gold)}
+
+  /* ---------- Generic building blocks ---------- */
+  .lead{font-size:15px;color:var(--ink2);line-height:1.75}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:#fff}
+  .card.dark{background:var(--ink);color:#eaeaea;border-color:var(--ink)}
+  .card.dark h3{color:#fff}
+  .card .h{font-weight:800;color:var(--ink);font-size:14px;margin-bottom:6px}
+  .card.dark .h{color:var(--gold)}
+  ul.clean{list-style:none;margin:0;padding:0}
+  ul.clean li{position:relative;padding:5px 0 5px 22px;border-bottom:1px solid var(--line)}
+  ul.clean li:last-child{border-bottom:none}
+  ul.clean li::before{content:"";position:absolute;left:0;top:12px;width:9px;height:9px;
+                      background:var(--gold);border-radius:2px}
+  .chk li::before{content:"✓";background:none;color:var(--gold-deep);font-weight:900;top:5px;left:2px;width:auto;height:auto}
+
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  thead th{background:var(--ink);color:#fff;text-align:left;padding:9px 11px;font-size:11px;
+           letter-spacing:.04em;text-transform:uppercase;font-weight:700}
+  tbody td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#fbfbf6}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:800}
+  .pill.info{background:#eef2ff;color:#2f4bce} .pill.trans{background:var(--gold);color:var(--ink)}
+  .pill.comm{background:var(--gold-soft);color:#7a5c00;border:1px solid var(--gold-deep)}
+  .pill.nav{background:#eee;color:#444}
+  .pill.low{background:#e6f6ec;color:#177544} .pill.med{background:var(--gold-soft);color:#7a5c00}
+  .pill.high{background:#fde8e8;color:#c0392b}
+
+  /* ---------- TOC ---------- */
+  ol.toc{list-style:none;counter-reset:t;margin:0;padding:0;columns:2;column-gap:26px}
+  ol.toc li{counter-increment:t;padding:9px 0 9px 34px;position:relative;border-bottom:1px solid var(--line);
+            font-weight:600;color:var(--ink);break-inside:avoid}
+  ol.toc li::before{content:counter(t);position:absolute;left:0;top:8px;width:22px;height:22px;
+       background:var(--gold);color:var(--ink);font-size:11px;font-weight:900;border-radius:4px;
+       display:flex;align-items:center;justify-content:center}
+  ol.toc li small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+
+  /* ---------- Stat tiles ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:14px 15px;background:#fff}
+  .stat .n{font-size:25px;font-weight:900;color:var(--ink);line-height:1.1}
+  .stat .n.gold{color:var(--gold-deep)}
+  .stat .l{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);
+           margin-top:6px;font-weight:700}
+  .stat .h{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.4}
+
+  /* ---------- Comparison table ---------- */
+  table.compare tbody tr.me{background:var(--gold-soft)!important}
+  table.compare tbody tr.me td{font-weight:800;color:var(--ink);border-top:2px solid var(--gold-deep);
+                               border-bottom:2px solid var(--gold-deep)}
+  table.compare td.num{text-align:right;font-variant-numeric:tabular-nums}
+  table.compare th.num{text-align:right}
+  .gapbadge{font-size:10px;font-weight:800;color:var(--bad)}
+
+  /* Roadmap */
+  .months{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .mo{border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:8px;padding:12px 15px;
+      break-inside:avoid}
+  .mo .n{display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;
+         color:var(--ink);background:var(--gold);padding:2px 9px;border-radius:3px}
+  .mo h3{font-size:14.5px;margin:8px 0 2px}
+  .mo .focus{color:var(--muted);font-size:11.5px;margin-bottom:7px}
+  .mo ul{margin:0 0 6px;padding-left:16px;font-size:11.5px;color:var(--ink2)}
+  .mo li{margin:2px 0}
+  .mo .plab{font-size:9.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+            color:var(--gold-deep);margin-top:7px}
+
+  /* Pillars */
+  .pillar{border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:14px;
+          break-inside:avoid;border-top:5px solid var(--gold)}
+  .pillar .pn{font-size:10.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+  .pillar h3{font-size:18px;margin:5px 0 8px}
+  .pillar .why{margin-top:10px;border-left:3px solid var(--gold);padding:4px 0 4px 12px;
+               font-size:12px;color:var(--ink2);background:#fffdf2}
+
+  /* Options A/B/C */
+  .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
+  .opt{border:1px solid var(--line2);border-radius:12px;padding:18px 16px;background:#fff;position:relative}
+  .opt.rec{border:2px solid var(--ink);background:var(--ink);color:#eaeaea;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+  .opt.rec .ol,.opt.rec h3{color:#fff}
+  .opt.rec .price{color:var(--gold)}
+  .opt .flag{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);
+             color:var(--ink);font-size:9px;font-weight:900;letter-spacing:.1em;padding:3px 12px;border-radius:20px;
+             white-space:nowrap}
+  .opt .ol{font-size:10.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .opt h3{font-size:17px;margin:5px 0 3px}
+  .opt .blurb{font-size:11px;color:var(--muted);min-height:32px}
+  .opt.rec .blurb{color:#b9b9b9}
+  .opt .price{font-size:15px;font-weight:900;color:var(--ink);margin:10px 0 2px;line-height:1.35}
+  .opt .kwr{font-size:11px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .opt.rec .kwr{border-color:#3a3a3a;color:#c9c9c9}
+  .opt ul{margin:8px 0 0;padding-left:15px;font-size:11px}
+  .opt li{margin:3px 0}
+
+  /* Matrix */
+  table.matrix td:first-child{font-weight:600;color:var(--ink2)}
+  table.matrix thead th:not(:first-child){text-align:center}
+  table.matrix td:not(:first-child){text-align:center}
+  table.matrix .yes{color:var(--gold-deep);font-weight:900}
+  table.matrix .no{color:#c9c9c9}
+  table.matrix .cnt{font-weight:700;color:var(--ink)}
+  .catrow td{background:var(--gold-soft)!important;font-weight:800;color:var(--ink);
+             font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+  .col-on{background:#fffdf0}
+
+  /* Moat */
+  .moat{background:var(--ink);color:#f2f2f2;border-radius:12px;padding:26px 28px;position:relative;overflow:hidden}
+  .moat::after{content:"";position:absolute;right:-70px;top:-70px;width:220px;height:220px;border:30px solid var(--gold);border-radius:50%;opacity:.18}
+  .moat .tag{color:var(--gold);font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+  .moat h2{color:#fff;font-size:24px;margin:10px 0 14px;max-width:22ch}
+  .moat p{color:#dcdcdc;font-size:14px}
+  .moat .why{margin-top:16px;border-left:4px solid var(--gold);padding:6px 0 6px 16px;color:#fff}
+
+  .cta{background:var(--gold);border-radius:12px;padding:22px 26px;color:var(--ink);text-align:center;margin-top:22px}
+  .cta h3{font-size:20px}
+  .cta p{margin:6px 0 0;font-weight:600}
+  .note{font-size:10.5px;color:var(--muted);font-style:italic;margin-top:10px}
+  .assump{font-size:10px;color:var(--muted);margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
+  .assump li{margin:3px 0}
+  .big{font-size:40px;font-weight:900;color:var(--ink);line-height:1}
+  .big small{font-size:13px;color:var(--muted);font-weight:600}
+
+  /* Steps */
+  .step{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);break-inside:avoid}
+  .step:last-child{border-bottom:none}
+  .step .sn{flex:none;width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--ink);
+            font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .step .sb b{color:var(--ink);font-size:13.5px}
+  .step .sb div{color:var(--muted);font-size:12px}
+
+  /* ---------- Audit: health scorecard ---------- */
+  .healthband{display:flex;gap:22px;align-items:center;background:var(--ink);border-radius:14px;
+              padding:22px 26px;color:#eaeaea}
+  .gcircle{width:104px;height:104px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+           font-size:46px;font-weight:900;color:#fff;background:#3a3a3a;flex:none;border:5px solid rgba(255,255,255,.15)}
+  .gcircle.gA,.gcircle.gB{background:var(--good)} .gcircle.gC{background:var(--gold-deep);color:var(--ink)}
+  .gcircle.gD,.gcircle.gF{background:var(--bad)}
+  .healthband .hb-t{color:#fff;font-size:18px;font-weight:800;margin:0 0 4px}
+  .healthband .hb-p{color:#c9c9c9;font-size:12.5px;margin:0}
+  .scorecard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+  .gcard{border:1px solid var(--line);border-radius:10px;padding:12px 10px;text-align:center;background:#fff}
+  .gcard .g{font-size:25px;font-weight:900;line-height:1}
+  .gcard .lab{font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+              margin-top:6px;font-weight:700}
+  .gA,.gB{color:var(--good)} .gC{color:var(--gold-deep)} .gD,.gF{color:var(--bad)}
+
+  /* Severity + status pills */
+  .pill.crit{background:#fce4e4;color:#a01d1d;border:1px solid #e6a6a6}
+  .sp{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:800;text-transform:uppercase;white-space:nowrap}
+  .sp.pass{background:#e6f6ec;color:#177544} .sp.warn{background:var(--gold-soft);color:#7a5c00}
+  .sp.fail{background:#fde8e8;color:#c0392b} .sp.info{background:#eef2ff;color:#2f4bce}
+
+  /* Keyword-position distribution bars */
+  .bars{margin-top:6px}
+  .bar{display:flex;align-items:center;gap:10px;margin:5px 0}
+  .bar .blab{width:112px;font-size:11px;color:var(--ink2);font-weight:700;flex:none}
+  .bar .btrack{flex:1;background:#f0f0e8;border-radius:4px;height:16px;overflow:hidden}
+  .bar .bfill{height:100%;background:var(--gold);border-radius:4px;min-width:2px}
+  .bar .bfill.win{background:var(--good)} .bar .bfill.mid{background:var(--gold-deep)}
+  .bar .bval{width:40px;text-align:right;font-size:11px;font-weight:800;color:var(--ink);flex:none}
+  .snap{font-size:10px;color:var(--muted);font-style:italic;margin-top:8px}
+
+  @media print{
+    body{background:#fff} .slide{margin:0;box-shadow:none;width:auto;min-height:auto}
+    table.matrix thead,table.compare thead{display:table-header-group}
+    table.matrix tr,table.compare tr,.mo,.card,.pillar,.opt,.stat{page-break-inside:avoid}
+    .healthband,.gcard,.bar{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ============ COVER ============ -->
+<section class="slide cover">
+  <div class="brand">Justwords</div>
+  <h1>SEO Audit &amp; <span class="hl">Growth Plan</span></h1>
+  <div class="tags">
+    <span><b>The Audit</b> — what we found</span>
+    <span><b>The Plan</b> — how we fix it</span>
+    <span><b>The Growth</b> — what it's worth</span>
+  </div>
+  <div class="for">Prepared exclusively for</div>
+  <div class="client">BrightPath Dental<small>https://brightpathdental.com/</small></div>
+  <div class="meta">
+    
+    Agency: <b>Justwords</b> &nbsp;·&nbsp; November 02, 2026
+     &nbsp;·&nbsp; Current audit grade <b>C</b><br>
+    Proposal valid until <b>December 02, 2026</b>
+  </div>
+</section>
+
+<!-- ============ EXECUTIVE SUMMARY ============ -->
+
+<section class="slide">
+  <span class="kicker">Executive Summary</span>
+  <h2 class="slide-title">What we found — and what we'll do about it</h2>
+  <div class="rule"></div>
+  
+  
+  <p class="lead">This deck sets out what our audit of brightpathdental.com found and the plan to turn those findings into organic growth.</p>
+
+  
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:22px 0 10px">Where you stand today</div>
+  <div class="stats">
+    
+    
+    
+    
+  </div>
+  
+
+  
+  
+<div class="foot"><span><b>Justwords</b> · SEO / GEO / AEO Growth Proposal</span>
+  <span>BrightPath Dental</span><span>2</span></div>
+
+</section>
+
+<!-- ============ TABLE OF CONTENTS ============ -->
+
+<section class="slide">
+  <span class="kicker">Contents</span>
+  <h2 class="slide-title">What's in this proposal</h2>
+  <div class="rule"></div>
+  <ol class="toc">
+    <li>Discovery Call Findings<small>What you told us</small></li>
+    <li>Digital Health Scorecard<small>The audit at a glance</small></li>
+    <li>Critical Issues<small>What's broken and what it costs</small></li>
+    <li>On-Page &amp; Technical Health<small>Speed, mobile, Core Web Vitals</small></li>
+    <li>Organic Search Performance<small>Traffic, rankings, backlinks</small></li>
+    
+    
+  </ol>
+  
+<div class="foot"><span><b>Justwords</b> · SEO / GEO / AEO Growth Proposal</span>
+  <span>BrightPath Dental</span><span>3</span></div>
+
+</section>
+
+
+<!-- ============ 1 · DISCOVERY CALL FINDINGS ============ -->
+
+<section class="slide">
+  <span class="kicker">01 · Discovery</span>
+  <h2 class="slide-title">What you told us</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Everything in this proposal is built around what you said on our call — not a
+    package we sell to everyone.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="h">Where you are today</div>
+      <ul class="clean">
+        
+        
+        
+        
+        
+        
+      </ul>
+    </div>
+    <div class="card">
+      <div class="h">Where you want to be</div>
+      <ul class="clean">
+        
+        
+        
+        
+      </ul>
+    </div>
+  </div>
+
+  
+
+  
+  
+<div class="foot"><span><b>Justwords</b> · SEO / GEO / AEO Growth Proposal</span>
+  <span>BrightPath Dental</span><span>4</span></div>
+
+</section>
+
+
+<!-- ============ AUDIT · 1 · HEALTH SCORECARD ============ -->
+
+<section class="slide">
+  <span class="kicker">The Audit · Health Scorecard</span>
+  <h2 class="slide-title">Your digital health at a glance</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">We ran a full technical + SEO audit of brightpathdental.com — the whole site, not a single
+    page — before writing a word of the plan. Here's the headline; the specifics follow.</p><div class="healthband">
+    <div class="gcircle gC">C</div>
+    <div>
+      <p class="hb-t">Underperforming — but fixable</p>
+      <p class="hb-p">3 issues to fix and 13 to improve, across
+        31 automated checks.
+        
+      </p>
+    </div>
+  </div>
+
+  
+  
+  
+  <div class="scorecard">
+    
+    <div class="gcard">
+      <div class="g gC">C</div>
+      <div class="lab">On-Page SEO</div>
+    </div>
+    
+    <div class="gcard">
+      <div class="g gD">D</div>
+      <div class="lab">Performance</div>
+    </div>
+    
+    <div class="gcard">
+      <div class="g gB">B</div>
+      <div class="lab">Security</div>
+    </div>
+    
+    <div class="gcard">
+      <div class="g gC">C</div>
+      <div class="lab">Usability</div>
+    </div>
+    
+    <div class="gcard">
+      <div class="g gA">A</div>
+      <div class="lab">AI Search</div>
+    </div>
+    
+  </div>
+  
+
+  <div class="stats" style="margin-top:16px">
+    <div class="stat"><div class="n" style="color:var(--good)">11</div><div class="l">Passing</div></div>
+    <div class="stat"><div class="n" style="color:var(--gold-deep)">13</div><div class="l">To improve</div></div>
+    <div class="stat"><div class="n" style="color:var(--bad)">3</div><div class="l">To fix</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">For review</div></div>
+  </div>
+
+  
+  
+  
+<div class="foot"><span><b>Justwords</b> · SEO / GEO / AEO Growth Proposal</span>
+  <span>BrightPath Dental</span><span>5</span></div>
+
+</section>
+
+<!-- ============ AUDIT · 2 · CRITICAL ISSUES ============ -->
+
+<section class="slide flow">
+  <span class="kicker">The Audit · Critical Issues</span>
+  <h2 class="slide-title">What's holding your rankings back</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Every row below is something the audit measured — ranked worst-first, with what
+    it's costing you in plain English. This is the list the plan is built to clear.</p>
+
+  
+  <table>
+    <thead><tr><th style="width:19%">Issue</th><th style="width:25%">What we found</th>
+      <th style="width:15%">Extent</th><th>Impact on rankings</th><th style="width:10%">Severity</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><b>HTTPS &amp; connection safety</b></td>
+        <td>HTTPS on, but some hardening headers are missing.</td>
+        <td style="color:var(--muted)">Homepage</td>
+        <td style="color:var(--ink2)">security flags destroy trust and can remove a site from results entirely.</td>
+        <td><span class="pill crit">Critical</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Google PageSpeed / Core Web Vitals</b></td>
+        <td>Mobile performance score 44/100.</td>
+        <td style="color:var(--muted)">2.6s load time</td>
+        <td style="color:var(--ink2)">around 40% of visitors abandon a page that takes over three seconds to load.</td>
+        <td><span class="pill high">High</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Thin content</b></td>
+        <td>8 pages fall under 300 words.</td>
+        <td style="color:var(--muted)">8 of 48 pages</td>
+        <td style="color:var(--ink2)">thin pages struggle to rank and can drag down the whole domain&#39;s quality signal.</td>
+        <td><span class="pill high">High</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Canonical tag</b></td>
+        <td>Homepage canonical is fine; 7 pages site-wide lack one.</td>
+        <td style="color:var(--muted)">Homepage</td>
+        <td style="color:var(--ink2)">without a clear canonical, duplicate URLs compete against each other and split your rankings.</td>
+        <td><span class="pill high">High</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Server response time</b></td>
+        <td>First byte in 410ms — acceptable but improvable.</td>
+        <td style="color:var(--muted)">2.6s load time</td>
+        <td style="color:var(--ink2)">slow server response delays every other metric Google measures.</td>
+        <td><span class="pill high">High</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Meta description</b></td>
+        <td>Homepage meta is short; 9 pages have none.</td>
+        <td style="color:var(--muted)">Homepage</td>
+        <td style="color:var(--ink2)">Google can&#39;t summarise the page properly, so click-through from search suffers.</td>
+        <td><span class="pill high">High</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Load time &amp; homepage weight</b></td>
+        <td>Homepage finishes loading in about 2.6s.</td>
+        <td style="color:var(--muted)">2.6s load time</td>
+        <td style="color:var(--ink2)">page weight and load time are confirmed ranking factors and a direct drag on conversion.</td>
+        <td><span class="pill high">High</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Titles across the site</b></td>
+        <td>7 pages have missing or duplicate titles.</td>
+        <td style="color:var(--muted)">7 of 48 pages</td>
+        <td style="color:var(--ink2)">titles are the strongest on-page signal; missing or duplicated ones across the site cap rankings on every affected page.</td>
+        <td><span class="pill high">High</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Indexability</b></td>
+        <td>11 canonical issues across the site.</td>
+        <td style="color:var(--muted)">11 of 48 pages</td>
+        <td style="color:var(--ink2)">missing or cross-pointing canonicals split ranking signals between duplicate URLs.</td>
+        <td><span class="pill high">High</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Broken links</b></td>
+        <td>11 broken internal links across the site.</td>
+        <td style="color:var(--muted)">11 broken links across 48 pages</td>
+        <td style="color:var(--ink2)">poor user experience, and link equity leaks out of dead ends.</td>
+        <td><span class="pill med">Medium</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Keyword coverage</b></td>
+        <td>Thin coverage of &#39;emergency dentist&#39; intent.</td>
+        <td style="color:var(--muted)">Homepage</td>
+        <td style="color:var(--ink2)">weak keyword coverage means missing the searches your buyers actually make.</td>
+        <td><span class="pill med">Medium</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Meta descriptions across the site</b></td>
+        <td>15 pages need meta description work.</td>
+        <td style="color:var(--muted)">15 of 48 pages</td>
+        <td style="color:var(--ink2)">missing and duplicate meta descriptions cost click-through from search on those pages.</td>
+        <td><span class="pill med">Medium</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Headings across the site</b></td>
+        <td>5 pages have no H1 or several.</td>
+        <td style="color:var(--muted)">5 of 48 pages</td>
+        <td style="color:var(--ink2)">pages with no H1 (or several) leave search engines unsure what each page is about.</td>
+        <td><span class="pill med">Medium</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Image alt text across the site</b></td>
+        <td>63 of 214 images have no alt text.</td>
+        <td style="color:var(--muted)">63 of 214 images</td>
+        <td style="color:var(--ink2)">images without alt text lose accessibility and image-search traffic site-wide.</td>
+        <td><span class="pill med">Medium</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>JS minification</b></td>
+        <td>Two large scripts are not minified.</td>
+        <td style="color:var(--muted)">Homepage</td>
+        <td style="color:var(--ink2)">unminified scripts slow the page down for every visitor.</td>
+        <td><span class="pill med">Medium</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>W3C markup validation</b></td>
+        <td>14 markup errors reported by the validator.</td>
+        <td style="color:var(--muted)">Homepage</td>
+        <td style="color:var(--ink2)">markup errors can break how crawlers parse the page.</td>
+        <td><span class="pill low">Low</span></td>
+      </tr>
+      
+    </tbody>
+  </table>
+  
+
+  
+  
+<div class="foot"><span><b>Justwords</b> · SEO / GEO / AEO Growth Proposal</span>
+  <span>BrightPath Dental</span><span>6</span></div>
+
+</section>
+
+<!-- ============ AUDIT · 3 · ON-PAGE & TECHNICAL ============ -->
+
+<section class="slide flow">
+  <span class="kicker">The Audit · On-Page &amp; Technical</span>
+  <h2 class="slide-title">Speed, mobile and on-page foundations</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">The technical signals search engines weigh directly — and the on-page elements that
+    tell them what each page is about.</p>
+
+  <div class="stats">
+    
+    <div class="stat"><div class="n">2.6s</div>
+      <div class="l">Page load</div><div class="h">Target: under 2s</div></div>
+    
+    
+    
+    <div class="stat"><div class="n">0.0<small style="font-size:14px">MB</small></div>
+      <div class="l">Page weight</div><div class="h">homepage payload</div></div>
+  </div>
+
+  
+
+  
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 10px">
+    Whole-site issues — across 48 crawled pages</div>
+  <table>
+    <thead><tr><th style="width:30%">Issue</th><th style="width:26%">Extent</th>
+      <th>What it means</th><th style="width:11%">Status</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><b>Missing page titles</b></td>
+        <td style="color:var(--muted)">2 of 48 pages</td>
+        <td>These pages have no title tag — search engines fall back to guessing a headline.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Duplicate titles</b></td>
+        <td style="color:var(--muted)">5 of 48 pages</td>
+        <td>Duplicate titles make pages compete against each other for the same terms.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Missing meta descriptions</b></td>
+        <td style="color:var(--muted)">9 of 48 pages</td>
+        <td>Google writes its own snippet for these pages, hurting click-through.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Missing H1 heading</b></td>
+        <td style="color:var(--muted)">3 of 48 pages</td>
+        <td>No H1 leaves search engines unsure what these pages are about.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Thin content (&lt;300 words)</b></td>
+        <td style="color:var(--muted)">8 of 48 pages</td>
+        <td>Thin pages rarely rank and can drag down the whole domain&#39;s quality signal.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Images missing alt text</b></td>
+        <td style="color:var(--muted)">63 of 214 images</td>
+        <td>Undescribed images lose accessibility and image-search traffic.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Canonical issues</b></td>
+        <td style="color:var(--muted)">11 of 48 pages</td>
+        <td>Missing or cross-pointing canonicals split ranking signals between URLs.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Broken links</b></td>
+        <td style="color:var(--muted)">11 broken across the site</td>
+        <td>Broken links waste crawl budget and leak link equity into dead ends.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+    </tbody>
+  </table>
+  
+
+  
+  <div class="h" style="font-weight:800;color:var(--ink);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 10px">Homepage on-page elements</div>
+  <table>
+    <thead><tr><th style="width:20%">Element</th><th style="width:30%">What's there now</th>
+      <th>Verdict</th><th style="width:11%">Status</th></tr></thead>
+    <tbody>
+      
+      <tr>
+        <td><b>Title tag</b></td>
+        <td style="color:var(--muted)">—</td>
+        <td>Clear, keyword-led title within length limits.</td>
+        <td><span class="sp pass">pass</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Meta description</b></td>
+        <td style="color:var(--muted)">—</td>
+        <td>Homepage meta is short; 9 pages have none.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>H1 / heading structure</b></td>
+        <td style="color:var(--muted)">—</td>
+        <td>Single H1, logical heading order.</td>
+        <td><span class="sp pass">pass</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Structured data</b></td>
+        <td style="color:var(--muted)">—</td>
+        <td>Dentist schema (JSON-LD) detected.</td>
+        <td><span class="sp pass">pass</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Canonical tag</b></td>
+        <td style="color:var(--muted)">—</td>
+        <td>Homepage canonical is fine; 7 pages site-wide lack one.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Page load speed</b></td>
+        <td style="color:var(--muted)">2.6s</td>
+        <td>Above the 2-second target — losing visitors before the page paints.</td>
+        <td><span class="sp fail">fail</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Content depth</b></td>
+        <td style="color:var(--muted)">738 words</td>
+        <td>Substantial enough to rank.</td>
+        <td><span class="sp pass">pass</span></td>
+      </tr>
+      
+      <tr>
+        <td><b>Image alt text</b></td>
+        <td style="color:var(--muted)">7 of 10 images described</td>
+        <td>3 images missing alt text — lost accessibility and image-search traffic.</td>
+        <td><span class="sp warn">warn</span></td>
+      </tr>
+      
+    </tbody>
+  </table>
+  
+  
+<div class="foot"><span><b>Justwords</b> · SEO / GEO / AEO Growth Proposal</span>
+  <span>BrightPath Dental</span><span>7</span></div>
+
+</section>
+
+<!-- ============ AUDIT · 4 · ORGANIC SEARCH PERFORMANCE ============ -->
+
+<section class="slide flow">
+  <span class="kicker">The Audit · Organic Search</span>
+  <h2 class="slide-title">Where you rank and what it's worth</h2>
+  <div class="rule"></div>
+  <p class="slide-sub">Domain-wide organic visibility for brightpathdental.com — the traffic you earn today, the
+    keywords behind it, and the backlink authority holding it up.</p>
+
+  <div class="stats">
+    
+    
+    
+    
+    <div class="stat"><div class="n">48</div>
+      <div class="l">Pages crawled</div><div class="h">whole-domain audit</div></div>
+  </div>
+
+  
+
+  
+  
+
+  
+  <div class="grid2" style="margin-top:14px">
+    
+    
+    <div class="card">
+      <div class="h">On-site signals</div>
+      <ul class="clean">
+        <li>Internal links (homepage) <b>3</b></li>
+        <li>External links (homepage) <b>1</b></li>
+        <li>Homepage content depth <b>738 words</b></li>
+        
+      </ul>
+    </div>
+    
+  </div>
+  
+
+  
+  <div class="card" style="margin-top:14px"><div class="h">Organic data</div>
+    <p style="margin:0;color:var(--muted)">Live keyword and traffic estimates weren't available for this
+      run. The Month-0 keyword research phase establishes the full ranking baseline.</p></div>
+  
+  
+<div class="foot"><span><b>Justwords</b> · SEO / GEO / AEO Growth Proposal</span>
+  <span>BrightPath Dental</span><span>8</span></div>
+
+</section>
+
+
+
+
+
+
+<!-- ============ CLOSE ============ -->
+<section class="slide cover" style="justify-content:center">
+  <div class="brand">Justwords</div>
+  <h1>Let's turn your audit into <span class="hl">organic market share.</span></h1>
+  <div class="tags" style="margin-top:30px">
+    
+    <span><b>12</b>-Month Roadmap</span>
+    
+  </div>
+  <div class="meta"><b>Next step:</b> a 30-minute strategy call to confirm keywords, pillars and kickoff.<br>
+    Prepared by Justwords · November 02, 2026 · Valid until December 02, 2026</div>
+</section>
+
+</body>
+</html>

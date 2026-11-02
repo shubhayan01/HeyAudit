@@ -3,7 +3,7 @@
 
 Point it at a client URL; it drives a headless Chromium browser through ~26
 SEO/technical checks and produces a self-contained **PDF report** (plus HTML and
-evidence screenshots). A Groq-powered AI layer turns the raw checks into a
+evidence screenshots). An AI layer turns the raw checks into a
 client-ready analysis — overall grade, executive summary, prioritised findings
 and quick wins.
 
@@ -16,7 +16,7 @@ Two ways to run it: a **web frontend** (paste a URL in the browser) or the CLI.
 ```
 
 Then open **http://127.0.0.1:8000**, paste the client URL, optionally add your
-Groq API key (stored only in your browser), and click *Run audit*. You get live
+AI strategy key (stored only in your browser), and click *Run audit*. You get live
 progress and download links for the PDF / HTML report. No extra dependencies —
 the server is pure standard library.
 
@@ -32,7 +32,7 @@ Output lands in `reports/<domain>-<timestamp>/`:
 - `deck.html` — same deck, web version
 - `assets/` — homepage + evidence screenshots
 
-With a Groq key the deck includes both halves; without one it renders as an
+With an AI key the deck includes both halves; without one it renders as an
 audit-only deck (no solution chapter).
 
 ## Deploy on Render
@@ -49,7 +49,7 @@ plus system libraries that Render's native Python runtime can't install).
 
 Notes:
 - The audit runs entirely on free, first-party data (no third-party API key).
-- The AI-written strategy half of the deck is optional: paste a Groq API key
+- The AI-written strategy half of the deck is optional: paste an AI strategy key
   into the web form at run time (it's stored only in your browser). Without one,
   the deck renders as an audit-only document.
 - A whole-site crawl + Chromium is memory-hungry; the blueprint requests the
@@ -80,28 +80,28 @@ py audit.py <url> [--out DIR] [--pagespeed-key KEY] [--groq-key KEY] [--groq-mod
   url                 Client URL or bare domain (example.com or https://example.com)
   --out DIR           Output directory (default: reports)
   --pagespeed-key K   Google PageSpeed API key (lifts rate limits on the speed check)
-  --groq-key K        Groq API key for the AI analysis + pitch deck (or set GROQ_API_KEY,
+  --groq-key K        AI API key for the AI analysis + pitch deck (or set GROQ_API_KEY,
                       or drop the key in a .groq_key file in the project root)
-  --groq-model M      Groq model (default: llama-3.3-70b-versatile)
+  --groq-model M      AI model (default: llama-3.3-70b-versatile)
   --no-pdf            Produce HTML only, skip PDF rendering
   --no-pitch          Skip the solution half — render an audit-only deck
 ```
 
-## AI analysis (Groq)
+## AI analysis
 
-With a Groq API key, the report gains an **AI Analysis** section at the top: an
+With an AI key, the report gains an **AI Analysis** section at the top: an
 overall letter grade + 0–100 health score, a plain-English executive summary,
 4–8 prioritised findings (each with a severity and a specific fix) and a list of
 quick wins. The model only interprets the data the audit actually collected.
 
 Provide the key via the frontend field, the `--groq-key` flag, or a
 `GROQ_API_KEY` environment variable. Without a key the report renders exactly as
-before (no AI section). Calls go to the Groq API over the standard library — no
+before (no AI section). Calls go to the AI API over the standard library — no
 SDK to install.
 
-## Solution half of the deck (Groq)
+## Solution half of the deck
 
-With a Groq key, the deck's second half turns the audit into a **6-month
+With an AI key, the deck's second half turns the audit into a **6-month
 cornerstone SEO / GEO / AEO strategy** — a professional, yellow/black/white
 proposal built
 around Justwords' Next Gen SEO Packages. Written in the voice of a Senior

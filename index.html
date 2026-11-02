@@ -3,41 +3,48 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>bd-auto — Technical SEO Audit</title>
+<title>HeyAudit — Technical SEO Audit</title>
 <style>
   :root{
-    --ink:#15181f; --muted:#6b7280; --line:#e5e7eb; --bg:#f4f6fa;
-    --brand:#2c6fb5; --brand-d:#205089; --ok:#1a8a3a; --bad:#c0392b; --warn:#b5840a;
+    --ink:#101420; --muted:#667085; --line:#e6e9ef; --bg:#eef2f8; --card:#ffffff;
+    --brand:#3366ff; --brand-d:#244ecc; --brand-soft:#eaf0ff;
+    --ok:#17894a; --bad:#d13b2e; --warn:#b5840a;
+    --shadow:0 10px 30px rgba(16,24,40,.08);
   }
-
-
   *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-       color:var(--ink);background:var(--bg);line-height:1.55;font-size:15px}
-  .wrap{max-width:760px;margin:0 auto;padding:48px 24px 80px}
-  .brand{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-  h1{font-size:34px;margin:6px 0 4px}
-  .lead{color:var(--muted);margin:0 0 28px}
+  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);line-height:1.55;font-size:15px;
+       background:radial-gradient(1200px 500px at 50% -120px,#dbe6ff 0%,var(--bg) 60%)}
+  .wrap{max-width:780px;margin:0 auto;padding:56px 22px 80px}
 
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;
-        box-shadow:0 1px 3px rgba(16,24,40,.04)}
+  .brand{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:800;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--brand-d)}
+  .brand .dot{width:12px;height:12px;border-radius:50%;
+    background:linear-gradient(135deg,var(--brand),#7aa0ff);box-shadow:0 2px 8px rgba(51,102,255,.5)}
+  h1{font-size:38px;line-height:1.1;margin:14px 0 6px;letter-spacing:-.02em}
+  .lead{color:var(--muted);margin:0 0 26px;font-size:16px;max-width:60ch}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;
+        box-shadow:var(--shadow)}
   label{display:block;font-size:13px;font-weight:600;margin:0 0 6px}
   .hint{font-weight:400;color:var(--muted)}
-  input[type=text],input[type=password]{width:100%;padding:12px 14px;font-size:15px;
-    border:1px solid var(--line);border-radius:10px;background:#fff;outline:none;transition:border .15s}
-  input:focus{border-color:var(--brand)}
+  input[type=text],input[type=password]{width:100%;padding:13px 15px;font-size:15px;
+    border:1px solid var(--line);border-radius:11px;background:#fff;outline:none;transition:border .15s,box-shadow .15s}
+  input:focus{border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
   .row{margin-bottom:18px}
+  .url-row input{padding:16px 16px;font-size:17px}
   .adv{margin:4px 0 18px}
-  .adv summary{cursor:pointer;font-size:13px;color:var(--brand);font-weight:600;user-select:none}
-  .adv .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .adv summary{cursor:pointer;font-size:13px;color:var(--brand-d);font-weight:700;user-select:none;
+    padding:8px 0}
+  .adv .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
   .adv .grid .full{grid-column:1/-1}
   @media(max-width:560px){.adv .grid{grid-template-columns:1fr}}
   .adv .note{font-size:12px;color:var(--muted);margin:10px 0 0}
   textarea{width:100%;padding:11px 13px;font-size:14px;border:1px solid var(--line);
-    border-radius:10px;background:#fff;outline:none;font-family:inherit;resize:vertical;min-height:64px}
-  textarea:focus{border-color:var(--brand)}
-  select{width:100%;padding:12px 14px;font-size:15px;border:1px solid var(--line);
-    border-radius:10px;background:#fff;outline:none}
+    border-radius:11px;background:#fff;outline:none;font-family:inherit;resize:vertical;min-height:64px}
+  textarea:focus{border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+  select{width:100%;padding:13px 15px;font-size:15px;border:1px solid var(--line);
+    border-radius:11px;background:#fff;outline:none}
   .secdiv{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
     color:var(--muted);margin:20px 0 -4px;grid-column:1/-1;border-top:1px solid var(--line);padding-top:16px}
 
@@ -48,74 +55,85 @@
   .inline select{width:auto;flex:none}
   .cats{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:8px}
   .cats label{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;
-    background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;
+    background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 13px;cursor:pointer;
     margin:0;user-select:none;transition:border .15s,background .15s}
   .cats label:hover{border-color:var(--brand)}
   .cats input{accent-color:var(--brand);width:15px;height:15px;margin:0}
-  .cats label:has(input:checked){border-color:var(--brand);background:#eef4fb}
+  .cats label:has(input:checked){border-color:var(--brand);background:var(--brand-soft)}
   .cats .catbtns{width:100%;display:flex;gap:14px;margin:2px 0 2px}
-  .cats .catbtns a{font-size:12px;color:var(--brand);cursor:pointer;font-weight:600}
-  .deckopts{background:#fbfcfe;border:1px solid var(--line);border-radius:12px;padding:16px 16px 18px}
+  .cats .catbtns a{font-size:12px;color:var(--brand-d);cursor:pointer;font-weight:700}
+  .deckopts{background:#f7f9ff;border:1px solid var(--line);border-radius:14px;padding:16px 16px 18px}
   .deckopts .h{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
-  button.go{width:100%;padding:14px;font-size:16px;font-weight:700;color:#fff;border:0;
-    border-radius:10px;background:var(--brand);cursor:pointer;transition:background .15s}
-  button.go:hover{background:var(--brand-d)}
-  button.go:disabled{background:#9bb6d4;cursor:not-allowed}
+
+  .btnrow{display:flex;gap:12px;margin-top:4px}
+  @media(max-width:480px){.btnrow{flex-direction:column}}
+  button.go,button.demo{padding:15px 16px;font-size:16px;font-weight:800;border-radius:12px;cursor:pointer;
+    transition:transform .05s ease,background .15s,box-shadow .15s;border:0}
+  button.go{flex:1;color:#fff;background:linear-gradient(135deg,var(--brand),#5c84ff);
+    box-shadow:0 8px 20px rgba(51,102,255,.32)}
+  button.go:hover{background:linear-gradient(135deg,var(--brand-d),var(--brand))}
+  button.go:active,button.demo:active{transform:translateY(1px)}
+  button.demo{flex:none;background:#fff;color:var(--brand-d);border:1.5px solid var(--brand);}
+  button.demo:hover{background:var(--brand-soft)}
+  button.go:disabled,button.demo:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
 
   .panel{margin-top:22px;display:none}
-  .panel.show{display:block}
-  .statusbar{display:flex;align-items:center;gap:10px;font-weight:600;margin-bottom:12px}
+  .panel.show{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .statusbar{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:12px}
   .spinner{width:18px;height:18px;border:3px solid var(--line);border-top-color:var(--brand);
     border-radius:50%;animation:spin .8s linear infinite;flex:none}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .log{background:#0f1320;color:#cdd6e4;border-radius:10px;padding:14px 16px;font-size:12.5px;
+  .log{background:#0d1324;color:#cdd6e4;border-radius:12px;padding:14px 16px;font-size:12.5px;
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;max-height:260px;overflow:auto}
-  .log div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .log div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 0}
   .log .cat{color:#7f93b5}
 
-
   .result{margin-top:18px}
-  .grade-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:18px}
-  .grade{width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-size:30px;font-weight:800;color:#fff;background:var(--brand);flex:none}
-  .grade.A{background:#1a8a3a}.grade.B{background:#5a9e1e}.grade.C{background:#b5840a}
-  .grade.D{background:#cc6a1f}.grade.F{background:#c0392b}
+  .result-card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:22px;box-shadow:var(--shadow)}
+  .grade-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:14px}
+  .grade{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:32px;font-weight:800;color:#fff;background:var(--brand);flex:none;box-shadow:var(--shadow)}
+  .grade.A{background:#17894a}.grade.B{background:#5a9e1e}.grade.C{background:#b5840a}
+  .grade.D{background:#cc6a1f}.grade.F{background:#d13b2e}
   .gtext .g1{font-size:13px;color:var(--muted)}
-  .gtext .g2{font-size:18px;font-weight:700}
+  .gtext .g2{font-size:19px;font-weight:800}
   .counts{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 0}
-  .pill{font-size:12px;font-weight:700;padding:4px 11px;border-radius:20px;background:var(--bg);border:1px solid var(--line)}
+  .pill{font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
   .pill.pass{color:var(--ok)}.pill.fail{color:var(--bad)}.pill.warn{color:var(--warn)}
-  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
-  .btn{display:inline-block;padding:11px 18px;border-radius:10px;font-weight:700;font-size:14px;
-    text-decoration:none;text-align:center}
-  .btn.primary{background:var(--brand);color:#fff}
-  .btn.ghost{background:#fff;color:var(--brand);border:1px solid var(--line)}
-  .errbox{background:#fdecea;border:1px solid #f5c6c0;color:var(--bad);border-radius:10px;padding:14px 16px;font-size:14px}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+  .btn{display:inline-block;padding:12px 20px;border-radius:11px;font-weight:800;font-size:14px;
+    text-decoration:none;text-align:center;transition:background .15s}
+  .btn.primary{background:var(--brand);color:#fff}.btn.primary:hover{background:var(--brand-d)}
+  .btn.ghost{background:#fff;color:var(--brand-d);border:1.5px solid var(--brand)}.btn.ghost:hover{background:var(--brand-soft)}
+  .demo-tag{display:inline-block;margin-bottom:12px;font-size:11px;font-weight:800;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--brand-d);background:var(--brand-soft);padding:5px 11px;border-radius:999px}
+  .note{font-size:12.5px;color:var(--muted)}
+  .errbox{background:#fdecea;border:1px solid #f5c6c0;color:var(--bad);border-radius:12px;padding:14px 16px;font-size:14px}
   footer{margin-top:30px;color:var(--muted);font-size:12px;text-align:center}
   .saved{font-size:12px;color:var(--ok);margin-left:8px}
 </style>
 </head>
 <body>
 
-
 <div class="wrap">
-  <div class="brand">bd-auto</div>
+  <div class="brand"><span class="dot"></span> HeyAudit</div>
   <h1>SEO Audit &amp; Growth Proposal</h1>
   <p class="lead">Drop in a client URL, choose the package and the services you're pitching, and we do the
-     rest: a whole-domain technical SEO audit, opportunity model, and a Groq-written
+     rest: a whole-domain technical SEO audit, an opportunity model, and an AI-written
      strategy. Out comes one client-ready deck — the audit findings and the growth plan in a single PDF.</p>
 
   <div class="card">
-    <div class="row">
+    <div class="row url-row">
       <label for="url">Website URL</label>
       <input type="text" id="url" placeholder="https://client.com  or  client.com" autocomplete="off">
     </div>
 
     <div class="row">
-      <label for="groq">Groq API key <span class="hint">— powers the AI report. Stored only in this browser.</span><span class="saved" id="saved"></span></label>
-      <input type="password" id="groq" placeholder="gsk_..." autocomplete="off">
+      <label for="groq">AI strategy key <span class="hint">— optional. Unlocks the AI-written strategy half of the deck. Stored only in this browser.</span><span class="saved" id="saved"></span></label>
+      <input type="password" id="groq" placeholder="optional — paste your key" autocomplete="off">
     </div>
-
 
     <div class="row deckopts">
       <div class="h">Offers to feature in the deck</div>
@@ -163,20 +181,15 @@
       <p class="note" style="margin:10px 0 0">Optional. Off-page figures (DA, organic traffic) have no free source for a prospect's site, so they're left out of the deck unless you enter the real numbers from Ahrefs/Semrush here.</p>
     </div>
 
-
-
     <details class="adv" id="discBlock">
       <summary>Discovery call answers &amp; competitors <span class="hint">— optional, but they unlock the proposal's best sections</span></summary>
       <div class="grid">
         <div class="secdiv">Competitors</div>
         <div class="full">
-          <label for="comps">Competitor domains <span class="hint">— up to 5, comma-separated. Each gets a real audit (~90s total).</span></label>
+          <label for="comps">Competitor domains <span class="hint">— up to 5, comma-separated.</span></label>
           <input type="text" id="comps" placeholder="rival-a.com, rival-b.com, rival-c.com" autocomplete="off">
-          <p class="note">Without these there's no competitive landscape table and no opportunity model —
-            those sections are built from measured competitor data, so they're skipped rather than guessed.</p>
+          <p class="note">Competitor off-page metrics have no free source for a third party's site, so the comparison table is left out rather than estimated.</p>
         </div>
- 
-
 
         <div class="secdiv">Proposal cover</div>
         <div>
@@ -221,26 +234,21 @@
           <label for="services">Primary services <span class="hint">— one per line</span></label>
           <textarea id="services" placeholder="Content marketing&#10;SEO retainers"></textarea>
         </div>
-
-
         <div class="full">
           <label for="pains">Pain points they raised <span class="hint">— one per line</span></label>
           <textarea id="pains" placeholder="Leads dried up after the last redesign&#10;No visibility outside our home city"></textarea>
         </div>
 
-
         <p class="note full">Leave anything blank and it drops out of the proposal cleanly — nothing here is invented to fill a gap.</p>
       </div>
     </details>
-
-
 
     <details class="adv">
       <summary>Advanced options</summary>
       <div class="grid">
         <div>
-          <label for="model">Groq model</label>
-          <input type="text" id="model" placeholder="llama-3.3-70b-versatile" autocomplete="off">
+          <label for="model">AI model</label>
+          <input type="text" id="model" placeholder="default" autocomplete="off">
         </div>
         <div>
           <label for="psi">PageSpeed API key <span class="hint">(optional)</span></label>
@@ -249,39 +257,33 @@
       </div>
     </details>
 
-
-
-    <button class="go" id="go">Run audit &amp; build proposal</button>
+    <div class="btnrow">
+      <button class="go" id="go">Run audit &amp; build proposal</button>
+      <button class="demo" id="demo" title="See a finished deck instantly, no audit required">Try a demo</button>
+    </div>
   </div>
 
   <div class="panel" id="panel">
-
-
     <div class="statusbar" id="statusbar">
       <span class="spinner" id="spinner"></span>
       <span id="statustext">Starting…</span>
     </div>
-
-
     <div class="log" id="log"></div>
-
     <div class="result" id="result"></div>
   </div>
 
-  <footer>bd-auto runs locally on your machine. Reports are saved under <code>reports/</code>.</footer>
+  <footer>HeyAudit — reports are generated on demand and downloaded right here.</footer>
 </div>
 
 <script>
 const $ = id => document.getElementById(id);
 const urlEl=$("url"), groqEl=$("groq"), modelEl=$("model"), psiEl=$("psi");
 
-// remember the keys/model locally so you don't paste them every time
+// remember the key/model locally so you don't paste them every time
 groqEl.value = localStorage.getItem("bd_groq") || "";
 modelEl.value = localStorage.getItem("bd_model") || "";
 psiEl.value = localStorage.getItem("bd_psi") || "";
-seoEl.value = localStorage.getItem("bd_seo") || "";
 if (groqEl.value) $("saved").textContent = "saved";
-
 
 // Discovery form -> the JSON keys auditor/discovery.py expects.
 const DISC_FIELDS = {
@@ -293,8 +295,6 @@ const DISC_FIELDS = {
   da_override:"da", organic_override:"organic"
 };
 
-
-
 // The real deck service areas (auditor/packages.py CATEGORIES). Ticking a box
 // keeps that area in the deck's deliverables + comparison matrix; unticked ones
 // are dropped. All on by default.
@@ -305,7 +305,6 @@ const CATEGORIES = [
   "Reporting", "Add-ons"
 ];
 
-
 const catsBox = $("cats");
 CATEGORIES.forEach(name => {
   const l = document.createElement("label");
@@ -313,23 +312,17 @@ CATEGORIES.forEach(name => {
   catsBox.appendChild(l);
 });
 
-
-
 const catInputs = () => [...catsBox.querySelectorAll("input[type=checkbox]")];
 $("catAll").addEventListener("click", () => catInputs().forEach(c => c.checked = true));
 $("catNone").addEventListener("click", () => catInputs().forEach(c => c.checked = false));
 function selectedCategories(){
   const all = catInputs();
   const on = all.filter(c => c.checked).map(c => c.value);
-  // All ticked == no filter (send nothing, deck shows everything).
-  return on.length === all.length ? [] : on;
+  return on.length === all.length ? [] : on;   // all ticked == no filter
 }
 
-
-
-// Live hint: which package the entered budget lands on. Mirrors packages.py
-// tier_for_budget — the first tier whose ceiling the budget doesn't exceed.
-const TIER_MAX = {  // monthly ceilings, by currency (Enterprise is custom/above)
+// Live hint: which package the entered budget lands on. Mirrors packages.py.
+const TIER_MAX = {
   INR:{Starter:50000,Growth:95000,Professional:180000},
   USD:{Starter:600,Growth:1150,Professional:2200}
 };
@@ -348,7 +341,6 @@ function updateBudgetHint(){
   const cur = ($("currency").value in TIER_MAX) ? $("currency").value : "INR";
   const b = parseBudget($("budget").value);
   const el = $("budgetHint");
-  // An explicit package pick overrides the budget, so the auto-fit hint is moot.
   if($("tier").value){ el.textContent = "Overridden by the package you picked above."; el.style.color="var(--muted)"; return; }
   if(b==null){ el.textContent=""; return; }
   const maxes = TIER_MAX[cur];
@@ -358,7 +350,6 @@ function updateBudgetHint(){
   el.style.color = "var(--ok)";
 }
 
-// Monthly price for each tier, by currency, for the tier picker's hint line.
 const TIER_PRICE = {
   INR:{starter:"₹24K–50K/mo",growth:"₹50K–95K/mo",professional:"₹95K–180K/mo",enterprise:"Custom quote"},
   USD:{starter:"$300–600/mo",growth:"$600–1,150/mo",professional:"$1,150–2,200/mo",enterprise:"Custom quote"}
@@ -376,8 +367,6 @@ $("tier").addEventListener("change", updateTierHint);
 $("budget").addEventListener("input", updateBudgetHint);
 $("currency").addEventListener("change", ()=>{ updateTierHint(); });
 
-// Whoever runs this pitches all day; only the client-specific answers should
-// reset between runs. Their own name/title/currency persist.
 const STICKY = ["prepared_by","prepared_by_title","currency"];
 STICKY.forEach(k => { const v = localStorage.getItem("bd_"+k); if(v) $(DISC_FIELDS[k]).value = v; });
 updateTierHint();
@@ -389,12 +378,11 @@ function collectDiscovery(){
     if (v) d[key] = v;
   }
   const cats = selectedCategories();
-  if (cats.length) d.include_categories = cats;  // empty == feature all
+  if (cats.length) d.include_categories = cats;
   STICKY.forEach(k => localStorage.setItem("bd_"+k, ($(DISC_FIELDS[k]).value||"").trim()));
   return d;
 }
 
-// Open the discovery block if it has anything in it, so it isn't forgotten.
 if (STICKY.some(k => ($(DISC_FIELDS[k]).value||"").trim())) $("discBlock").open = true;
 
 let seen = 0, poll = null;
@@ -403,7 +391,6 @@ function setStatus(text, busy){
   $("statustext").textContent = text;
   $("spinner").style.display = busy ? "block" : "none";
 }
-
 function addLog(items){
   const log = $("log");
   for (let i = seen; i < items.length; i++){
@@ -414,24 +401,18 @@ function addLog(items){
   seen = items.length;
   log.scrollTop = log.scrollHeight;
 }
-
-
 function escapeHtml(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
-
+function busyUI(on){ $("go").disabled = on; $("demo").disabled = on; }
 
 async function start(){
   const url = urlEl.value.trim();
   if(!url){ urlEl.focus(); return; }
 
-
-
-  // persist keys locally
   localStorage.setItem("bd_groq", groqEl.value.trim());
   localStorage.setItem("bd_model", modelEl.value.trim());
   localStorage.setItem("bd_psi", psiEl.value.trim());
-  localStorage.setItem("bd_seo", seoEl.value.trim());
 
-  $("go").disabled = true;
+  busyUI(true);
   $("panel").classList.add("show");
   $("log").innerHTML = ""; $("result").innerHTML = ""; seen = 0;
   setStatus("Launching browser…", true);
@@ -447,7 +428,7 @@ async function start(){
         discovery: collectDiscovery()
       })
     }).then(r=>r.json());
-  }catch(e){ fail("Could not reach the server. Is server.py running?"); return; }
+  }catch(e){ fail("Could not reach the server. Is the service running?"); return; }
 
   if(res.error){ fail(res.error); return; }
   poll = setInterval(()=>checkStatus(res.job_id), 1200);
@@ -464,61 +445,109 @@ async function checkStatus(jobId){
   } else if(job.status === "done"){
     clearInterval(poll); setStatus("Audit complete.", false);
     showResult(job);
-    $("go").disabled = false;
+    busyUI(false);
   } else if(job.status === "error"){
     clearInterval(poll); fail(job.error || "Audit failed.");
   }
 }
 
-function showResult(job){
-  const c = job.counts || {};
-  const grade = job.ai_grade || "";
+function resultCard({tag, grade, score, domain, counts, deckHtml, deckPdf, notes}){
   const gradeHtml = grade ? `<div class="grade ${grade}">${grade}</div>` : "";
-  const scoreHtml = (job.ai_score!=null)
-    ? `<div class="gtext"><div class="g1">AI health score</div><div class="g2">${job.ai_score} / 100</div></div>`
-    : `<div class="gtext"><div class="g1">Audit finished</div><div class="g2">${job.domain||""}</div></div>`;
-
+  const scoreHtml = (score!=null)
+    ? `<div class="gtext"><div class="g1">Health score</div><div class="g2">${score} / 100</div></div>`
+    : `<div class="gtext"><div class="g1">Audit finished</div><div class="g2">${escapeHtml(domain||"")}</div></div>`;
+  const c = counts || {};
   const pills = [
     c.pass?`<span class="pill pass">${c.pass} passed</span>`:"",
-    c.warn?`<span class="pill warn">${c.warn} warnings</span>`:"",
-    c.fail?`<span class="pill fail">${c.fail} failed</span>`:"",
+    c.warn?`<span class="pill warn">${c.warn} to improve</span>`:"",
+    c.fail?`<span class="pill fail">${c.fail} to fix</span>`:"",
     c.info?`<span class="pill">${c.info} manual</span>`:"",
     c.error?`<span class="pill">${c.error} errors</span>`:"",
   ].join("");
+  const view = deckHtml ? `<a class="btn ghost" href="${deckHtml}" target="_blank">View deck</a>` : "";
+  const pdf  = deckPdf ? `<a class="btn primary" href="${deckPdf}" target="_blank">Download deck (PDF)</a>` : "";
+  $("result").innerHTML = `
+    <div class="result-card">
+      ${tag ? `<div class="demo-tag">${escapeHtml(tag)}</div>` : ""}
+      <div class="grade-row">${gradeHtml}${scoreHtml}</div>
+      <div class="counts">${pills}</div>
+      <div class="actions">${view}${pdf}</div>
+      ${notes||""}
+    </div>`;
+}
 
-  const deckPdf = job.deck_pdf ? `<a class="btn primary" href="/reports/${job.deck_pdf}" target="_blank">Download deck (PDF)</a>` : "";
-  const deckHtml = job.deck_html ? `<a class="btn ghost" href="/reports/${job.deck_html}" target="_blank">View deck</a>` : "";
-
-  // Say plainly which competitors made it in — a silently dropped one would
-  // otherwise show up as a missing section in the finished proposal.
+function showResult(job){
   const comps = job.competitors || [];
   const failed = comps.filter(c => !c.loaded).map(c => c.domain);
   const okCount = comps.length - failed.length;
-  let compNote = "";
+  let notes = "";
   if (comps.length){
-    compNote = `<p class="note" style="margin-top:12px">${okCount} of ${comps.length} competitor${comps.length!==1?"s":""} analysed`
-      + (failed.length ? ` — no data for ${escapeHtml(failed.join(", "))}, so they're left out of the comparison.` : ".")
-      + `</p>`;
+    notes += `<p class="note" style="margin-top:12px">${okCount} of ${comps.length} competitor${comps.length!==1?"s":""} analysed`
+      + (failed.length ? ` — no data for ${escapeHtml(failed.join(", "))}.` : ".") + `</p>`;
   }
   const opp = job.opportunity;
-  const oppNote = (opp && opp.visits)
-    ? `<p class="note" style="margin-top:6px">Opportunity modelled: +${opp.visits.toLocaleString()} visits/month, +${(opp.leads||0).toLocaleString()} leads/month.</p>`
-    : "";
+  if (opp && opp.visits)
+    notes += `<p class="note" style="margin-top:6px">Opportunity modelled: +${opp.visits.toLocaleString()} visits/month, +${(opp.leads||0).toLocaleString()} leads/month.</p>`;
 
-  $("result").innerHTML = `
-    <div class="grade-row">${gradeHtml}${scoreHtml}</div>
-    <div class="counts">${pills}</div>
-    <div class="actions" style="margin-top:14px">${deckHtml}${deckPdf}</div>
-    ${compNote}${oppNote}`;
+  resultCard({
+    grade: job.ai_grade || "", score: job.ai_score, domain: job.domain,
+    counts: job.counts,
+    deckHtml: job.deck_html ? "/reports/"+job.deck_html : "",
+    deckPdf:  job.deck_pdf  ? "/reports/"+job.deck_pdf  : "",
+    notes
+  });
 }
 
 function fail(msg){
   setStatus("Failed.", false);
   $("result").innerHTML = `<div class="errbox">${escapeHtml(msg)}</div>`;
-  $("go").disabled = false;
+  busyUI(false);
+}
+
+// ---- Demo run: always works, no backend audit needed (for showing a deck) ----
+const DEMO_STEPS = [
+  {msg:"Loading homepage", cat:"brightpathdental.com"},
+  {msg:"Crawling the whole site (up to 48 pages)", cat:"brightpathdental.com"},
+  {msg:"Crawl done: 48 pages in 31s", cat:"brightpathdental.com"},
+  {msg:"[3/32] SSL/TLS certificate validity", cat:"Security"},
+  {msg:"[7/32] Google PageSpeed / Core Web Vitals", cat:"Performance"},
+  {msg:"[12/32] Title tag", cat:"On-Page SEO"},
+  {msg:"[15/32] Structured data", cat:"On-Page SEO"},
+  {msg:"[19/32] Load time & homepage weight", cat:"Page Load"},
+  {msg:"[23/32] AI Search readiness", cat:"AI Visibility"},
+  {msg:"[28/32] Thin content across the site", cat:"On-Page SEO"},
+  {msg:"Building combined audit + solution deck", cat:"deck"},
+];
+function demoRun(){
+  busyUI(true);
+  $("panel").classList.add("show");
+  $("log").innerHTML = ""; $("result").innerHTML = ""; seen = 0;
+  setStatus("Running demo audit…", true);
+  const items = [];
+  let i = 0;
+  const timer = setInterval(()=>{
+    if (i >= DEMO_STEPS.length){
+      clearInterval(timer);
+      setStatus("Demo complete.", false);
+      resultCard({
+        tag:"Demo — sample data",
+        grade:"C", score:71, domain:"brightpathdental.com",
+        counts:{pass:18, warn:9, fail:3, info:2},
+        deckHtml:"/sample_deck.html",
+        notes:`<p class="note" style="margin-top:12px">This is a pre-built sample deck for demonstration — run a real audit above to generate one for a live site.</p>`
+      });
+      busyUI(false);
+      return;
+    }
+    items.push(DEMO_STEPS[i]);
+    addLog(items);
+    setStatus("Auditing brightpathdental.com — " + (i+1) + " steps…", true);
+    i++;
+  }, 280);
 }
 
 $("go").addEventListener("click", start);
+$("demo").addEventListener("click", demoRun);
 urlEl.addEventListener("keydown", e=>{ if(e.key==="Enter") start(); });
 </script>
 </body>

@@ -181,6 +181,9 @@ class Handler(BaseHTTPRequestHandler):
         if route in ("/", "/index.html"):
             self._file(ROOT / "index.html")
             return
+        if route == "/sample_deck.html":   # pre-built deck for the UI's Demo button
+            self._file(ROOT / "sample_deck.html")
+            return
         if route.startswith("/api/status/"):
             job_id = route.rsplit("/", 1)[-1]
             job = JOBS.get(job_id)
